@@ -136,28 +136,6 @@ static inline bool sstr_add_char(sstr * const s, char const c)
     return true;
 }
 
-static inline sstr sstr_clone(sstr const s)
-{
-    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
-    size_t new_sstr_len = s.length;
-    size_t new_sstr_capacity = s.capacity;
-
-    if ((new_sstr.cstr = (char *) malloc(new_sstr_capacity)) == NULL)
-    {
-        return new_sstr;
-    }
-
-    if (new_sstr_len && s.cstr)
-    {
-        memcpy(new_sstr.cstr, s.cstr, new_sstr_capacity);
-    }
-
-    new_sstr.length = new_sstr_len;
-    new_sstr.capacity = new_sstr_capacity;
-
-    return new_sstr;
-}
-
 static inline int sstr_cmp(sstr const s, sstr const s2)
 {
     return strcmp(s.cstr, s2.cstr);
@@ -191,6 +169,14 @@ static inline bool sstr_set_capacity(sstr * const s, size_t capacity)
     s->capacity = new_capacity;
 
     return true;
+}
+
+static inline sstr sstr_clone(sstr const s)
+{
+    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr_set_capacity(&new_sstr, s.capacity);
+    sstr_add_from(&new_sstr, s.cstr, s.length);
+    return new_sstr;
 }
 
 #endif /*SSTR_IMPLEMENTATION*/
