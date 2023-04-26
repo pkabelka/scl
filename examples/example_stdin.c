@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #define SSTR_IMPLEMENTATION
-#include "sstr.h"
+#include "../sstr.h"
 
 int main()
 {
