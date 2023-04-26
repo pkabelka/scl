@@ -46,7 +46,7 @@ typedef struct
 
 #ifdef SSTR_IMPLEMENTATION
 
-static inline sstr sstr_new(char const *init_string)
+static inline sstr sstr_new(char const * const init_string)
 {
     sstr s = { .cstr = NULL, .length = 0, .capacity = 0 };
     size_t init_string_len = strlen(init_string);
