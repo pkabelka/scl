@@ -31,7 +31,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef SSTR_ALLOC_SIZE
 #define SSTR_ALLOC_SIZE 32
+#endif
 
 typedef struct
 {
