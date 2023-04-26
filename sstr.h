@@ -179,4 +179,11 @@ static inline sstr sstr_clone(sstr const s)
     return new_sstr;
 }
 
+static inline sstr sstr_substr(sstr * const s, size_t start, size_t length)
+{
+    sstr substr = sstr_new("");
+    sstr_add_from(&substr, s->cstr+start, length);
+    return substr;
+}
+
 #endif /*SSTR_IMPLEMENTATION*/
