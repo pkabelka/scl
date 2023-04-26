@@ -83,10 +83,9 @@ static inline void sstr_empty(sstr * const s)
     s->length = 0;
 }
 
-static inline bool sstr_add_const(sstr * const s, const char * const s2)
+static inline bool sstr_add_from(sstr * const s, const void * const src, size_t length)
 {
-    size_t s2_length = strlen(s2);
-    size_t new_length = s->length + s2_length;
+    size_t new_length = s->length + length;
     size_t new_capacity = sizeof(char) * (new_length + 1);
 
     if (new_capacity >= s->capacity)
@@ -98,11 +97,17 @@ static inline bool sstr_add_const(sstr * const s, const char * const s2)
         s->capacity = new_capacity;
     }
 
+    memcpy(s->cstr+s->length, src, length);
     s->length = new_length;
-    strncat(s->cstr, s2, s2_length);
     s->cstr[s->length] = '\0';
 
     return true;
+}
+
+static inline bool sstr_add_const(sstr * const s, const char * const s2)
+{
+    size_t s2_length = strlen(s2);
+    return sstr_add_from(s, s2, s2_length);
 }
 
 static inline bool sstr_add_sstr(sstr * const s, sstr const s2)
