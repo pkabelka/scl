@@ -12,6 +12,8 @@ Similar to [nothings' stb](https://github.com/nothings/stb):
 #include "sstr.h"
 ```
 
+An example program can be found in [example.c](example.c).
+
 ## LICENSE
 
 This project is in public domain, see [LICENSE](LICENSE).
