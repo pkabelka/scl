@@ -112,8 +112,7 @@ static inline bool sstr_add_from(sstr * const s, const void * const src, size_t 
 
 static inline bool sstr_add_const(sstr * const s, const char * const s2)
 {
-    size_t const s2_length = strlen(s2);
-    return sstr_add_from(s, s2, s2_length);
+    return sstr_add_from(s, s2, strlen(s2));
 }
 
 static inline bool sstr_add_sstr(sstr * const s, sstr const s2)
