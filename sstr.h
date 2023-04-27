@@ -71,8 +71,11 @@ static inline sstr sstr_new(char const * const init_string)
 
 static inline void sstr_free(sstr * const s)
 {
-    free(s->cstr);
-    s->cstr = NULL;
+    if (s->cstr != NULL)
+    {
+        free(s->cstr);
+        s->cstr = NULL;
+    }
     s->length = 0;
     s->capacity = 0;
 }
