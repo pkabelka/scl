@@ -31,10 +31,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef SSTR_ALLOC_SIZE
-#define SSTR_ALLOC_SIZE 32
-#endif
-
 typedef struct
 {
     char *cstr;
@@ -45,6 +41,10 @@ typedef struct
 #endif /*INCLUDE_SSTR_H*/
 
 #ifdef SSTR_IMPLEMENTATION
+
+#ifndef SSTR_ALLOC_SIZE
+#define SSTR_ALLOC_SIZE 32
+#endif
 
 static inline sstr sstr_new(char const * const init_string)
 {
