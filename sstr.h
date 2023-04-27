@@ -100,7 +100,10 @@ static inline bool sstr_add_from(sstr * const s, const void * const src, size_t 
         s->capacity = new_capacity;
     }
 
-    memcpy(s->cstr+s->length, src, length);
+    if (length && src)
+    {
+        memcpy(s->cstr+s->length, src, length);
+    }
     s->length = new_length;
     s->cstr[s->length] = '\0';
 
