@@ -117,23 +117,8 @@ static inline bool sstr_add_sstr(sstr * const s, sstr const s2)
 
 static inline bool sstr_add_char(sstr * const s, char const c)
 {
-    size_t new_length = s->length + 1;
-    size_t new_capacity = sizeof(char) * (new_length + 1 + SSTR_ALLOC_SIZE);
-
-    if ((new_length + 1) >= s->capacity)
-    {
-        if ((s->cstr = (char *) realloc(s->cstr, new_capacity)) == NULL)
-        {
-            return false;
-        }
-        s->capacity = new_capacity;
-    }
-
-    s->cstr[s->length] = c;
-    s->length = new_length;
-    s->cstr[s->length] = '\0';
-
-    return true;
+    char tmp[2] = {c, '\0'};
+    return sstr_add_const(s, tmp);
 }
 
 static inline int sstr_cmp(sstr const s, sstr const s2)
