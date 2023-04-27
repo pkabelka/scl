@@ -43,7 +43,7 @@ int main()
     printf("%ld, %ld, %s\n", s2.length, s2.capacity, s2.cstr);
     /* 35, 36, Lorem ipsum dolor sit amet consecte */
 
-    sstr_add_from(&s2, s2.cstr, 5);
+    sstr_add_from(&s2, s.cstr, 5);
     printf("%ld, %ld, %s\n", s2.length, s2.capacity, s2.cstr);
     /* 40, 41, Lorem ipsum dolor sit amet consecteLorem */
 
