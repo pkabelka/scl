@@ -13,5 +13,7 @@ int main()
     }
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
 
+    sstr_free(&s);
+
     return 0;
 }

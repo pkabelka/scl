@@ -9,7 +9,8 @@ int main()
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
     /* 11, 32, Lorem ipsum */
 
-    sstr_add_sstr(&s, sstr_new(" dolor sit"));
+    sstr tmp_sstr = sstr_new(" dolor sit");
+    sstr_add_sstr(&s, tmp_sstr);
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
     /* 21, 32, Lorem ipsum dolor sit */
 
@@ -50,6 +51,12 @@ int main()
     sstr s2_substr = sstr_substr(&s2, 6, 5);
     printf("%lu, %lu, %s\n", s2_substr.length, s2_substr.capacity, s2_substr.cstr);
     /* 5, 32, ipsum */
+
+    /* cleanup */
+    sstr_free(&s);
+    sstr_free(&tmp_sstr);
+    sstr_free(&s2);
+    sstr_free(&s2_substr);
 
     return 0;
 }
