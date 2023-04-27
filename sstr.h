@@ -49,8 +49,8 @@ typedef struct
 static inline sstr sstr_new(char const * const init_string)
 {
     sstr s = { .cstr = NULL, .length = 0, .capacity = 0 };
-    size_t init_string_len = strlen(init_string);
-    size_t init_capacity = init_string_len+1 < SSTR_ALLOC_SIZE ? SSTR_ALLOC_SIZE : init_string_len+1;
+    size_t const init_string_len = strlen(init_string);
+    size_t const init_capacity = init_string_len+1 < SSTR_ALLOC_SIZE ? SSTR_ALLOC_SIZE : init_string_len+1;
 
     if ((s.cstr = (char *) malloc(sizeof(char) * init_capacity)) == NULL)
     {
@@ -88,8 +88,8 @@ static inline void sstr_empty(sstr * const s)
 
 static inline bool sstr_add_from(sstr * const s, const void * const src, size_t const length)
 {
-    size_t new_length = s->length + length;
-    size_t new_capacity = sizeof(char) * (new_length + 1 + SSTR_ALLOC_SIZE);
+    size_t const new_length = s->length + length;
+    size_t const new_capacity = sizeof(char) * (new_length + 1 + SSTR_ALLOC_SIZE);
 
     if (new_length+1 > s->capacity)
     {
@@ -112,7 +112,7 @@ static inline bool sstr_add_from(sstr * const s, const void * const src, size_t 
 
 static inline bool sstr_add_const(sstr * const s, const char * const s2)
 {
-    size_t s2_length = strlen(s2);
+    size_t const s2_length = strlen(s2);
     return sstr_add_from(s, s2, s2_length);
 }
 
@@ -123,7 +123,7 @@ static inline bool sstr_add_sstr(sstr * const s, sstr const s2)
 
 static inline bool sstr_add_char(sstr * const s, char const c)
 {
-    char tmp[2] = {c, '\0'};
+    char const tmp[2] = {c, '\0'};
     return sstr_add_const(s, tmp);
 }
 
@@ -139,14 +139,14 @@ static inline int sstr_cmp_const(sstr const s, const char * const s2)
 
 static inline void sstr_swap(sstr *s, sstr *s2)
 {
-    sstr tmp = *s;
+    sstr const tmp = *s;
     *s = *s2;
     *s2 = tmp;
 }
 
 static inline bool sstr_set_capacity(sstr * const s, size_t const capacity)
 {
-    size_t new_capacity = sizeof(char) * capacity;
+    size_t const new_capacity = sizeof(char) * capacity;
 
     if (new_capacity < (s->length + 1))
     {
