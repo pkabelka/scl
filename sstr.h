@@ -86,7 +86,7 @@ static inline void sstr_empty(sstr * const s)
 static inline bool sstr_add_from(sstr * const s, const void * const src, size_t length)
 {
     size_t new_length = s->length + length;
-    size_t new_capacity = sizeof(char) * (new_length + 1);
+    size_t new_capacity = sizeof(char) * (new_length + 1 + SSTR_ALLOC_SIZE);
 
     if (new_capacity >= s->capacity)
     {
