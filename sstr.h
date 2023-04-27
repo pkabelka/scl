@@ -38,6 +38,20 @@ typedef struct
     size_t capacity;
 } sstr;
 
+sstr sstr_new(char const * const init_string);
+void sstr_free(sstr * const s);
+void sstr_empty(sstr * const s);
+bool sstr_add_from(sstr * const s, const void * const src, size_t const length);
+bool sstr_add_const(sstr * const s, const char * const s2);
+bool sstr_add_sstr(sstr * const s, sstr const s2);
+bool sstr_add_char(sstr * const s, char const c);
+int sstr_cmp(sstr const s, sstr const s2);
+int sstr_cmp_const(sstr const s, const char * const s2);
+void sstr_swap(sstr *s, sstr *s2);
+bool sstr_set_capacity(sstr * const s, size_t const capacity);
+sstr sstr_clone(sstr const s);
+sstr sstr_substr(sstr * const s, size_t const start, size_t const length);
+
 #endif /*INCLUDE_SSTR_H*/
 
 #ifdef SSTR_IMPLEMENTATION
@@ -46,7 +60,7 @@ typedef struct
 #define SSTR_ALLOC_SIZE 32
 #endif
 
-static inline sstr sstr_new(char const * const init_string)
+sstr sstr_new(char const * const init_string)
 {
     sstr s = { .cstr = NULL, .length = 0, .capacity = 0 };
     size_t const init_string_len = strlen(init_string);
@@ -69,7 +83,7 @@ static inline sstr sstr_new(char const * const init_string)
     return s;
 }
 
-static inline void sstr_free(sstr * const s)
+void sstr_free(sstr * const s)
 {
     if (s->cstr != NULL)
     {
@@ -80,13 +94,13 @@ static inline void sstr_free(sstr * const s)
     s->capacity = 0;
 }
 
-static inline void sstr_empty(sstr * const s)
+void sstr_empty(sstr * const s)
 {
     s->cstr[0] = '\0';
     s->length = 0;
 }
 
-static inline bool sstr_add_from(sstr * const s, const void * const src, size_t const length)
+bool sstr_add_from(sstr * const s, const void * const src, size_t const length)
 {
     size_t const new_length = s->length + length;
     size_t const new_capacity = sizeof(char) * (new_length + 1 + SSTR_ALLOC_SIZE);
@@ -110,40 +124,40 @@ static inline bool sstr_add_from(sstr * const s, const void * const src, size_t 
     return true;
 }
 
-static inline bool sstr_add_const(sstr * const s, const char * const s2)
+bool sstr_add_const(sstr * const s, const char * const s2)
 {
     return sstr_add_from(s, s2, strlen(s2));
 }
 
-static inline bool sstr_add_sstr(sstr * const s, sstr const s2)
+bool sstr_add_sstr(sstr * const s, sstr const s2)
 {
     return sstr_add_const(s, s2.cstr);
 }
 
-static inline bool sstr_add_char(sstr * const s, char const c)
+bool sstr_add_char(sstr * const s, char const c)
 {
     char const tmp[2] = {c, '\0'};
     return sstr_add_const(s, tmp);
 }
 
-static inline int sstr_cmp(sstr const s, sstr const s2)
+int sstr_cmp(sstr const s, sstr const s2)
 {
     return strcmp(s.cstr, s2.cstr);
 }
 
-static inline int sstr_cmp_const(sstr const s, const char * const s2)
+int sstr_cmp_const(sstr const s, const char * const s2)
 {
     return strcmp(s.cstr, s2);
 }
 
-static inline void sstr_swap(sstr *s, sstr *s2)
+void sstr_swap(sstr *s, sstr *s2)
 {
     sstr const tmp = *s;
     *s = *s2;
     *s2 = tmp;
 }
 
-static inline bool sstr_set_capacity(sstr * const s, size_t const capacity)
+bool sstr_set_capacity(sstr * const s, size_t const capacity)
 {
     size_t const new_capacity = sizeof(char) * capacity;
 
@@ -161,7 +175,7 @@ static inline bool sstr_set_capacity(sstr * const s, size_t const capacity)
     return true;
 }
 
-static inline sstr sstr_clone(sstr const s)
+sstr sstr_clone(sstr const s)
 {
     sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
     sstr_set_capacity(&new_sstr, s.capacity);
@@ -169,7 +183,7 @@ static inline sstr sstr_clone(sstr const s)
     return new_sstr;
 }
 
-static inline sstr sstr_substr(sstr * const s, size_t const start, size_t const length)
+sstr sstr_substr(sstr * const s, size_t const start, size_t const length)
 {
     sstr new_sstr = sstr_new("");
     if ((start < s->length) && (s->length - start >= length))
