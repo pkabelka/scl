@@ -13,39 +13,39 @@ int main()
     printf("%ld, %ld, %s\n", s.length, s.capacity, s.cstr);
     /* 21, 32, Lorem ipsum dolor sit */
 
-    sstr_add_const(&s, " amet consec");
+    sstr_add_const(&s, " amet con");
     printf("%ld, %ld, %s\n", s.length, s.capacity, s.cstr);
-    /* 33, 34, Lorem ipsum dolor sit amet consec */
+    /* 30, 32, Lorem ipsum dolor sit amet con */
 
-    sstr_add_char(&s, 't');
+    sstr_add_char(&s, 's');
     printf("%ld, %ld, %s\n", s.length, s.capacity, s.cstr);
-    /* 34, 67, Lorem ipsum dolor sit amet consect */
+    /* 31, 32, Lorem ipsum dolor sit amet cons */
 
     sstr_add_char(&s, 'e');
     printf("%ld, %ld, %s\n", s.length, s.capacity, s.cstr);
-    /* 35, 67, Lorem ipsum dolor sit amet consecte */
+    /* 32, 65, Lorem ipsum dolor sit amet conse */
 
     sstr s2 = sstr_clone(s);
     printf("%ld, %ld, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 35, 67, Lorem ipsum dolor sit amet consecte */
+    /* 32, 65, Lorem ipsum dolor sit amet conse */
 
-    sstr_add_const(&s2, "tur");
+    sstr_add_const(&s2, "ctetur");
     printf("%ld, %ld, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 38, 67, Lorem ipsum dolor sit amet consectetur */
+    /* 38, 65, Lorem ipsum dolor sit amet consectetur */
 
     sstr_swap(&s, &s2);
     printf("%ld, %ld, %s\n", s.length, s.capacity, s.cstr);
-    /* 38, 67, Lorem ipsum dolor sit amet consectetur */
+    /* 38, 65, Lorem ipsum dolor sit amet consectetur */
     printf("%ld, %ld, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 35, 67, Lorem ipsum dolor sit amet consecte */
+    /* 32, 65, Lorem ipsum dolor sit amet conse */
 
-    sstr_set_capacity(&s2, 36);
+    sstr_set_capacity(&s2, 33);
     printf("%ld, %ld, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 35, 36, Lorem ipsum dolor sit amet consecte */
+    /* 32, 33, Lorem ipsum dolor sit amet conse */
 
     sstr_add_from(&s2, s.cstr, 5);
     printf("%ld, %ld, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 40, 41, Lorem ipsum dolor sit amet consecteLorem */
+    /* 37, 70, Lorem ipsum dolor sit amet conseLorem */
 
     sstr s2_substr = sstr_substr(&s2, 6, 5);
     printf("%ld, %ld, %s\n", s2_substr.length, s2_substr.capacity, s2_substr.cstr);
