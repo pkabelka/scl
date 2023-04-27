@@ -11,7 +11,7 @@ int main()
     {
         sstr_add_char(&s, c);
     }
-    printf("%ld, %ld, %s\n", s.length, s.capacity, s.cstr);
+    printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
 
     return 0;
 }
