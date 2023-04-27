@@ -31,6 +31,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct
 {
     char *cstr;
@@ -51,6 +55,10 @@ void sstr_swap(sstr *s, sstr *s2);
 bool sstr_set_capacity(sstr * const s, size_t const capacity);
 sstr sstr_clone(sstr const s);
 sstr sstr_substr(sstr * const s, size_t const start, size_t const length);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*INCLUDE_SSTR_H*/
 
