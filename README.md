@@ -12,6 +12,14 @@ Similar to [nothings' stb](https://github.com/nothings/stb):
 #include "sstr.h"
 ```
 
+You can adjust the size of additionally allocated memory when the string's
+capacity overflows. You can define it before `#include "sstr.h"` in the same
+file where `SSTR_IMPLEMENTATION` is defined with:
+
+```
+#define SSTR_ALLOC_SIZE 32
+```
+
 An example program can be found [here](examples/example.c).
 
 ## LICENSE
