@@ -38,6 +38,24 @@ implementation of a very basic double linked list.
 
 An example program can be found [here](examples/sdll_example.c).
 
+## sbintree
+
+`sbintree` stands for *simple binary tree*. It is a single header file
+implementation of a very basic binary search tree.
+
+### Usage
+
+`sbintree.h` also requires `sdll.h` and therefore `#define SDLL_IMPLEMENTATION`
+too.
+
+```
+#define SBINTREE_IMPLEMENTATION
+#define SDLL_IMPLEMENTATION
+#include "sbintree.h"
+```
+
+An example program can be found [here](examples/sbintree_example.c).
+
 ## LICENSE
 
 This project is in public domain, see [LICENSE](LICENSE).
