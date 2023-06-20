@@ -1,9 +1,11 @@
-# sstr
+# scl
+
+## sstr
 
 `sstr` stands for *simple string*. It is a single header file implementation of
 a very basic C string library.
 
-## Usage
+### Usage
 
 Similar to [nothings' stb](https://github.com/nothings/stb):
 
@@ -20,7 +22,21 @@ file where `SSTR_IMPLEMENTATION` is defined with:
 #define SSTR_ALLOC_SIZE 32
 ```
 
-An example program can be found [here](examples/example.c).
+An example program can be found [here](examples/sstr_example.c).
+
+## sdll
+
+`sdll` stands for *simple double linked list*. It is a single header file
+implementation of a very basic double linked list.
+
+### Usage
+
+```
+#define SDLL_IMPLEMENTATION
+#include "sdll.h"
+```
+
+An example program can be found [here](examples/sdll_example.c).
 
 ## LICENSE
 
