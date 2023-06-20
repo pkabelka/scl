@@ -27,7 +27,6 @@
 #ifndef INCLUDE_SDLL_H
 #define INCLUDE_SDLL_H
 
-#include <stdbool.h>
 #include <stdlib.h>
 
 #ifdef __cplusplus
