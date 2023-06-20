@@ -17,12 +17,15 @@ int main()
 
     sstr str1 = sstr_new("dolor sit");
     sdll_insert_first(list, &str1);
+    printf("%lu\n", list->length);
 
     sstr str2 = sstr_new("amet consectetur");
     sdll_insert_last(list, &str2);
+    printf("%lu\n", list->length);
 
     sstr str3 = sstr_new("Lorem ipsum");
     sdll_insert_first(list, &str3);
+    printf("%lu\n", list->length);
 
     sdll_node *curr = list->first;
     while (curr != NULL)
@@ -34,6 +37,8 @@ int main()
         /* find the node to remove */
         if (sstr_cmp_const(*(sstr*)curr->data, "amet consectetur") == 0)
         {
+            printf("%lu\n", list->length);
+
             /* remove the node from list */
             sdll_unlink(list, curr);
             /* free the node data */
@@ -42,6 +47,8 @@ int main()
             next = curr->next;
             /* free the unlinked node */
             free(curr);
+
+            printf("%lu\n", list->length);
         }
         curr = next;
     }

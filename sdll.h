@@ -128,6 +128,7 @@ void sdll_insert_after(sdll * const l, sdll_node *node, void * const data)
     }
 
     node->next = new_node;
+    l->length++;
 }
 
 void sdll_insert_before(sdll * const l, sdll_node *node, void * const data)
@@ -150,6 +151,7 @@ void sdll_insert_before(sdll * const l, sdll_node *node, void * const data)
     }
 
     node->prev = new_node;
+    l->length++;
 }
 
 void sdll_insert_first(sdll * const l, void * const data)
@@ -165,6 +167,7 @@ void sdll_insert_first(sdll * const l, void * const data)
         l->last = new_node;
         new_node->next = NULL;
         new_node->prev = NULL;
+        l->length++;
     }
     else
     {
@@ -207,6 +210,7 @@ void sdll_unlink(sdll * const l, sdll_node * const node)
     {
         node->next->prev = node->prev;
     }
+    l->length--;
 }
 
 #endif /*SDLL_IMPLEMENTATION*/
