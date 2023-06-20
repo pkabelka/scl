@@ -55,6 +55,8 @@ void sdll_insert_before(sdll * const l, sdll_node *node, void * const data);
 void sdll_insert_first(sdll * const l, void * const data);
 void sdll_insert_last(sdll * const l, void * const data);
 void sdll_unlink(sdll * const l, sdll_node * const node);
+void sdll_remove(sdll * const l, sdll_node ** node, void (*free_func)(void*));
+void sdll_dummy_free(void * const data);
 
 #ifdef __cplusplus
 }
@@ -210,6 +212,19 @@ void sdll_unlink(sdll * const l, sdll_node * const node)
         node->next->prev = node->prev;
     }
     l->length--;
+}
+
+void sdll_remove(sdll * const l, sdll_node ** node, void (*free_func)(void*))
+{
+    sdll_unlink(l, *node);
+    free_func((*node)->data);
+    free(*node);
+    *node = NULL;
+}
+
+void sdll_dummy_free(void * const data)
+{
+    (void)data;
 }
 
 #endif /*SDLL_IMPLEMENTATION*/

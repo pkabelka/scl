@@ -27,6 +27,7 @@ int main()
     sdll_insert_first(list, &str3);
     printf("%lu\n", list->length);
 
+    /* remove example with sdll_unlink */
     sdll_node *curr = list->first;
     while (curr != NULL)
     {
@@ -53,6 +54,32 @@ int main()
         curr = next;
     }
 
+    /* print the list */
+    for (sdll_node *curr = list->first; curr != NULL; curr = curr->next)
+    {
+        printf("%s\n", ((sstr*)curr->data)->cstr);
+    }
+
+    /* remove example with sdll_remove */
+    curr = list->first;
+    while (curr != NULL)
+    {
+        sdll_node *next = curr->next;
+
+        /* find the node to remove */
+        if (sstr_cmp_const(*(sstr*)curr->data, "dolor sit") == 0)
+        {
+            printf("%lu\n", list->length);
+
+            next = curr->next;
+            sdll_remove(list, &curr, sdll_sstr_free);
+
+            printf("%lu\n", list->length);
+        }
+        curr = next;
+    }
+
+    /* print the list */
     for (sdll_node *curr = list->first; curr != NULL; curr = curr->next)
     {
         printf("%s\n", ((sstr*)curr->data)->cstr);
