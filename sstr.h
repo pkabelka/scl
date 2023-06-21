@@ -72,7 +72,8 @@ sstr sstr_new(char const * const init_string)
 {
     sstr s = { .cstr = NULL, .length = 0, .capacity = 0 };
     size_t const init_string_len = strlen(init_string);
-    size_t const init_capacity = init_string_len+1 < SSTR_ALLOC_SIZE ? SSTR_ALLOC_SIZE : init_string_len+1;
+    /* ceil(init_cap / ALLOC_SIZE) * ALLOC_SIZE */
+    size_t const init_capacity = ((init_string_len+1)/SSTR_ALLOC_SIZE + (((init_string_len+1) % SSTR_ALLOC_SIZE) != 0)) * SSTR_ALLOC_SIZE;
 
     if ((s.cstr = (char *) malloc(sizeof(char) * init_capacity)) == NULL)
     {
