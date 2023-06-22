@@ -9,7 +9,7 @@ a very basic C string library.
 
 Similar to [nothings' stb](https://github.com/nothings/stb):
 
-```
+```c
 #define SSTR_IMPLEMENTATION
 #include "sstr.h"
 ```
@@ -18,7 +18,7 @@ You can adjust the size of additionally allocated memory when the string's
 capacity overflows. You can define it before `#include "sstr.h"` in the same
 file where `SSTR_IMPLEMENTATION` is defined with:
 
-```
+```c
 #define SSTR_ALLOC_SIZE 32
 ```
 
@@ -31,7 +31,7 @@ implementation of a very basic double linked list.
 
 ### Usage
 
-```
+```c
 #define SDLL_IMPLEMENTATION
 #include "sdll.h"
 ```
@@ -48,7 +48,7 @@ implementation of a very basic binary search tree.
 `sbintree.h` also requires `sdll.h` and therefore `#define SDLL_IMPLEMENTATION`
 too.
 
-```
+```c
 #define SBINTREE_IMPLEMENTATION
 #define SDLL_IMPLEMENTATION
 #include "sbintree.h"
