@@ -37,6 +37,12 @@ int main()
 
     sbintree_inorder(root, printf_callback);
 
+    sbintree *leftmost = sbintree_leftmost(root);
+    printf("%s\n", (char*)(leftmost->data));
+
+    sbintree *rightmost = sbintree_rightmost(root);
+    printf("%s\n", (char*)(rightmost->data));
+
     sbintree_free(&root, sbintree_free_func);
 
     return 0;

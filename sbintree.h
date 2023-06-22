@@ -47,6 +47,8 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
 sbintree* sbintree_search(sbintree * const root, void * const key, int (*key_func)(void *searched_key, void *node_key));
 void sbintree_inorder(sbintree * const root, void (*callback)(sbintree * const node));
 void sbintree_free(sbintree ** const root, void (*free_func)(sbintree*));
+sbintree* sbintree_leftmost(sbintree * const root);
+sbintree* sbintree_rightmost(sbintree * const root);
 
 #ifdef __cplusplus
 }
@@ -193,6 +195,26 @@ void sbintree_free(sbintree ** const root, void (*free_func)(sbintree*))
 {
     sbintree_inorder(*root, free_func);
     *root = NULL;
+}
+
+sbintree* sbintree_leftmost(sbintree * const root)
+{
+    sbintree *predecessor = root;
+    for (sbintree *current = root; current != NULL; current = current->left)
+    {
+        predecessor = current;
+    }
+    return predecessor;
+}
+
+sbintree* sbintree_rightmost(sbintree * const root)
+{
+    sbintree *predecessor = root;
+    for (sbintree *current = root; current != NULL; current = current->right)
+    {
+        predecessor = current;
+    }
+    return predecessor;
 }
 
 #endif /*SBINTREE_IMPLEMENTATION*/
