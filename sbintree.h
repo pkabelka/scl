@@ -50,6 +50,9 @@ void sbintree_inorder(sbintree * const root, void (*callback)(sbintree * const n
 void sbintree_free(sbintree ** const root, void (*free_func)(sbintree*));
 sbintree* sbintree_leftmost(sbintree * const root);
 sbintree* sbintree_rightmost(sbintree * const root);
+sbintree* sbintree_successor(sbintree * const root);
+sbintree* sbintree_predecessor(sbintree * const root);
+void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_func)(sbintree*));
 
 #ifdef __cplusplus
 }
@@ -253,6 +256,57 @@ sbintree* sbintree_predecessor(sbintree * const root)
         predecessor = predecessor->parent;
     }
     return predecessor;
+}
+
+static void sbintree_replace_nodes(sbintree ** const root, sbintree * const old_node, sbintree * const new_node)
+{
+    if (old_node->parent == NULL)
+    {
+        *root = new_node;
+    }
+    else if (old_node == old_node->parent->left)
+    {
+        old_node->parent->left = new_node;
+    }
+    else
+    {
+        old_node->parent->right = new_node;
+    }
+
+    if (new_node != NULL)
+    {
+        new_node->parent = old_node->parent;
+    }
+}
+
+void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_func)(sbintree*))
+{
+    if (node->left == NULL)
+    {
+        sbintree_replace_nodes(root, node, node->right);
+        free_func(node);
+        return;
+    }
+    else if (node->right == NULL)
+    {
+        sbintree_replace_nodes(root, node, node->left);
+        free_func(node);
+        return;
+    }
+
+    sbintree *replacement = sbintree_successor(node);
+    if (replacement->parent != node)
+    {
+        sbintree_replace_nodes(root, replacement, replacement->right);
+        replacement->right = node->right;
+        replacement->right->parent = replacement;
+    }
+
+    sbintree_replace_nodes(root, node, replacement);
+    replacement->left = node->left;
+    replacement->left->parent = replacement;
+
+    free_func(node);
 }
 
 #endif /*SBINTREE_IMPLEMENTATION*/

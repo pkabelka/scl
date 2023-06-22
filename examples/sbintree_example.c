@@ -36,7 +36,7 @@ int main()
 
     printf("%s\n", (char*)(root->right->data));
 
-    sbintree *node = sbintree_search(root, "d", str_comp);
+    sbintree *node = sbintree_search(root, "c", str_comp);
     printf("%s\n", (char*)(node->data));
 
     sbintree_inorder(root, printf_callback);
@@ -46,6 +46,9 @@ int main()
 
     sbintree *rightmost = sbintree_rightmost(root);
     printf("%s\n", (char*)(rightmost->data));
+
+    sbintree_remove(&root, node, sbintree_free_func);
+    sbintree_inorder(root, printf_callback);
 
     sbintree_free(&root, sbintree_free_func);
 
