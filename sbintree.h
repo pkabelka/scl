@@ -48,10 +48,10 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
 sbintree* sbintree_search(sbintree * const root, void * const key, int (*key_func)(void *searched_key, void *node_key));
 void sbintree_inorder(sbintree * const root, void (*callback)(sbintree * const node));
 void sbintree_free(sbintree ** const root, void (*free_func)(sbintree*));
-sbintree* sbintree_leftmost(sbintree * const root);
-sbintree* sbintree_rightmost(sbintree * const root);
-sbintree* sbintree_successor(sbintree * const root);
-sbintree* sbintree_predecessor(sbintree * const root);
+sbintree* sbintree_leftmost(sbintree * const node);
+sbintree* sbintree_rightmost(sbintree * const node);
+sbintree* sbintree_successor(sbintree * const node);
+sbintree* sbintree_predecessor(sbintree * const node);
 void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_func)(sbintree*));
 
 #ifdef __cplusplus
@@ -204,35 +204,35 @@ void sbintree_free(sbintree ** const root, void (*free_func)(sbintree*))
     *root = NULL;
 }
 
-sbintree* sbintree_leftmost(sbintree * const root)
+sbintree* sbintree_leftmost(sbintree * const node)
 {
-    sbintree *predecessor = root;
-    for (sbintree *current = root; current != NULL; current = current->left)
+    sbintree *predecessor = node;
+    for (sbintree *current = node; current != NULL; current = current->left)
     {
         predecessor = current;
     }
     return predecessor;
 }
 
-sbintree* sbintree_rightmost(sbintree * const root)
+sbintree* sbintree_rightmost(sbintree * const node)
 {
-    sbintree *predecessor = root;
-    for (sbintree *current = root; current != NULL; current = current->right)
+    sbintree *predecessor = node;
+    for (sbintree *current = node; current != NULL; current = current->right)
     {
         predecessor = current;
     }
     return predecessor;
 }
 
-sbintree* sbintree_successor(sbintree * const root)
+sbintree* sbintree_successor(sbintree * const node)
 {
-    if (root->right != NULL)
+    if (node->right != NULL)
     {
-        return sbintree_leftmost(root->right);
+        return sbintree_leftmost(node->right);
     }
 
-    sbintree *current = root;
-    sbintree *successor = root->parent;
+    sbintree *current = node;
+    sbintree *successor = node->parent;
     while (successor != NULL && current == successor->right)
     {
         current = successor;
@@ -241,15 +241,15 @@ sbintree* sbintree_successor(sbintree * const root)
     return successor;
 }
 
-sbintree* sbintree_predecessor(sbintree * const root)
+sbintree* sbintree_predecessor(sbintree * const node)
 {
-    if (root->left != NULL)
+    if (node->left != NULL)
     {
-        return sbintree_rightmost(root->left);
+        return sbintree_rightmost(node->left);
     }
 
-    sbintree *current = root;
-    sbintree *predecessor = root->parent;
+    sbintree *current = node;
+    sbintree *predecessor = node->parent;
     while (predecessor != NULL && current == predecessor->left)
     {
         current = predecessor;
