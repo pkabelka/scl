@@ -221,4 +221,38 @@ sbintree* sbintree_rightmost(sbintree * const root)
     return predecessor;
 }
 
+sbintree* sbintree_successor(sbintree * const root)
+{
+    if (root->right != NULL)
+    {
+        return sbintree_leftmost(root->right);
+    }
+
+    sbintree *current = root;
+    sbintree *successor = root->parent;
+    while (successor != NULL && current == successor->right)
+    {
+        current = successor;
+        successor = successor->parent;
+    }
+    return successor;
+}
+
+sbintree* sbintree_predecessor(sbintree * const root)
+{
+    if (root->left != NULL)
+    {
+        return sbintree_rightmost(root->left);
+    }
+
+    sbintree *current = root;
+    sbintree *predecessor = root->parent;
+    while (predecessor != NULL && current == predecessor->left)
+    {
+        current = predecessor;
+        predecessor = predecessor->parent;
+    }
+    return predecessor;
+}
+
 #endif /*SBINTREE_IMPLEMENTATION*/
