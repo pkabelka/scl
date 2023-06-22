@@ -13,6 +13,10 @@ int str_comp(void *s1, void *s2)
 void printf_callback(sbintree * const node)
 {
     printf("%s: %s\n", (char*)node->key, (char*)node->data);
+    if (node->parent != NULL)
+    {
+        printf("parent of %s: %s\n", (char*)node->key, (char*)node->parent->key);
+    }
 }
 
 void sbintree_free_func(sbintree * const node)

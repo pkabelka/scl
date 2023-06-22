@@ -37,6 +37,7 @@ extern "C" {
 
 typedef struct sbintree
 {
+    struct sbintree *parent;
     struct sbintree *left;
     struct sbintree *right;
     void *key;
@@ -68,6 +69,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
             return NULL;
         }
 
+        new_node->parent = NULL;
         new_node->left = NULL;
         new_node->right = NULL;
         new_node->key = key;
@@ -96,6 +98,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
                 return NULL;
             }
 
+            new_node->parent = current;
             new_node->left = NULL;
             new_node->right = NULL;
             new_node->key = key;
@@ -119,6 +122,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
                 return NULL;
             }
 
+            new_node->parent = current;
             new_node->left = NULL;
             new_node->right = NULL;
             new_node->key = key;
