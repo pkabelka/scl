@@ -64,8 +64,8 @@ sstr sstr_substr(sstr * const s, size_t const start, size_t const length);
 
 #ifdef SSTR_IMPLEMENTATION
 
-#ifndef SSTR_ALLOC_SIZE
-#define SSTR_ALLOC_SIZE 32
+#ifndef SSTR_INIT_ALLOC_SIZE
+#define SSTR_INIT_ALLOC_SIZE 32
 #endif
 
 sstr sstr_new(char const * const init_string)
@@ -73,7 +73,7 @@ sstr sstr_new(char const * const init_string)
     sstr s = { .cstr = NULL, .length = 0, .capacity = 0 };
     size_t const init_string_len = strlen(init_string);
     /* ceil(init_cap / ALLOC_SIZE) * ALLOC_SIZE */
-    size_t const init_capacity = ((init_string_len+1)/SSTR_ALLOC_SIZE + (((init_string_len+1) % SSTR_ALLOC_SIZE) != 0)) * SSTR_ALLOC_SIZE;
+    size_t const init_capacity = ((init_string_len+1)/SSTR_INIT_ALLOC_SIZE + (((init_string_len+1) % SSTR_INIT_ALLOC_SIZE) != 0)) * SSTR_INIT_ALLOC_SIZE;
 
     if ((s.cstr = (char *) malloc(sizeof(char) * init_capacity)) == NULL)
     {
@@ -112,7 +112,8 @@ void sstr_empty(sstr * const s)
 bool sstr_add_from(sstr * const s, const void * const src, size_t const length)
 {
     size_t const new_length = s->length + length;
-    size_t const new_capacity = sizeof(char) * (new_length + 1 + SSTR_ALLOC_SIZE);
+    /* ceil((new_length+1) * 1.5) */
+    size_t const new_capacity = sizeof(char) * (3*(new_length+1)/2 + (((new_length+1) % 2) != 0));
 
     if (new_length+1 > s->capacity)
     {

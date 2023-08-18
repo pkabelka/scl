@@ -24,21 +24,21 @@ int main()
 
     sstr_add_char(&s, 'e');
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
-    /* 32, 65, Lorem ipsum dolor sit amet conse */
+    /* 32, 50, Lorem ipsum dolor sit amet conse */
 
     sstr s2 = sstr_clone(s);
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 32, 65, Lorem ipsum dolor sit amet conse */
+    /* 32, 50, Lorem ipsum dolor sit amet conse */
 
     sstr_add_const(&s2, "ctetur");
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 38, 65, Lorem ipsum dolor sit amet consectetur */
+    /* 38, 50, Lorem ipsum dolor sit amet consectetur */
 
     sstr_swap(&s, &s2);
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
-    /* 38, 65, Lorem ipsum dolor sit amet consectetur */
+    /* 38, 50, Lorem ipsum dolor sit amet consectetur */
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 32, 65, Lorem ipsum dolor sit amet conse */
+    /* 32, 50, Lorem ipsum dolor sit amet conse */
 
     sstr_set_capacity(&s2, 33);
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
@@ -46,7 +46,7 @@ int main()
 
     sstr_add_from(&s2, s.cstr, 5);
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 37, 70, Lorem ipsum dolor sit amet conseLorem */
+    /* 37, 57, Lorem ipsum dolor sit amet conseLorem */
 
     sstr s2_substr = sstr_substr(&s2, 6, 5);
     printf("%lu, %lu, %s\n", s2_substr.length, s2_substr.capacity, s2_substr.cstr);
