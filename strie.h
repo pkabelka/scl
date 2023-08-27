@@ -47,7 +47,7 @@ typedef struct strie
 
 strie* strie_insert(strie ** const node, void * const key, size_t const key_length_bytes, void * const data);
 strie* strie_search(strie * const node, void * const key, size_t const key_length_bytes);
-bool strie_remove(strie * const root, void * const key, size_t const key_length_bytes, void (*free_func)(void*));
+bool strie_remove(strie ** const root, void * const key, size_t const key_length_bytes, void (*free_func)(void*));
 
 #ifdef __cplusplus
 }
@@ -137,15 +137,15 @@ strie* strie_search(strie * const node, void * const key, size_t const key_lengt
     return current;
 }
 
-bool strie_remove(strie * const root, void * const key, size_t const key_length_bytes, void (*free_func)(void*))
+bool strie_remove(strie ** const root, void * const key, size_t const key_length_bytes, void (*free_func)(void*))
 {
-    if (root == NULL)
+    if (*root == NULL)
     {
         return false;
     }
 
     unsigned char const * const key_bytes = (unsigned char const *) key;
-    strie *current = strie_search(root, key, key_length_bytes);
+    strie *current = strie_search(*root, key, key_length_bytes);
     if (current == NULL)
     {
         return false;
@@ -159,7 +159,7 @@ bool strie_remove(strie * const root, void * const key, size_t const key_length_
     }
 
     size_t i = key_length_bytes - 1;
-    while (current->prev != root->prev)
+    while (current->prev != (*root)->prev)
     {
         free(current->next);
         current->next = NULL;
@@ -169,7 +169,7 @@ bool strie_remove(strie * const root, void * const key, size_t const key_length_
         if (current->prev->next_count > 0)
         {
             free(current);
-            break;
+            return true;
         }
 
         strie *tmp = current;
@@ -178,6 +178,10 @@ bool strie_remove(strie * const root, void * const key, size_t const key_length_
 
         free(tmp);
     }
+
+    free((*root)->next);
+    free(*root);
+    *root = NULL;
 
     return true;
 }

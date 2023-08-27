@@ -35,22 +35,18 @@ int main()
     print_keys(root->next[(int)'f']->next[(int)'a']);
     print_keys(root->next[(int)'f']->next[(int)'o']);
 
-    strie_remove(root, "faa", 3, dummy_free);
+    strie_remove(&root, "faa", 3, dummy_free);
 
     print_keys(root);
     print_keys(root->next[(int)'f']);
     print_keys(root->next[(int)'f']->next[(int)'o']);
 
-    strie_remove(root, "foo", 3, dummy_free);
+    strie_remove(&root, "foo", 3, dummy_free);
     print_keys(root);
     print_keys(root->next[(int)'f']);
     print_keys(root->next[(int)'f']->next[(int)'o']);
 
-    strie_remove(root, "fob", 3, dummy_free);
-
-    free(root->next);
-    free(root);
-    root = NULL;
+    strie_remove(&root, "fob", 3, dummy_free);
 
     return 0;
 }
