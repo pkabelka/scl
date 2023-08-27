@@ -30,5 +30,9 @@ int main()
     printf("%lu, %lu, %s\n", arr3.length, arr3.capacity, (char *) arr3.data);
     /* 7, 11, foobar */
 
+    free(arr.data);
+    free(arr2.data);
+    free(arr3.data);
+
     return 0;
 }
