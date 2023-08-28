@@ -44,7 +44,7 @@ int main()
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
     /* 32, 33, Lorem ipsum dolor sit amet conse */
 
-    sstr_add_from(&s2, s.cstr, 5);
+    sstr_add(&s2, s.cstr, 5);
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
     /* 37, 57, Lorem ipsum dolor sit amet conseLorem */
 

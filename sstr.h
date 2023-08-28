@@ -45,7 +45,7 @@ typedef struct
 sstr sstr_new(char const * const init_string);
 void sstr_free(sstr * const s);
 void sstr_empty(sstr * const s);
-bool sstr_add_from(sstr * const s, const void * const src, size_t const length);
+bool sstr_add(sstr * const s, const void * const src, size_t const length);
 bool sstr_add_const(sstr * const s, const char * const s2);
 bool sstr_add_sstr(sstr * const s, sstr const s2);
 bool sstr_add_char(sstr * const s, char const c);
@@ -109,7 +109,7 @@ void sstr_empty(sstr * const s)
     s->length = 0;
 }
 
-bool sstr_add_from(sstr * const s, const void * const src, size_t const length)
+bool sstr_add(sstr * const s, const void * const src, size_t const length)
 {
     size_t const new_length = s->length + length;
     /* ceil((new_length+1) * 1.5) */
@@ -136,7 +136,7 @@ bool sstr_add_from(sstr * const s, const void * const src, size_t const length)
 
 bool sstr_add_const(sstr * const s, const char * const s2)
 {
-    return sstr_add_from(s, s2, strlen(s2));
+    return sstr_add(s, s2, strlen(s2));
 }
 
 bool sstr_add_sstr(sstr * const s, sstr const s2)
@@ -189,7 +189,7 @@ sstr sstr_clone(sstr const s)
 {
     sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
     sstr_set_capacity(&new_sstr, s.capacity);
-    sstr_add_from(&new_sstr, s.cstr, s.length);
+    sstr_add(&new_sstr, s.cstr, s.length);
     return new_sstr;
 }
 
@@ -198,7 +198,7 @@ sstr sstr_substr(sstr * const s, size_t const start, size_t const length)
     sstr new_sstr = sstr_new("");
     if ((start < s->length) && (s->length - start >= length))
     {
-        sstr_add_from(&new_sstr, s->cstr+start, length);
+        sstr_add(&new_sstr, s->cstr+start, length);
     }
     return new_sstr;
 }
