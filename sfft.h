@@ -123,6 +123,7 @@ void sfft_free(sfft * const fft)
     free(fft->sine);
     free(fft->cosine);
 
+    fft->n = 0;
     fft->bit_reverse = NULL;
     fft->sine = NULL;
     fft->cosine = NULL;
