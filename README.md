@@ -56,6 +56,51 @@ too.
 
 An example program can be found [here](examples/sbintree_example.c).
 
+## strie
+
+`strie` stands for *simple trie*. It is a single header file
+implementation of a very basic trie (prefix tree).
+
+### Usage
+
+```c
+#define STRIE_IMPLEMENTATION
+#include "strie.h"
+```
+
+An example program can be found [here](examples/strie_example.c).
+
+## sfft
+
+`sfft` stands for *simple Fast Fourier transform*. It is a single header file
+implementation of a Fast Fourier transform.
+
+### Usage
+
+```c
+#define SFFT_IMPLEMENTATION
+#include "sfft.h"
+```
+
+An example program can be found [here](examples/sfft_example.c).
+
+## sdarray
+
+`sdarray` stands for *simple dynamic array*. It is a single header file
+implementation of a very basic dynamic array.
+
+The implementation is a work-in-progress and cannot remove elements at this
+time.
+
+### Usage
+
+```c
+#define SDARRAY_IMPLEMENTATION
+#include "sdarray.h"
+```
+
+An example program can be found [here](examples/sdarray_example.c).
+
 ## LICENSE
 
 This project is in public domain, see [LICENSE](LICENSE).
