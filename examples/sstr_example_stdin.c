@@ -17,3 +17,16 @@ int main()
 
     return 0;
 }
+
+void buffered()
+{
+    sstr s = sstr_new("");
+    char buffer[4096];
+    while (fgets(buffer, 4096, stdin))
+    {
+        sstr_add_from(&s, buffer, strlen(buffer));
+    }
+    printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
+
+    sstr_free(&s);
+}
