@@ -82,6 +82,9 @@ implementation of a Fast Fourier transform.
 #include "sfft.h"
 ```
 
+The library uses `math.h` and therefore you need to link with `-lm` when
+compiling.
+
 An example program can be found [here](examples/sfft_example.c).
 
 ## sdarray
