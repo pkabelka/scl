@@ -113,11 +113,11 @@ bool sstr_add(sstr * const s, const void * const src, size_t const length)
 {
     size_t const new_length = s->length + length;
     /* ceil((new_length+1) * 1.5) */
-    size_t const new_capacity = sizeof(char) * (3*(new_length+1)/2 + (((new_length+1) % 2) != 0));
+    size_t const new_capacity = (3*(new_length+1)/2 + (((new_length+1) % 2) != 0));
 
     if (new_length+1 > s->capacity)
     {
-        if ((s->cstr = (char *) realloc(s->cstr, new_capacity)) == NULL)
+        if ((s->cstr = (char *) realloc(s->cstr, sizeof(char) * new_capacity)) == NULL)
         {
             return false;
         }
