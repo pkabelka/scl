@@ -35,6 +35,77 @@
 extern "C" {
 #endif
 
+/**
+ * Scans the characters from `getchar_func` into a buffer and converts them into
+ * long long int numbers.
+ *
+ * This function automatically allocates memory for the `result` array.
+ *
+ * @param getchar_func Functions which returns a single character of the input.
+ * Input end is marked with an `EOF` value.
+ * @param delimiter Array of delimiters. Default delimiter is ','. Use `NULL` if
+ * you don't want to specify own delimiters.
+ * @param delimiter_length Length of custom `delimiter` array. Ignored if
+ * `delimiter` == `NULL`.
+ * @param result Pointer to the result number array pointer.
+ * @param result_length Result number array length will be written to this
+ * pointer.
+ * @param result_capacity Result number array capacity (number of elements) will
+ * be written to this pointer.
+ * @return True if the function succeedes, false otherwise.
+ */
+bool sscannum_ll(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  long long int ** result,
+                  size_t *result_length,
+                  size_t *result_capacity,
+                  int base);
+
+bool sscannum_ull(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  unsigned long long int ** result,
+                  size_t *result_length,
+                  size_t *result_capacity,
+                  int base);
+
+bool sscannum_l(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  long int ** result,
+                  size_t *result_length,
+                  size_t *result_capacity,
+                  int base);
+
+bool sscannum_ul(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  unsigned long int ** result,
+                  size_t *result_length,
+                  size_t *result_capacity,
+                  int base);
+
+bool sscannum_ld(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  long double ** result,
+                  size_t *result_length,
+                  size_t *result_capacity);
+
+bool sscannum_d(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  double ** result,
+                  size_t *result_length,
+                  size_t *result_capacity);
+
+bool sscannum_f(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  float ** result,
+                  size_t *result_length,
+                  size_t *result_capacity);
 
 #ifdef __cplusplus
 }
@@ -42,13 +113,17 @@ extern "C" {
 
 #endif /*INCLUDE_SSCANNUM_H*/
 
-#define SSCANNUM_IMPLEMENTATION
 #ifdef SSCANNUM_IMPLEMENTATION
 
 enum _sscannum_number_type
 {
     _SSCANNUM_LONGLONGINT,
+    _SSCANNUM_UNSIGNEDLONGLONGINT,
+    _SSCANNUM_LONGINT,
+    _SSCANNUM_UNSIGNEDLONGINT,
+    _SSCANNUM_LONGDOUBLE,
     _SSCANNUM_DOUBLE,
+    _SSCANNUM_FLOAT,
 };
 
 /**
@@ -89,8 +164,23 @@ static bool _sscannum_common(int (*getchar_func)(),
         case _SSCANNUM_LONGLONGINT:
             numbers_element_size = sizeof(long long int);
             break;
+        case _SSCANNUM_UNSIGNEDLONGLONGINT:
+            numbers_element_size = sizeof(unsigned long long int);
+            break;
+        case _SSCANNUM_LONGINT:
+            numbers_element_size = sizeof(long int);
+            break;
+        case _SSCANNUM_UNSIGNEDLONGINT:
+            numbers_element_size = sizeof(unsigned long int);
+            break;
+        case _SSCANNUM_LONGDOUBLE:
+            numbers_element_size = sizeof(long double);
+            break;
         case _SSCANNUM_DOUBLE:
             numbers_element_size = sizeof(double);
+            break;
+        case _SSCANNUM_FLOAT:
+            numbers_element_size = sizeof(float);
             break;
         default:
             return false;
@@ -160,8 +250,23 @@ static bool _sscannum_common(int (*getchar_func)(),
             case _SSCANNUM_LONGLONGINT:
                 ((long long int *) numbers)[numbers_length++] = strtoll(digit_buffer, NULL, base);
                 break;
+            case _SSCANNUM_UNSIGNEDLONGLONGINT:
+                ((unsigned long long int *) numbers)[numbers_length++] = strtoull(digit_buffer, NULL, base);
+                break;
+            case _SSCANNUM_LONGINT:
+                ((long int *) numbers)[numbers_length++] = strtol(digit_buffer, NULL, base);
+                break;
+            case _SSCANNUM_UNSIGNEDLONGINT:
+                ((unsigned long int *) numbers)[numbers_length++] = strtoul(digit_buffer, NULL, base);
+                break;
+            case _SSCANNUM_LONGDOUBLE:
+                ((long double *) numbers)[numbers_length++] = strtold(digit_buffer, NULL);
+                break;
             case _SSCANNUM_DOUBLE:
                 ((double *) numbers)[numbers_length++] = strtod(digit_buffer, NULL);
+                break;
+            case _SSCANNUM_FLOAT:
+                ((float *) numbers)[numbers_length++] = strtof(digit_buffer, NULL);
                 break;
             default:
                 free(numbers);
@@ -176,25 +281,6 @@ static bool _sscannum_common(int (*getchar_func)(),
     return true;
 }
 
-/**
- * Scans the characters from `getchar_func` into a buffer and converts them into
- * long long int numbers.
- *
- * This function automatically allocates memory for the `result` array.
- *
- * @param getchar_func Functions which returns a single character of the input.
- * Input end is marked with an `EOF` value.
- * @param delimiter Array of delimiters. Default delimiter is ','. Use `NULL` if
- * you don't want to specify own delimiters.
- * @param delimiter_length Length of custom `delimiter` array. Ignored if
- * `delimiter` == `NULL`.
- * @param result Pointer to the result number array pointer.
- * @param result_length Result number array length will be written to this
- * pointer.
- * @param result_capacity Result number array capacity (number of elements) will
- * be written to this pointer.
- * @return True if the function succeedes, false otherwise.
- */
 bool sscannum_ll(int (*getchar_func)(),
                   char const * delimiter,
                   size_t delimiter_length,
@@ -214,6 +300,81 @@ bool sscannum_ll(int (*getchar_func)(),
         base);
 }
 
+bool sscannum_ull(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  unsigned long long int ** result,
+                  size_t *result_length,
+                  size_t *result_capacity,
+                  int base)
+{
+    return _sscannum_common(
+        getchar_func,
+        delimiter,
+        delimiter_length,
+        (void **) result,
+        result_length,
+        result_capacity,
+        _SSCANNUM_UNSIGNEDLONGLONGINT,
+        base);
+}
+
+bool sscannum_l(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  long int ** result,
+                  size_t *result_length,
+                  size_t *result_capacity,
+                  int base)
+{
+    return _sscannum_common(
+        getchar_func,
+        delimiter,
+        delimiter_length,
+        (void **) result,
+        result_length,
+        result_capacity,
+        _SSCANNUM_LONGINT,
+        base);
+}
+
+bool sscannum_ul(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  unsigned long int ** result,
+                  size_t *result_length,
+                  size_t *result_capacity,
+                  int base)
+{
+    return _sscannum_common(
+        getchar_func,
+        delimiter,
+        delimiter_length,
+        (void **) result,
+        result_length,
+        result_capacity,
+        _SSCANNUM_UNSIGNEDLONGINT,
+        base);
+}
+
+bool sscannum_ld(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  long double ** result,
+                  size_t *result_length,
+                  size_t *result_capacity)
+{
+    return _sscannum_common(
+        getchar_func,
+        delimiter,
+        delimiter_length,
+        (void **) result,
+        result_length,
+        result_capacity,
+        _SSCANNUM_LONGDOUBLE,
+        0);
+}
+
 bool sscannum_d(int (*getchar_func)(),
                   char const * delimiter,
                   size_t delimiter_length,
@@ -229,6 +390,24 @@ bool sscannum_d(int (*getchar_func)(),
         result_length,
         result_capacity,
         _SSCANNUM_DOUBLE,
+        0);
+}
+
+bool sscannum_f(int (*getchar_func)(),
+                  char const * delimiter,
+                  size_t delimiter_length,
+                  float ** result,
+                  size_t *result_length,
+                  size_t *result_capacity)
+{
+    return _sscannum_common(
+        getchar_func,
+        delimiter,
+        delimiter_length,
+        (void **) result,
+        result_length,
+        result_capacity,
+        _SSCANNUM_FLOAT,
         0);
 }
 
