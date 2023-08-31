@@ -13,7 +13,7 @@ int main()
     size_t numbers_capacity;
 
     /* char const delimiter[] = {'\n'}; */
-    /* sscannum_ll(&get_char_stdin, delimiter, 1, &numbers, &numbers_length, &numbers_capacity); */
+    /* sscannum_ll(&get_char_stdin, delimiter, 1, &numbers, &numbers_length, &numbers_capacity, 10); */
     sscannum_ll(&get_char_stdin, NULL, 0, &numbers, &numbers_length, &numbers_capacity, 10);
     /* sscannum_d(&get_char_stdin, NULL, 0, &numbers, &numbers_length, &numbers_capacity); */
 

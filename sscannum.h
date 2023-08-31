@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,6 +63,26 @@ bool sscannum_ll(int (*getchar_func)(),
                   size_t *result_capacity,
                   int base);
 
+/**
+ * Scans the characters from `getchar_func` into a buffer and converts them into
+ * unsigned long long int numbers.
+ *
+ * This function automatically allocates memory for the `result` array.
+ *
+ * @param getchar_func Functions which returns a single character of the input.
+ * Input end is marked with an `EOF` value.
+ * @param delimiter Array of delimiters. Default delimiter is ','. Use `NULL` if
+ * you don't want to specify own delimiters.
+ * @param delimiter_length Length of custom `delimiter` array. Ignored if
+ * `delimiter` == `NULL`.
+ * @param result Pointer to the result number array pointer.
+ * @param result_length Result number array length will be written to this
+ * pointer.
+ * @param result_capacity Result number array capacity (number of elements) will
+ * be written to this pointer.
+ * @param base Number base (radix) between `2` and `36` (inclusive).
+ * @return True if the function succeedes, false otherwise.
+ */
 bool sscannum_ull(int (*getchar_func)(),
                   char const * delimiter,
                   size_t delimiter_length,
@@ -70,6 +91,26 @@ bool sscannum_ull(int (*getchar_func)(),
                   size_t *result_capacity,
                   int base);
 
+/**
+ * Scans the characters from `getchar_func` into a buffer and converts them into
+ * long int numbers.
+ *
+ * This function automatically allocates memory for the `result` array.
+ *
+ * @param getchar_func Functions which returns a single character of the input.
+ * Input end is marked with an `EOF` value.
+ * @param delimiter Array of delimiters. Default delimiter is ','. Use `NULL` if
+ * you don't want to specify own delimiters.
+ * @param delimiter_length Length of custom `delimiter` array. Ignored if
+ * `delimiter` == `NULL`.
+ * @param result Pointer to the result number array pointer.
+ * @param result_length Result number array length will be written to this
+ * pointer.
+ * @param result_capacity Result number array capacity (number of elements) will
+ * be written to this pointer.
+ * @param base Number base (radix) between `2` and `36` (inclusive).
+ * @return True if the function succeedes, false otherwise.
+ */
 bool sscannum_l(int (*getchar_func)(),
                   char const * delimiter,
                   size_t delimiter_length,
@@ -78,6 +119,26 @@ bool sscannum_l(int (*getchar_func)(),
                   size_t *result_capacity,
                   int base);
 
+/**
+ * Scans the characters from `getchar_func` into a buffer and converts them into
+ * unsigned long int numbers.
+ *
+ * This function automatically allocates memory for the `result` array.
+ *
+ * @param getchar_func Functions which returns a single character of the input.
+ * Input end is marked with an `EOF` value.
+ * @param delimiter Array of delimiters. Default delimiter is ','. Use `NULL` if
+ * you don't want to specify own delimiters.
+ * @param delimiter_length Length of custom `delimiter` array. Ignored if
+ * `delimiter` == `NULL`.
+ * @param result Pointer to the result number array pointer.
+ * @param result_length Result number array length will be written to this
+ * pointer.
+ * @param result_capacity Result number array capacity (number of elements) will
+ * be written to this pointer.
+ * @param base Number base (radix) between `2` and `36` (inclusive).
+ * @return True if the function succeedes, false otherwise.
+ */
 bool sscannum_ul(int (*getchar_func)(),
                   char const * delimiter,
                   size_t delimiter_length,
@@ -86,6 +147,25 @@ bool sscannum_ul(int (*getchar_func)(),
                   size_t *result_capacity,
                   int base);
 
+/**
+ * Scans the characters from `getchar_func` into a buffer and converts them into
+ * long double numbers.
+ *
+ * This function automatically allocates memory for the `result` array.
+ *
+ * @param getchar_func Functions which returns a single character of the input.
+ * Input end is marked with an `EOF` value.
+ * @param delimiter Array of delimiters. Default delimiter is ','. Use `NULL` if
+ * you don't want to specify own delimiters.
+ * @param delimiter_length Length of custom `delimiter` array. Ignored if
+ * `delimiter` == `NULL`.
+ * @param result Pointer to the result number array pointer.
+ * @param result_length Result number array length will be written to this
+ * pointer.
+ * @param result_capacity Result number array capacity (number of elements) will
+ * be written to this pointer.
+ * @return True if the function succeedes, false otherwise.
+ */
 bool sscannum_ld(int (*getchar_func)(),
                   char const * delimiter,
                   size_t delimiter_length,
@@ -93,6 +173,25 @@ bool sscannum_ld(int (*getchar_func)(),
                   size_t *result_length,
                   size_t *result_capacity);
 
+/**
+ * Scans the characters from `getchar_func` into a buffer and converts them into
+ * double numbers.
+ *
+ * This function automatically allocates memory for the `result` array.
+ *
+ * @param getchar_func Functions which returns a single character of the input.
+ * Input end is marked with an `EOF` value.
+ * @param delimiter Array of delimiters. Default delimiter is ','. Use `NULL` if
+ * you don't want to specify own delimiters.
+ * @param delimiter_length Length of custom `delimiter` array. Ignored if
+ * `delimiter` == `NULL`.
+ * @param result Pointer to the result number array pointer.
+ * @param result_length Result number array length will be written to this
+ * pointer.
+ * @param result_capacity Result number array capacity (number of elements) will
+ * be written to this pointer.
+ * @return True if the function succeedes, false otherwise.
+ */
 bool sscannum_d(int (*getchar_func)(),
                   char const * delimiter,
                   size_t delimiter_length,
@@ -100,6 +199,25 @@ bool sscannum_d(int (*getchar_func)(),
                   size_t *result_length,
                   size_t *result_capacity);
 
+/**
+ * Scans the characters from `getchar_func` into a buffer and converts them into
+ * float numbers.
+ *
+ * This function automatically allocates memory for the `result` array.
+ *
+ * @param getchar_func Functions which returns a single character of the input.
+ * Input end is marked with an `EOF` value.
+ * @param delimiter Array of delimiters. Default delimiter is ','. Use `NULL` if
+ * you don't want to specify own delimiters.
+ * @param delimiter_length Length of custom `delimiter` array. Ignored if
+ * `delimiter` == `NULL`.
+ * @param result Pointer to the result number array pointer.
+ * @param result_length Result number array length will be written to this
+ * pointer.
+ * @param result_capacity Result number array capacity (number of elements) will
+ * be written to this pointer.
+ * @return True if the function succeedes, false otherwise.
+ */
 bool sscannum_f(int (*getchar_func)(),
                   char const * delimiter,
                   size_t delimiter_length,
@@ -212,11 +330,8 @@ static bool _sscannum_common(int (*getchar_func)(),
         {
             c = getchar_func();
 
-            /* ignore whitespace by default */
-            if ((c == '\n' && !_sscannum_char_in_array('\n', delimiter, delimiter_length))
-                || (c == '\r' && !_sscannum_char_in_array('\r', delimiter, delimiter_length))
-                || (c == '\t' && !_sscannum_char_in_array('\t', delimiter, delimiter_length))
-                || (c == ' ' && !_sscannum_char_in_array(' ', delimiter, delimiter_length)))
+            /* ignore whitespace by default if it is not specified as a delimiter */
+            if (isspace(c) && !_sscannum_char_in_array(c, delimiter, delimiter_length))
             {
                 continue;
             }
