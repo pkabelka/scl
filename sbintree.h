@@ -171,7 +171,7 @@ sbintree* sbintree_search(sbintree * const root, void * const key, int (*key_fun
     return NULL;
 }
 
-static void sbintree_left_inorder(sbintree * const root, sdll * const list)
+static void _sbintree_left_inorder(sbintree * const root, sdll * const list)
 {
     for (sbintree *current = root; current != NULL; current = current->left)
     {
@@ -184,13 +184,13 @@ void sbintree_inorder(sbintree * const root, void (*callback)(sbintree * const n
     if (root == NULL) return;
 
     sdll *list = sdll_new();
-    sbintree_left_inorder(root, list);
+    _sbintree_left_inorder(root, list);
 
     while (list->first != NULL)
     {
         sdll_node *first = list->first;
         sdll_unlink(list, list->first);
-        sbintree_left_inorder(((sbintree*)first->data)->right, list);
+        _sbintree_left_inorder(((sbintree*)first->data)->right, list);
         callback((sbintree*)first->data);
         free(first);
     }
@@ -258,7 +258,7 @@ sbintree* sbintree_predecessor(sbintree * const node)
     return predecessor;
 }
 
-static void sbintree_replace_nodes(sbintree ** const root, sbintree * const old_node, sbintree * const new_node)
+static void _sbintree_replace_nodes(sbintree ** const root, sbintree * const old_node, sbintree * const new_node)
 {
     if (old_node->parent == NULL)
     {
@@ -283,13 +283,13 @@ void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_
 {
     if (node->left == NULL)
     {
-        sbintree_replace_nodes(root, node, node->right);
+        _sbintree_replace_nodes(root, node, node->right);
         free_func(node);
         return;
     }
     else if (node->right == NULL)
     {
-        sbintree_replace_nodes(root, node, node->left);
+        _sbintree_replace_nodes(root, node, node->left);
         free_func(node);
         return;
     }
@@ -297,12 +297,12 @@ void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_
     sbintree *replacement = sbintree_successor(node);
     if (replacement->parent != node)
     {
-        sbintree_replace_nodes(root, replacement, replacement->right);
+        _sbintree_replace_nodes(root, replacement, replacement->right);
         replacement->right = node->right;
         replacement->right->parent = replacement;
     }
 
-    sbintree_replace_nodes(root, node, replacement);
+    _sbintree_replace_nodes(root, node, replacement);
     replacement->left = node->left;
     replacement->left->parent = replacement;
 
