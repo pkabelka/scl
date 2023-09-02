@@ -30,6 +30,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,7 +71,7 @@ sdarray sdarray_new(size_t const element_size, size_t const init_capacity)
         return arr;
     }
 
-    if ((arr.data = (void *) malloc(sizeof(char) * element_size * init_capacity)) == NULL)
+    if ((arr.data = (void *) malloc(sizeof(uint8_t) * element_size * init_capacity)) == NULL)
     {
         return arr;
     }
@@ -95,7 +96,7 @@ bool sdarray_add_from(sdarray * const arr, const void * const src, size_t const 
     if (arr->data == NULL)
     {
 
-        if ((arr->data = (void *) malloc(sizeof(char) * arr->element_size * length)) == NULL)
+        if ((arr->data = (void *) malloc(sizeof(uint8_t) * arr->element_size * length)) == NULL)
         {
             return false;
         }
@@ -103,7 +104,7 @@ bool sdarray_add_from(sdarray * const arr, const void * const src, size_t const 
 
     if (new_length > arr->capacity)
     {
-        if ((arr->data = (void *) realloc(arr->data, sizeof(char) * arr->element_size * new_capacity)) == NULL)
+        if ((arr->data = (void *) realloc(arr->data, sizeof(uint8_t) * arr->element_size * new_capacity)) == NULL)
         {
             return false;
         }
@@ -112,7 +113,7 @@ bool sdarray_add_from(sdarray * const arr, const void * const src, size_t const 
 
     if (length && src)
     {
-        memcpy(((char *) arr->data) + arr->length * arr->element_size, src, sizeof(char) * arr->element_size * length);
+        memcpy(((uint8_t *) arr->data) + arr->length * arr->element_size, src, sizeof(uint8_t) * arr->element_size * length);
     }
     arr->length = new_length;
 
@@ -133,20 +134,20 @@ bool sdarray_remove(sdarray * const arr, size_t const index)
 
     if (index + 1 == arr->length)
     {
-        memset(((char *) arr->data) + index, 0, arr->element_size);
+        memset(((uint8_t *) arr->data) + index, 0, arr->element_size);
     }
     else
     {
-        memmove(((char *) arr->data) + index * arr->element_size,
-                ((char *) arr->data) + (index + 1) * arr->element_size,
-                sizeof(char) * arr->element_size * (arr->length - index));
+        memmove(((uint8_t *) arr->data) + index * arr->element_size,
+                ((uint8_t *) arr->data) + (index + 1) * arr->element_size,
+                sizeof(uint8_t) * arr->element_size * (arr->length - index));
     }
     arr->length--;
 
     /* shrink the array when it reaches cap = 2 * len */
     if (arr->capacity / arr->length >= 2)
     {
-        if ((arr->data = (char *) realloc(arr->data, sizeof(char) * arr->element_size * arr->length)) == NULL)
+        if ((arr->data = (uint8_t *) realloc(arr->data, sizeof(uint8_t) * arr->element_size * arr->length)) == NULL)
         {
             return false;
         }
@@ -158,7 +159,7 @@ bool sdarray_remove(sdarray * const arr, size_t const index)
 
 void *sdarray_at(sdarray * const arr, size_t const index)
 {
-    return (void *) (((char *) arr->data) + index * arr->element_size);
+    return (void *) (((uint8_t *) arr->data) + index * arr->element_size);
 }
 
 void sdarray_swap(sdarray *arr, sdarray *arr2)
@@ -175,7 +176,7 @@ bool sdarray_set_capacity(sdarray * const arr, size_t const capacity)
         return false;
     }
 
-    if ((arr->data = (char *) realloc(arr->data, sizeof(char) * arr->element_size * capacity)) == NULL)
+    if ((arr->data = (uint8_t *) realloc(arr->data, sizeof(uint8_t) * arr->element_size * capacity)) == NULL)
     {
         return false;
     }
