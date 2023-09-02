@@ -48,6 +48,7 @@ sdarray sdarray_wrap_ptr(void * const ptr, size_t const element_size, size_t con
 bool sdarray_add_from(sdarray * const arr, const void * const src, size_t const length);
 bool sdarray_add_sdarray(sdarray * const arr, sdarray const arr2);
 bool sdarray_remove(sdarray * const arr, size_t const index);
+void *sdarray_at(sdarray * const arr, size_t const index);
 void sdarray_swap(sdarray *arr, sdarray *arr2);
 bool sdarray_set_capacity(sdarray * const arr, size_t const capacity);
 sdarray sdarray_clone(sdarray const arr);
@@ -153,6 +154,11 @@ bool sdarray_remove(sdarray * const arr, size_t const index)
     }
 
     return true;
+}
+
+void *sdarray_at(sdarray * const arr, size_t const index)
+{
+    return (void *) (((char *) arr->data) + index * arr->element_size);
 }
 
 void sdarray_swap(sdarray *arr, sdarray *arr2)
