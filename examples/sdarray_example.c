@@ -30,6 +30,19 @@ int main()
     printf("%lu, %lu, %s\n", arr3.length, arr3.capacity, (char *) arr3.data);
     /* 7, 11, foobar */
 
+    sdarray_remove(&arr3, 5);
+    printf("%lu, %lu, %s\n", arr3.length, arr3.capacity, (char *) arr3.data);
+    /* 6, 11, fooba */
+
+    sdarray_remove(&arr3, 4);
+    printf("%lu, %lu, %s\n", arr3.length, arr3.capacity, (char *) arr3.data);
+    /* 5, 5, foob */
+
+    arr3.length--;
+    sdarray_add_from(&arr3, "az", 3);
+    printf("%lu, %lu, %s\n", arr3.length, arr3.capacity, (char *) arr3.data);
+    /* 7, 11, foobaz */
+
     free(arr.data);
     free(arr2.data);
     free(arr3.data);

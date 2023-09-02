@@ -92,9 +92,6 @@ An example program can be found [here](examples/sfft_example.c).
 `sdarray` stands for *simple dynamic array*. It is a single header file
 implementation of a very basic dynamic array.
 
-The implementation is a work-in-progress and cannot remove elements at this
-time.
-
 ### Usage
 
 ```c

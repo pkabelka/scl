@@ -47,6 +47,7 @@ sdarray sdarray_new(size_t const element_size, size_t const init_capacity);
 sdarray sdarray_wrap_ptr(void * const ptr, size_t const element_size, size_t const ptr_size);
 bool sdarray_add_from(sdarray * const arr, const void * const src, size_t const length);
 bool sdarray_add_sdarray(sdarray * const arr, sdarray const arr2);
+bool sdarray_remove(sdarray * const arr, size_t const index);
 void sdarray_swap(sdarray *arr, sdarray *arr2);
 bool sdarray_set_capacity(sdarray * const arr, size_t const capacity);
 sdarray sdarray_clone(sdarray const arr);
@@ -120,6 +121,38 @@ bool sdarray_add_from(sdarray * const arr, const void * const src, size_t const 
 bool sdarray_add_sdarray(sdarray * const arr, sdarray const arr2)
 {
     return sdarray_add_from(arr, arr2.data, arr2.length);
+}
+
+bool sdarray_remove(sdarray * const arr, size_t const index)
+{
+    if (index >= arr->length)
+    {
+        return false;
+    }
+
+    if (index + 1 == arr->length)
+    {
+        memset(((char *) arr->data) + index, 0, arr->element_size);
+    }
+    else
+    {
+        memmove(((char *) arr->data) + index * arr->element_size,
+                ((char *) arr->data) + (index + 1) * arr->element_size,
+                sizeof(char) * arr->element_size * (arr->length - index));
+    }
+    arr->length--;
+
+    /* shrink the array when it reaches cap = 2 * len */
+    if (arr->capacity / arr->length >= 2)
+    {
+        if ((arr->data = (char *) realloc(arr->data, sizeof(char) * arr->element_size * arr->length)) == NULL)
+        {
+            return false;
+        }
+        arr->capacity = arr->length;
+    }
+
+    return true;
 }
 
 void sdarray_swap(sdarray *arr, sdarray *arr2)
