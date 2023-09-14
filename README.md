@@ -87,6 +87,23 @@ compiling.
 
 An example program can be found [here](examples/sfft_example.c).
 
+## sfft_recursive
+
+`sfft_recursive` stands for *simple recursive Fast Fourier transform*. It is a
+single header file implementation of a recursive Fast Fourier transform.
+
+### Usage
+
+```c
+#define SFFT_RECURSIVE_IMPLEMENTATION
+#include "sfft_recursive.h"
+```
+
+The library uses `math.h` and therefore you need to link with `-lm` when
+compiling.
+
+An example program can be found [here](examples/sfft_recursive_example.c).
+
 ## sdarray
 
 `sdarray` stands for *simple dynamic array*. It is a single header file
