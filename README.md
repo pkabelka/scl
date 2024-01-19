@@ -118,6 +118,25 @@ implementation of a very basic dynamic array.
 
 An example program can be found [here](examples/sdarray_example.c).
 
+## shashtab
+
+`shashtab` stands for *simple binary tree*. It is a single header file
+implementation of a very basic binary search tree.
+
+### Usage
+
+`shashtab.h` also requires `sbintree.h` and therefore `#define
+SBINTREE_IMPLEMENTATION` and `#define SDLL_IMPLEMENTATION` too.
+
+```c
+#define SHASHTAB_IMPLEMENTATION
+#define SBINTREE_IMPLEMENTATION
+#define SDLL_IMPLEMENTATION
+#include "shashtab.h"
+```
+
+An example program can be found [here](examples/shashtab_example.c).
+
 ## LICENSE
 
 This project is in public domain, see [LICENSE](LICENSE).
