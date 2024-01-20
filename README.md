@@ -120,8 +120,8 @@ An example program can be found [here](examples/sdarray_example.c).
 
 ## shashtab
 
-`shashtab` stands for *simple binary tree*. It is a single header file
-implementation of a very basic binary search tree.
+`shashtab` stands for *simple hash table*. It is a single header file
+implementation of a very basic hash table using FNV 1a 32 hash algorithm.
 
 ### Usage
 
