@@ -42,6 +42,7 @@ typedef struct
     size_t capacity;
 } sstr;
 
+size_t sstr_optimal_capacity(size_t length);
 sstr sstr_new(char const * const init_string);
 void sstr_free(sstr * const s);
 void sstr_empty(sstr * const s);
@@ -74,16 +75,17 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
 
 #ifdef SSTR_IMPLEMENTATION
 
-#ifndef SSTR_INIT_ALLOC_SIZE
-#define SSTR_INIT_ALLOC_SIZE 32
-#endif
+size_t sstr_optimal_capacity(size_t length)
+{
+    /* ceil((new_length+1) * 1.5) */
+    return 3*(length+1)/2 + (((length+1) % 2) != 0);
+}
 
 sstr sstr_new(char const * const init_string)
 {
     sstr s = { .cstr = NULL, .length = 0, .capacity = 0 };
     size_t const init_string_len = strlen(init_string);
-    /* ceil(init_cap / ALLOC_SIZE) * ALLOC_SIZE */
-    size_t const init_capacity = ((init_string_len+1)/SSTR_INIT_ALLOC_SIZE + (((init_string_len+1) % SSTR_INIT_ALLOC_SIZE) != 0)) * SSTR_INIT_ALLOC_SIZE;
+    size_t const init_capacity = sstr_optimal_capacity(init_string_len);
 
     if ((s.cstr = (char *) malloc(sizeof(char) * init_capacity)) == NULL)
     {
@@ -122,8 +124,7 @@ void sstr_empty(sstr * const s)
 bool sstr_add(sstr * const s, const void * const src, size_t const length)
 {
     size_t const new_length = s->length + length;
-    /* ceil((new_length+1) * 1.5) */
-    size_t const new_capacity = (3*(new_length+1)/2 + (((new_length+1) % 2) != 0));
+    size_t const new_capacity = sstr_optimal_capacity(new_length);
 
     if (new_length+1 > s->capacity)
     {
@@ -346,7 +347,7 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
     {
         size_t const new_length = new_str_len + s.length + s.length * new_str_len;
         /* ceil((new_length+1) * 1.5) */
-        size_t const new_capacity = (3*(new_length+1)/2 + (((new_length+1) % 2) != 0));
+        size_t const new_capacity = sstr_optimal_capacity(new_length);
 
         sstr new_sstr = sstr_new_empty(new_capacity);
         if (new_sstr.capacity == 0 || new_sstr.cstr == NULL)
@@ -378,7 +379,7 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
 
     size_t const new_length = s.length + (new_str_len - old_str_len) * replacement_count;
     /* ceil((new_length+1) * 1.5) */
-    size_t const new_capacity = (3*(new_length+1)/2 + (((new_length+1) % 2) != 0));
+    size_t const new_capacity = sstr_optimal_capacity(new_length);
 
     sstr new_sstr = sstr_new_empty(new_capacity);
     if (new_sstr.capacity == 0 || new_sstr.cstr == NULL)

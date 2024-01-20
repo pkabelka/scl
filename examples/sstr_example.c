@@ -7,38 +7,38 @@ int main()
 {
     sstr s = sstr_new("Lorem ipsum");
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
-    /* 11, 32, Lorem ipsum */
+    /* 11, 18, Lorem ipsum */
 
     sstr tmp_sstr = sstr_new(" dolor sit");
     sstr_add_sstr(&s, tmp_sstr);
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
-    /* 21, 32, Lorem ipsum dolor sit */
+    /* 21, 33, Lorem ipsum dolor sit */
 
     sstr_add_const(&s, " amet con");
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
-    /* 30, 32, Lorem ipsum dolor sit amet con */
+    /* 30, 33, Lorem ipsum dolor sit amet con */
 
     sstr_add_char(&s, 's');
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
-    /* 31, 32, Lorem ipsum dolor sit amet cons */
+    /* 31, 33, Lorem ipsum dolor sit amet cons */
 
     sstr_add_char(&s, 'e');
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
-    /* 32, 50, Lorem ipsum dolor sit amet conse */
+    /* 32, 33, Lorem ipsum dolor sit amet conse */
 
     sstr s2 = sstr_clone(s);
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 32, 50, Lorem ipsum dolor sit amet conse */
+    /* 32, 33, Lorem ipsum dolor sit amet conse */
 
     sstr_add_const(&s2, "ctetur");
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 38, 50, Lorem ipsum dolor sit amet consectetur */
+    /* 38, 59, Lorem ipsum dolor sit amet consectetur */
 
     sstr_swap(&s, &s2);
     printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr);
-    /* 38, 50, Lorem ipsum dolor sit amet consectetur */
+    /* 38, 59, Lorem ipsum dolor sit amet consectetur */
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
-    /* 32, 50, Lorem ipsum dolor sit amet conse */
+    /* 32, 33, Lorem ipsum dolor sit amet conse */
 
     sstr_set_capacity(&s2, 33);
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
@@ -50,7 +50,7 @@ int main()
 
     sstr s2_substr = sstr_substr(s2, 6, 5);
     printf("%lu, %lu, %s\n", s2_substr.length, s2_substr.capacity, s2_substr.cstr);
-    /* 5, 32, ipsum */
+    /* 5, 9, ipsum */
 
     printf("%d\n", sstr_has_prefix(s2, "Lorem"));
     /* 1 */
@@ -83,7 +83,7 @@ int main()
 
     sstr s3 = sstr_new("foo bar");
     printf("%lu, %lu, %s\n", s3.length, s3.capacity, s3.cstr);
-    /* 7, 32, foo bar */
+    /* 7, 12, foo bar */
     sstr s3_repl = sstr_replace(s3, "", "qux");
     printf("%lu, %lu, %s\n", s3_repl.length, s3_repl.capacity, s3_repl.cstr);
     /* 31, 48, quxfquxoquxoqux quxbquxaquxrqux */
