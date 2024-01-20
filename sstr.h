@@ -53,8 +53,17 @@ int sstr_cmp(sstr const s, sstr const s2);
 int sstr_cmp_const(sstr const s, const char * const s2);
 void sstr_swap(sstr *s, sstr *s2);
 bool sstr_set_capacity(sstr * const s, size_t const capacity);
+sstr sstr_new_empty(size_t const capacity);
 sstr sstr_clone(sstr const s);
 sstr sstr_substr(sstr * const s, size_t const start, size_t const length);
+bool sstr_has_prefix(sstr const s, const char * const prefix);
+bool sstr_has_suffix(sstr const s, const char * const suffix);
+bool sstr_has_prefix_sstr(sstr const s, sstr const prefix);
+bool sstr_has_suffix_sstr(sstr const s, sstr const suffix);
+sstr sstr_trim_left(sstr const s, const char * const trim_char_set);
+sstr sstr_trim_right(sstr const s, const char * const trim_char_set);
+bool sstr_index_of(sstr const s, char const c, size_t * const index);
+bool sstr_index_of_last(sstr const s, char const c, size_t * const index);
 
 #ifdef __cplusplus
 }
@@ -185,6 +194,13 @@ bool sstr_set_capacity(sstr * const s, size_t const capacity)
     return true;
 }
 
+sstr sstr_new_empty(size_t const capacity)
+{
+    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr_set_capacity(&new_sstr, capacity);
+    return new_sstr;
+}
+
 sstr sstr_clone(sstr const s)
 {
     sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
@@ -201,6 +217,122 @@ sstr sstr_substr(sstr * const s, size_t const start, size_t const length)
         sstr_add(&new_sstr, s->cstr+start, length);
     }
     return new_sstr;
+}
+
+bool sstr_has_prefix(sstr const s, const char * const prefix)
+{
+    size_t const prefix_len = strlen(prefix);
+    if (prefix_len > s.length)
+    {
+        return false;
+    }
+    return memcmp(s.cstr, prefix, prefix_len) == 0;
+}
+
+bool sstr_has_suffix(sstr const s, const char * const suffix)
+{
+    size_t const suffix_len = strlen(suffix);
+    if (suffix_len > s.length)
+    {
+        return false;
+    }
+    return memcmp(s.cstr + s.length - suffix_len, suffix, suffix_len) == 0;
+}
+
+bool sstr_has_prefix_sstr(sstr const s, sstr const prefix)
+{
+    if (prefix.length > s.length)
+    {
+        return false;
+    }
+    return memcmp(s.cstr, prefix.cstr, prefix.length) == 0;
+}
+
+bool sstr_has_suffix_sstr(sstr const s, sstr const suffix)
+{
+    if (suffix.length > s.length)
+    {
+        return false;
+    }
+    return memcmp(s.cstr + s.length - suffix.length, suffix.cstr, suffix.length) == 0;
+}
+
+static bool _sstr_const_contains_char(const char * const string, char const ch)
+{
+    for (char const *c = string; *c; c++)
+    {
+        if (*c == ch)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+sstr sstr_trim_left(sstr const s, const char * const trim_char_set)
+{
+    size_t char_count = 0;
+    for (size_t i = 0; i < s.length; i++)
+    {
+        if (_sstr_const_contains_char(trim_char_set, s.cstr[i]))
+        {
+            char_count++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr_add(&new_sstr, s.cstr + char_count, s.length - char_count);
+    return new_sstr;
+}
+
+sstr sstr_trim_right(sstr const s, const char * const trim_char_set)
+{
+    size_t char_count = 0;
+    for (size_t i = s.length - 1; i >= 0; i--)
+    {
+        if (_sstr_const_contains_char(trim_char_set, s.cstr[i]))
+        {
+            char_count++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr_add(&new_sstr, s.cstr, s.length - char_count);
+    return new_sstr;
+}
+
+bool sstr_index_of(sstr const s, char const c, size_t * const index)
+{
+    for (size_t i = 0; i < s.length; i++)
+    {
+        if (c == s.cstr[i])
+        {
+            *index = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool sstr_index_of_last(sstr const s, char const c, size_t * const index)
+{
+    for (size_t i = s.length - 1; i >= 0; i--)
+    {
+        if (c == s.cstr[i])
+        {
+            *index = i;
+            return true;
+        }
+    }
+    return false;
 }
 
 #endif /*SSTR_IMPLEMENTATION*/
