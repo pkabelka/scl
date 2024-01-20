@@ -346,7 +346,6 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
     if (old_str_len == 0)
     {
         size_t const new_length = new_str_len + s.length + s.length * new_str_len;
-        /* ceil((new_length+1) * 1.5) */
         size_t const new_capacity = sstr_optimal_capacity(new_length);
 
         sstr new_sstr = sstr_new_empty(new_capacity);
@@ -378,7 +377,6 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
     }
 
     size_t const new_length = s.length + (new_str_len - old_str_len) * replacement_count;
-    /* ceil((new_length+1) * 1.5) */
     size_t const new_capacity = sstr_optimal_capacity(new_length);
 
     sstr new_sstr = sstr_new_empty(new_capacity);
