@@ -64,6 +64,7 @@ sstr sstr_trim_left(sstr const s, const char * const trim_char_set);
 sstr sstr_trim_right(sstr const s, const char * const trim_char_set);
 bool sstr_index_of(sstr const s, char const c, size_t * const index);
 bool sstr_index_of_last(sstr const s, char const c, size_t * const index);
+sstr sstr_replace(sstr const s, const char * const old_str, const char * const new_str);
 
 #ifdef __cplusplus
 }
@@ -333,6 +334,74 @@ bool sstr_index_of_last(sstr const s, char const c, size_t * const index)
         }
     }
     return false;
+}
+
+sstr sstr_replace(sstr const s, const char * const old_str, const char * const new_str)
+{
+    size_t const old_str_len = strlen(old_str);
+    size_t const new_str_len = strlen(new_str);
+
+    /* place `new_str` at each "empty" character */
+    if (old_str_len == 0)
+    {
+        size_t const new_length = new_str_len + s.length + s.length * new_str_len;
+        /* ceil((new_length+1) * 1.5) */
+        size_t const new_capacity = (3*(new_length+1)/2 + (((new_length+1) % 2) != 0));
+
+        sstr new_sstr = sstr_new_empty(new_capacity);
+        if (new_sstr.capacity == 0 || new_sstr.cstr == NULL)
+        {
+            sstr empty_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+            return empty_sstr;
+        }
+        new_sstr.length = new_length;
+
+        char *new_moving_ptr = new_sstr.cstr;
+        for (size_t i = 0; i < s.length; i++)
+        {
+            new_moving_ptr = strncpy(new_moving_ptr, new_str, new_str_len) + new_str_len;
+            *new_moving_ptr++ = s.cstr[i];
+        }
+        strncpy(new_moving_ptr, new_str, new_str_len);
+
+        return new_sstr;
+    }
+
+    char *next_occurrence = s.cstr;
+    size_t replacement_count = 0;
+    char *tmp;
+    while ((tmp = strstr(next_occurrence, old_str)))
+    {
+        next_occurrence = tmp + old_str_len;
+        replacement_count++;
+    }
+
+    size_t const new_length = s.length + (new_str_len - old_str_len) * replacement_count;
+    /* ceil((new_length+1) * 1.5) */
+    size_t const new_capacity = (3*(new_length+1)/2 + (((new_length+1) % 2) != 0));
+
+    sstr new_sstr = sstr_new_empty(new_capacity);
+    if (new_sstr.capacity == 0 || new_sstr.cstr == NULL)
+    {
+        sstr empty_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+        return empty_sstr;
+    }
+    new_sstr.length = new_length;
+
+    char *new_moving_ptr = new_sstr.cstr;
+    char *orig_moving_ptr = s.cstr;
+    size_t len_to_next_replacement = 0;
+    for (size_t i = 0; i < replacement_count; i++)
+    {
+        next_occurrence = strstr(orig_moving_ptr, old_str);
+        len_to_next_replacement = next_occurrence - orig_moving_ptr;
+        new_moving_ptr = strncpy(new_moving_ptr, orig_moving_ptr, len_to_next_replacement) + len_to_next_replacement;
+        new_moving_ptr = strncpy(new_moving_ptr, new_str, new_str_len) + new_str_len;
+        orig_moving_ptr += len_to_next_replacement + old_str_len;
+    }
+    strncpy(new_moving_ptr, orig_moving_ptr, s.cstr + s.length - orig_moving_ptr);
+
+    return new_sstr;
 }
 
 #endif /*SSTR_IMPLEMENTATION*/

@@ -77,6 +77,17 @@ int main()
         printf("%lu, %c\n", idx, 'o');
     /* 33, o */
 
+    sstr s2_repl = sstr_replace(s2, "Lorem", "foo");
+    printf("%lu, %lu, %s\n", s2_repl.length, s2_repl.capacity, s2_repl.cstr);
+    /* 33, 51, foo ipsum dolor sit amet consefoo */
+
+    sstr s3 = sstr_new("foo bar");
+    printf("%lu, %lu, %s\n", s3.length, s3.capacity, s3.cstr);
+    /* 7, 32, foo bar */
+    sstr s3_repl = sstr_replace(s3, "", "qux");
+    printf("%lu, %lu, %s\n", s3_repl.length, s3_repl.capacity, s3_repl.cstr);
+    /* 31, 48, quxfquxoquxoqux quxbquxaquxrqux */
+
     /* cleanup */
     sstr_free(&s);
     sstr_free(&tmp_sstr);
@@ -84,6 +95,9 @@ int main()
     sstr_free(&s2_substr);
     sstr_free(&s2_trimmed_left);
     sstr_free(&s2_trimmed_right);
+    sstr_free(&s2_repl);
+    sstr_free(&s3);
+    sstr_free(&s3_repl);
 
     return 0;
 }
