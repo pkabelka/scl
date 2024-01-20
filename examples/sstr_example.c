@@ -48,7 +48,7 @@ int main()
     printf("%lu, %lu, %s\n", s2.length, s2.capacity, s2.cstr);
     /* 37, 57, Lorem ipsum dolor sit amet conseLorem */
 
-    sstr s2_substr = sstr_substr(&s2, 6, 5);
+    sstr s2_substr = sstr_substr(s2, 6, 5);
     printf("%lu, %lu, %s\n", s2_substr.length, s2_substr.capacity, s2_substr.cstr);
     /* 5, 32, ipsum */
 

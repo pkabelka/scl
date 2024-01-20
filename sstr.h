@@ -55,7 +55,7 @@ void sstr_swap(sstr *s, sstr *s2);
 bool sstr_set_capacity(sstr * const s, size_t const capacity);
 sstr sstr_new_empty(size_t const capacity);
 sstr sstr_clone(sstr const s);
-sstr sstr_substr(sstr * const s, size_t const start, size_t const length);
+sstr sstr_substr(sstr const s, size_t const start, size_t const length);
 bool sstr_has_prefix(sstr const s, const char * const prefix);
 bool sstr_has_suffix(sstr const s, const char * const suffix);
 bool sstr_has_prefix_sstr(sstr const s, sstr const prefix);
@@ -210,12 +210,12 @@ sstr sstr_clone(sstr const s)
     return new_sstr;
 }
 
-sstr sstr_substr(sstr * const s, size_t const start, size_t const length)
+sstr sstr_substr(sstr const s, size_t const start, size_t const length)
 {
     sstr new_sstr = sstr_new("");
-    if ((start < s->length) && (s->length - start >= length))
+    if ((start < s.length) && (s.length - start >= length))
     {
-        sstr_add(&new_sstr, s->cstr+start, length);
+        sstr_add(&new_sstr, s.cstr+start, length);
     }
     return new_sstr;
 }
