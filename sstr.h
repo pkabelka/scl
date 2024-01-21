@@ -441,7 +441,7 @@ sstr sstr_new_empty(size_t const capacity)
 
 sstr sstr_clone(sstr const s)
 {
-    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr new_sstr = sstr_new_empty(0);
     sstr_set_capacity(&new_sstr, s.capacity);
     sstr_add(&new_sstr, s.cstr, s.length);
     return new_sstr;
@@ -522,7 +522,7 @@ sstr sstr_trim_left(sstr const s, const char * const trim_char_set)
         }
     }
 
-    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr new_sstr = sstr_new_empty(0);
     sstr_add(&new_sstr, s.cstr + char_count, s.length - char_count);
     return new_sstr;
 }
@@ -543,7 +543,7 @@ sstr sstr_trim_left_sstr(sstr const s, sstr const trim_char_set)
         }
     }
 
-    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr new_sstr = sstr_new_empty(0);
     sstr_add(&new_sstr, s.cstr + char_count, s.length - char_count);
     return new_sstr;
 }
@@ -563,7 +563,7 @@ sstr sstr_trim_right(sstr const s, const char * const trim_char_set)
         }
     }
 
-    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr new_sstr = sstr_new_empty(0);
     sstr_add(&new_sstr, s.cstr, s.length - char_count);
     return new_sstr;
 }
@@ -584,7 +584,7 @@ sstr sstr_trim_right_sstr(sstr const s, sstr trim_char_set)
         }
     }
 
-    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr new_sstr = sstr_new_empty(0);
     sstr_add(&new_sstr, s.cstr, s.length - char_count);
     return new_sstr;
 }
@@ -629,8 +629,7 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
         sstr new_sstr = sstr_new_empty(new_capacity);
         if (new_sstr.capacity == 0 || new_sstr.cstr == NULL)
         {
-            sstr empty_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
-            return empty_sstr;
+            return sstr_new_empty(0);
         }
         new_sstr.length = new_length;
 
@@ -660,8 +659,7 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
     sstr new_sstr = sstr_new_empty(new_capacity);
     if (new_sstr.capacity == 0 || new_sstr.cstr == NULL)
     {
-        sstr empty_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
-        return empty_sstr;
+        return sstr_new_empty(0);
     }
     new_sstr.length = new_length;
 
