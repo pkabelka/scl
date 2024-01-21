@@ -77,23 +77,27 @@ int main()
         printf("%lu, %c\n", idx, 'o');
     /* 33, o */
 
-    sstr s2_repl = sstr_replace(s2, "Lorem", "foo");
+    sstr tmp1 = sstr_new("Lorem");
+    sstr tmp2 = sstr_new("foo");
+    sstr s2_repl = sstr_replace(s2, tmp1, tmp2);
     printf("%lu, %lu, %s\n", s2_repl.length, s2_repl.capacity, s2_repl.cstr);
     /* 33, 51, foo ipsum dolor sit amet consefoo */
+    sstr_free(&tmp1);
+    sstr_free(&tmp2);
 
     sstr s3 = sstr_new("foo bar");
     printf("%lu, %lu, %s\n", s3.length, s3.capacity, s3.cstr);
     /* 7, 12, foo bar */
-    sstr s3_repl = sstr_replace(s3, "", "qux");
+    sstr s3_repl = sstr_replace_const(s3, "", "qux");
     printf("%lu, %lu, %s\n", s3_repl.length, s3_repl.capacity, s3_repl.cstr);
     /* 31, 48, quxfquxoquxoqux quxbquxaquxrqux */
 
-    sstr tmp1 = sstr_new("foo");
-    sstr tmp2 = sstr_new("foo1");
-    printf("%d\n", sstr_cmp(tmp1, tmp2));
+    sstr tmp3 = sstr_new("foo");
+    sstr tmp4 = sstr_new("foo1");
+    printf("%d\n", sstr_cmp(tmp3, tmp4));
     /* -1 */
-    sstr_free(&tmp1);
-    sstr_free(&tmp2);
+    sstr_free(&tmp3);
+    sstr_free(&tmp4);
 
     sstr s4 = sstr_new_empty(0);
     char str_with_null[] = "FOO\0BAR\0BAZ";
@@ -124,6 +128,11 @@ int main()
     printf("%lu, %lu, %s\n", s5_trimmed_null.length, s5_trimmed_null.capacity, s5_trimmed_null.cstr);
     /* 11, 18, FOO */
 
+    sstr under = sstr_new("_");
+    sstr s5_repl_null = sstr_replace(s5_trimmed_null, null_str, under);
+    printf("%lu, %lu, %s\n", s5_repl_null.length, s5_repl_null.capacity, s5_repl_null.cstr);
+    /* 11, 18, FOO */
+
     /* cleanup */
     sstr_free(&s);
     sstr_free(&tmp_sstr);
@@ -138,6 +147,8 @@ int main()
     sstr_free(&s5);
     sstr_free(&null_str);
     sstr_free(&s5_trimmed_null);
+    sstr_free(&s5_repl_null);
+    sstr_free(&under);
 
     return 0;
 }

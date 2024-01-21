@@ -288,13 +288,25 @@ bool sstr_index_of_last(sstr const s, char const c, size_t * const index);
  * Allocates a new sstr with all occurrences of `old_str` replaced with
  * `new_str`.
  *
- * @param s Original sstr to loop through.
+ * @param s Original sstr to search through.
+ * @param old_str The replaced sstr.
+ * @param new_str The replacement sstr.
+ * @return New sstr with all occurrences of `old_str` replaced with
+ * `new_str`.
+ */
+sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str);
+
+/**
+ * Allocates a new sstr with all occurrences of `old_str` replaced with
+ * `new_str`.
+ *
+ * @param s Original sstr to search through.
  * @param old_str The replaced C string.
  * @param new_str The replacement C string.
  * @return New sstr with all occurrences of `old_str` replaced with
  * `new_str`.
  */
-sstr sstr_replace(sstr const s, const char * const old_str, const char * const new_str);
+sstr sstr_replace_const(sstr const s, const char * const old_str, const char * const new_str);
 
 #ifdef __cplusplus
 }
@@ -615,10 +627,10 @@ bool sstr_index_of_last(sstr const s, char const c, size_t * const index)
     return false;
 }
 
-sstr sstr_replace(sstr const s, const char * const old_str, const char * const new_str)
+sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
 {
-    size_t const old_str_len = strlen(old_str);
-    size_t const new_str_len = strlen(new_str);
+    size_t const old_str_len = old_str.length;
+    size_t const new_str_len = new_str.length;
 
     /* place `new_str` at each "empty" character */
     if (old_str_len == 0)
@@ -636,10 +648,11 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
         char *new_moving_ptr = new_sstr.cstr;
         for (size_t i = 0; i < s.length; i++)
         {
-            new_moving_ptr = strncpy(new_moving_ptr, new_str, new_str_len) + new_str_len;
+            new_moving_ptr = (char *) memcpy(new_moving_ptr, new_str.cstr, new_str_len) + new_str_len;
             *new_moving_ptr++ = s.cstr[i];
         }
-        strncpy(new_moving_ptr, new_str, new_str_len);
+        memcpy(new_moving_ptr, new_str.cstr, new_str_len);
+        new_sstr.cstr[new_length] = '\0';
 
         return new_sstr;
     }
@@ -647,7 +660,7 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
     char *next_occurrence = s.cstr;
     size_t replacement_count = 0;
     char *tmp;
-    while ((tmp = strstr(next_occurrence, old_str)))
+    while ((tmp = (char *) memmem(next_occurrence, s.cstr + s.length - next_occurrence, old_str.cstr, old_str_len)))
     {
         next_occurrence = tmp + old_str_len;
         replacement_count++;
@@ -668,15 +681,26 @@ sstr sstr_replace(sstr const s, const char * const old_str, const char * const n
     size_t len_to_next_replacement = 0;
     for (size_t i = 0; i < replacement_count; i++)
     {
-        next_occurrence = strstr(orig_moving_ptr, old_str);
+        next_occurrence = (char *) memmem(orig_moving_ptr, s.cstr + s.length - orig_moving_ptr, old_str.cstr, old_str_len);
         len_to_next_replacement = next_occurrence - orig_moving_ptr;
-        new_moving_ptr = strncpy(new_moving_ptr, orig_moving_ptr, len_to_next_replacement) + len_to_next_replacement;
-        new_moving_ptr = strncpy(new_moving_ptr, new_str, new_str_len) + new_str_len;
+        new_moving_ptr = (char *) memcpy(new_moving_ptr, orig_moving_ptr, len_to_next_replacement) + len_to_next_replacement;
+        new_moving_ptr = (char *) memcpy(new_moving_ptr, new_str.cstr, new_str_len) + new_str_len;
         orig_moving_ptr += len_to_next_replacement + old_str_len;
     }
-    strncpy(new_moving_ptr, orig_moving_ptr, s.cstr + s.length - orig_moving_ptr);
+    memcpy(new_moving_ptr, orig_moving_ptr, s.cstr + s.length - orig_moving_ptr);
+    new_sstr.cstr[new_length] = '\0';
 
     return new_sstr;
+}
+
+sstr sstr_replace_const(sstr const s, const char * const old_str, const char * const new_str)
+{
+    sstr old_sstr = sstr_new(old_str);
+    sstr new_sstr = sstr_new(new_str);
+    sstr const replaced = sstr_replace(s, old_sstr, new_sstr);
+    sstr_free(&old_sstr);
+    sstr_free(&new_sstr);
+    return replaced;
 }
 
 #endif /*SSTR_IMPLEMENTATION*/
