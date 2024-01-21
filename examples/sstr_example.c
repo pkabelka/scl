@@ -88,6 +88,9 @@ int main()
     printf("%lu, %lu, %s\n", s3_repl.length, s3_repl.capacity, s3_repl.cstr);
     /* 31, 48, quxfquxoquxoqux quxbquxaquxrqux */
 
+    printf("%d\n", sstr_cmp(sstr_new("foo"), sstr_new("foo1")));
+    /* -1 */
+
     /* cleanup */
     sstr_free(&s);
     sstr_free(&tmp_sstr);

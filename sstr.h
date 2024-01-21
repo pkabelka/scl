@@ -162,7 +162,15 @@ bool sstr_add_char(sstr * const s, char const c)
 
 int sstr_cmp(sstr const s, sstr const s2)
 {
-    return strncmp(s.cstr, s2.cstr, s.length < s2.length ? s.length : s2.length);
+    if (s.length < s2.length)
+    {
+        return -1;
+    }
+    else if (s.length > s2.length)
+    {
+        return 1;
+    }
+    return memcmp(s.cstr, s2.cstr, s.length);
 }
 
 int sstr_cmp_const(sstr const s, const char * const s2)
