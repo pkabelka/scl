@@ -35,6 +35,9 @@
 extern "C" {
 #endif
 
+/**
+ * Simple string type. Capacity includes the NULL ('\0') terminator.
+ */
 typedef struct
 {
     char *cstr;
@@ -42,29 +45,235 @@ typedef struct
     size_t capacity;
 } sstr;
 
+/**
+ * Calculates the optimal capacity based on the passed length. The optimal
+ * capacity ceil((new_length+1) * 1.5) should achieve an amortized constant
+ * time.
+ *
+ * @param length Desired string length.
+ * @return Optimal string capacity including the NULL ('\0') terminator.
+ */
 size_t sstr_optimal_capacity(size_t length);
+
+/**
+ * Allocates a new `sstr` and copies the string literal to the `.cstr` field.
+ *
+ * @param init_string String to wrap.
+ * @return New `sstr`.
+ */
 sstr sstr_new(char const * const init_string);
+
+/**
+ * Frees the string. Can be called repeatedly.
+ *
+ * @param s String to free.
+ */
 void sstr_free(sstr * const s);
+
+/**
+ * Sets the strings length and first char to `0`.
+ *
+ * @param s String to empty.
+ */
 void sstr_empty(sstr * const s);
+
+/**
+ * Appends the `src` to the string up to `length` chars. The `.cstr` or
+ * `.capacity` field of `s` can even be `0`. If there's not enough capacity, the
+ * function automatically reallocates the string.
+ *
+ * @param s The string to append to.
+ * @param src Appended C string.
+ * @param length Length of the appended C string.
+ * @return `true` upon success, `false` otherwise.
+ */
 bool sstr_add(sstr * const s, const void * const src, size_t const length);
+
+/**
+ * Appends the `s2` to the sstr `s`. The `.cstr` or
+ * `.capacity` field of `s` can even be `0`. If there's not enough capacity, the
+ * function automatically reallocates the string.
+ *
+ * @param s The string to append to.
+ * @param s2 Appended C string.
+ * @return `true` upon success, `false` otherwise.
+ */
 bool sstr_add_const(sstr * const s, const char * const s2);
+
+/**
+ * Appends the sstr `s2` to the sstr `s`. The `.cstr` or
+ * `.capacity` field of `s` can even be `0`. If there's not enough capacity, the
+ * function automatically reallocates the string.
+ *
+ * @param s The string to append to.
+ * @param s2 Appended sstr.
+ * @return `true` upon success, `false` otherwise.
+ */
 bool sstr_add_sstr(sstr * const s, sstr const s2);
+
+/**
+ * Appends the char to the sstr `s`. The `.cstr` or
+ * `.capacity` field of `s` can even be `0`. If there's not enough capacity, the
+ * function automatically reallocates the string.
+ *
+ * @param s The string to append to.
+ * @param c Appended character.
+ * @return `true` upon success, `false` otherwise.
+ */
 bool sstr_add_char(sstr * const s, char const c);
+
+/**
+ * Compares the sstr `s` with `s2` using `memcmp`.
+ *
+ * @param s First string to compare.
+ * @param s2 Second string to compare.
+ * @return `<0` the first character that does not match has a lower value in `s` than in `s2`.
+ * @return `0` the contents of both strings are equal.
+ * @return `>0` the first character that does not match has a greater value in `s` than in `s2`.
+ */
 int sstr_cmp(sstr const s, sstr const s2);
+
+/**
+ * Compares the sstr `s` with `s2` using `strcmp`.
+ *
+ * @param s sstr to compare.
+ * @param s2 C string to compare with.
+ * @return `<0` the first character that does not match has a lower value in `s` than in `s2`.
+ * @return `0` the contents of both strings are equal.
+ * @return `>0` the first character that does not match has a greater value in `s` than in `s2`.
+ */
 int sstr_cmp_const(sstr const s, const char * const s2);
+
+/**
+ * Swaps the strings.
+ */
 void sstr_swap(sstr *s, sstr *s2);
+
+/**
+ * Reallocates the string's capacity. The new capacity MUST be larger than the
+ * string's length + 1 for the NULL ('\0') terminator.
+ *
+ * @param s sstr to reallocate.
+ * @param capacity New capacity.
+ * @return `true` upon success, `false` otherwise.
+ */
 bool sstr_set_capacity(sstr * const s, size_t const capacity);
+
+/**
+ * Allocates a new empty sstr with the desired capacity.
+ *
+ * @param capacity Initial capacity.
+ * @return `true` upon success, `false` otherwise.
+ */
 sstr sstr_new_empty(size_t const capacity);
+
+/**
+ * Clones the sstr to a newly allocated string. The new string has even the same
+ * capacity.
+ *
+ * @param s sstr to clone.
+ * @return Cloned string.
+ */
 sstr sstr_clone(sstr const s);
+
+/**
+ * Allocates a new slice of the string.
+ *
+ * @param s sstr to cut.
+ * @param start Starting index.
+ * @param length Substring length.
+ * @return Slice of the string.
+ */
 sstr sstr_substr(sstr const s, size_t const start, size_t const length);
+
+/**
+ * Checks if the string's prefix matches `prefix`.
+ *
+ * @param s sstr to check.
+ * @param prefix Prefix to find.
+ * @return `true` if the prefix matches, `false` otherwise.
+ */
 bool sstr_has_prefix(sstr const s, const char * const prefix);
+
+/**
+ * Checks if the string's suffix matches `suffix`.
+ *
+ * @param s sstr to check.
+ * @param suffix Suffix to find.
+ * @return `true` if the suffix matches, `false` otherwise.
+ */
 bool sstr_has_suffix(sstr const s, const char * const suffix);
+
+/**
+ * Checks if the string's prefix matches `prefix`.
+ *
+ * @param s sstr to check.
+ * @param prefix Prefix to find.
+ * @return `true` if the prefix matches, `false` otherwise.
+ */
 bool sstr_has_prefix_sstr(sstr const s, sstr const prefix);
+
+/**
+ * Checks if the string's suffix matches `suffix`.
+ *
+ * @param s sstr to check.
+ * @param suffix Suffix to find.
+ * @return `true` if the suffix matches, `false` otherwise.
+ */
 bool sstr_has_suffix_sstr(sstr const s, sstr const suffix);
+
+/**
+ * Allocates a new sstr without the prefix characters in `trim_char_set`. Stops
+ * trimming upon first prefix character not in `trim_char_set`.
+ *
+ * @param s sstr to trim.
+ * @param trim_char_set A C string containing the characters to trim from left.
+ * @return New sstr without the characters trimmed from left.
+ */
 sstr sstr_trim_left(sstr const s, const char * const trim_char_set);
+
+/**
+ * Allocates a new sstr without the suffix characters in `trim_char_set`. Stops
+ * trimming upon first suffix character not in `trim_char_set`.
+ *
+ * @param s sstr to trim.
+ * @param trim_char_set A C string containing the characters to trim from right.
+ * @return New sstr without the characters trimmed from right.
+ */
 sstr sstr_trim_right(sstr const s, const char * const trim_char_set);
+
+/**
+ * Finds the index of the first occurrence of `c`. Check if the function
+ * returned `true` before using `index`.
+ *
+ * @param s sstr to search.
+ * @param c Searched character.
+ * @param index Index of the found character.
+ * @return `true` if the character is present, `false` otherwise.
+ */
 bool sstr_index_of(sstr const s, char const c, size_t * const index);
+
+/**
+ * Finds the index of the last occurrence of `c`. Check if the function
+ * returned `true` before using `index`.
+ *
+ * @param s sstr to search.
+ * @param c Searched character.
+ * @param index Index of the found character.
+ * @return `true` if the character is present, `false` otherwise.
+ */
 bool sstr_index_of_last(sstr const s, char const c, size_t * const index);
+
+/**
+ * Allocates a new sstr with all occurrences of `old_str` replaced with
+ * `new_str`.
+ *
+ * @param s Original sstr to loop through.
+ * @param old_str The replaced C string.
+ * @param new_str The replacement C string.
+ * @return New sstr with all occurrences of `old_str` replaced with
+ * `new_str`.
+ */
 sstr sstr_replace(sstr const s, const char * const old_str, const char * const new_str);
 
 #ifdef __cplusplus
