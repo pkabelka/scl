@@ -220,7 +220,7 @@ sstr sstr_clone(sstr const s)
 
 sstr sstr_substr(sstr const s, size_t const start, size_t const length)
 {
-    sstr new_sstr = sstr_new("");
+    sstr new_sstr = sstr_new_empty(0);
     if ((start < s.length) && (s.length - start >= length))
     {
         sstr_add(&new_sstr, s.cstr+start, length);
