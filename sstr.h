@@ -233,6 +233,16 @@ bool sstr_has_suffix_sstr(sstr const s, sstr const suffix);
 sstr sstr_trim_left(sstr const s, const char * const trim_char_set);
 
 /**
+ * Allocates a new sstr without the prefix characters in `trim_char_set`. Stops
+ * trimming upon first prefix character not in `trim_char_set`.
+ *
+ * @param s sstr to trim.
+ * @param trim_char_set An sstr containing the characters to trim from left.
+ * @return New sstr without the characters trimmed from left.
+ */
+sstr sstr_trim_left_sstr(sstr const s, sstr const trim_char_set);
+
+/**
  * Allocates a new sstr without the suffix characters in `trim_char_set`. Stops
  * trimming upon first suffix character not in `trim_char_set`.
  *
@@ -241,6 +251,16 @@ sstr sstr_trim_left(sstr const s, const char * const trim_char_set);
  * @return New sstr without the characters trimmed from right.
  */
 sstr sstr_trim_right(sstr const s, const char * const trim_char_set);
+
+/**
+ * Allocates a new sstr without the suffix characters in `trim_char_set`. Stops
+ * trimming upon first suffix character not in `trim_char_set`.
+ *
+ * @param s sstr to trim.
+ * @param trim_char_set An sstr containing the characters to trim from right.
+ * @return New sstr without the characters trimmed from right.
+ */
+sstr sstr_trim_right_sstr(sstr const s, sstr trim_char_set);
 
 /**
  * Finds the index of the first occurrence of `c`. Check if the function
@@ -507,12 +527,54 @@ sstr sstr_trim_left(sstr const s, const char * const trim_char_set)
     return new_sstr;
 }
 
+sstr sstr_trim_left_sstr(sstr const s, sstr const trim_char_set)
+{
+    size_t char_count = 0;
+    size_t unused;
+    for (size_t i = 0; i < s.length; i++)
+    {
+        if (sstr_index_of(trim_char_set, s.cstr[i], &unused))
+        {
+            char_count++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr_add(&new_sstr, s.cstr + char_count, s.length - char_count);
+    return new_sstr;
+}
+
 sstr sstr_trim_right(sstr const s, const char * const trim_char_set)
 {
     size_t char_count = 0;
     for (size_t i = s.length - 1; i >= 0; i--)
     {
         if (_sstr_const_contains_char(trim_char_set, s.cstr[i]))
+        {
+            char_count++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr_add(&new_sstr, s.cstr, s.length - char_count);
+    return new_sstr;
+}
+
+sstr sstr_trim_right_sstr(sstr const s, sstr trim_char_set)
+{
+    size_t char_count = 0;
+    size_t unused;
+    for (size_t i = s.length - 1; i >= 0; i--)
+    {
+        if (sstr_index_of(trim_char_set, s.cstr[i], &unused))
         {
             char_count++;
         }

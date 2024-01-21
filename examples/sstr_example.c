@@ -88,8 +88,41 @@ int main()
     printf("%lu, %lu, %s\n", s3_repl.length, s3_repl.capacity, s3_repl.cstr);
     /* 31, 48, quxfquxoquxoqux quxbquxaquxrqux */
 
-    printf("%d\n", sstr_cmp(sstr_new("foo"), sstr_new("foo1")));
+    sstr tmp1 = sstr_new("foo");
+    sstr tmp2 = sstr_new("foo1");
+    printf("%d\n", sstr_cmp(tmp1, tmp2));
     /* -1 */
+    sstr_free(&tmp1);
+    sstr_free(&tmp2);
+
+    sstr s4 = sstr_new_empty(0);
+    char str_with_null[] = "FOO\0BAR\0BAZ";
+    printf("%zu\n", sizeof(str_with_null));
+    /* 12 */
+    sstr_add(&s4, str_with_null, sizeof(str_with_null)-1);
+    printf("%lu, %lu\n", s4.length, s4.capacity);
+    /* 11, 18 */
+
+    size_t idx2;
+    if (sstr_index_of(s4, '\0', &idx2))
+        printf("%lu, \\0\n", idx2);
+    /* 3, \0 */
+
+
+    sstr s5 = sstr_new_empty(0);
+    char str_with_null2[] = "\0\0FOO\0BAR\0BAZ";
+    printf("%zu\n", sizeof(str_with_null2));
+    /* 14 */
+    sstr_add(&s5, str_with_null2, sizeof(str_with_null2)-1);
+    printf("%lu, %lu\n", s5.length, s5.capacity);
+    /* 13, 21 */
+
+    sstr null_str = sstr_new_empty(1);
+    sstr_add(&null_str, "\0", 1);
+
+    sstr s5_trimmed_null = sstr_trim_left_sstr(s5, null_str);
+    printf("%lu, %lu, %s\n", s5_trimmed_null.length, s5_trimmed_null.capacity, s5_trimmed_null.cstr);
+    /* 11, 18, FOO */
 
     /* cleanup */
     sstr_free(&s);
@@ -101,6 +134,10 @@ int main()
     sstr_free(&s2_repl);
     sstr_free(&s3);
     sstr_free(&s3_repl);
+    sstr_free(&s4);
+    sstr_free(&s5);
+    sstr_free(&null_str);
+    sstr_free(&s5_trimmed_null);
 
     return 0;
 }
