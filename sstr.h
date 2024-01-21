@@ -152,18 +152,17 @@ bool sstr_add_const(sstr * const s, const char * const s2)
 
 bool sstr_add_sstr(sstr * const s, sstr const s2)
 {
-    return sstr_add_const(s, s2.cstr);
+    return sstr_add(s, s2.cstr, s2.length);
 }
 
 bool sstr_add_char(sstr * const s, char const c)
 {
-    char const tmp[2] = {c, '\0'};
-    return sstr_add_const(s, tmp);
+    return sstr_add(s, &c, 1);
 }
 
 int sstr_cmp(sstr const s, sstr const s2)
 {
-    return strcmp(s.cstr, s2.cstr);
+    return strncmp(s.cstr, s2.cstr, s.length < s2.length ? s.length : s2.length);
 }
 
 int sstr_cmp_const(sstr const s, const char * const s2)
