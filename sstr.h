@@ -657,6 +657,11 @@ bool sstr_index_of_last(sstr const s, char const c, size_t * const index)
 
 size_t sstr_count(sstr const s, const void * const substr, size_t const substr_len)
 {
+    if (substr_len == 0)
+    {
+        return s.length + 1;
+    }
+
     char *next_occurrence = s.cstr;
     size_t count = 0;
     char *tmp;
