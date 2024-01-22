@@ -286,7 +286,7 @@ bool sstr_index_of_last(sstr const s, char const c, size_t * const index);
 
 /**
  * Allocates a new sstr with all occurrences of `old_str` replaced with
- * `new_str`.
+ * `new_str`. Requires the function `memmem`.
  *
  * @param s Original sstr to search through.
  * @param old_str The replaced sstr.
@@ -298,7 +298,7 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str);
 
 /**
  * Allocates a new sstr with all occurrences of `old_str` replaced with
- * `new_str`.
+ * `new_str`. Requires the function `memmem`.
  *
  * @param s Original sstr to search through.
  * @param old_str The replaced C string.
