@@ -743,12 +743,15 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
 
 sstr sstr_replace_const(sstr const s, const char * const old_str, const char * const new_str)
 {
-    sstr old_sstr = sstr_new(old_str);
-    sstr new_sstr = sstr_new(new_str);
-    sstr const replaced = sstr_replace(s, old_sstr, new_sstr);
-    sstr_free(&old_sstr);
-    sstr_free(&new_sstr);
-    return replaced;
+    sstr old_sstr = sstr_new_empty(0);
+    old_sstr.cstr = (char * const) old_str;
+    old_sstr.length = strlen(old_str);
+
+    sstr new_sstr = sstr_new_empty(0);
+    new_sstr.cstr = (char * const) new_str;
+    new_sstr.length = strlen(new_str);
+
+    return sstr_replace(s, old_sstr, new_sstr);
 }
 
 #endif /*SSTR_IMPLEMENTATION*/
