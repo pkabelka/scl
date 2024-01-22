@@ -563,7 +563,7 @@ sstr sstr_trim_left_sstr(sstr const s, sstr const trim_char_set)
 sstr sstr_trim_right(sstr const s, const char * const trim_char_set)
 {
     size_t char_count = 0;
-    for (size_t i = s.length - 1; i >= 0; i--)
+    for (size_t i = s.length - 1; i != 0; i--)
     {
         if (_sstr_const_contains_char(trim_char_set, s.cstr[i]))
         {
@@ -584,7 +584,7 @@ sstr sstr_trim_right_sstr(sstr const s, sstr trim_char_set)
 {
     size_t char_count = 0;
     size_t unused;
-    for (size_t i = s.length - 1; i >= 0; i--)
+    for (size_t i = s.length - 1; i != 0; i--)
     {
         if (sstr_index_of(trim_char_set, s.cstr[i], &unused))
         {
@@ -616,7 +616,7 @@ bool sstr_index_of(sstr const s, char const c, size_t * const index)
 
 bool sstr_index_of_last(sstr const s, char const c, size_t * const index)
 {
-    for (size_t i = s.length - 1; i >= 0; i--)
+    for (size_t i = s.length - 1; i != 0; i--)
     {
         if (c == s.cstr[i])
         {
@@ -660,7 +660,7 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
     char *next_occurrence = s.cstr;
     size_t replacement_count = 0;
     char *tmp;
-    while ((tmp = (char *) memmem(next_occurrence, s.cstr + s.length - next_occurrence, old_str.cstr, old_str_len)))
+    while ((tmp = (char *) memmem(next_occurrence, (size_t) (s.cstr + s.length - next_occurrence), old_str.cstr, old_str_len)))
     {
         next_occurrence = tmp + old_str_len;
         replacement_count++;
@@ -681,13 +681,13 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
     size_t len_to_next_replacement = 0;
     for (size_t i = 0; i < replacement_count; i++)
     {
-        next_occurrence = (char *) memmem(orig_moving_ptr, s.cstr + s.length - orig_moving_ptr, old_str.cstr, old_str_len);
-        len_to_next_replacement = next_occurrence - orig_moving_ptr;
+        next_occurrence = (char *) memmem(orig_moving_ptr, (size_t) (s.cstr + s.length - orig_moving_ptr), old_str.cstr, old_str_len);
+        len_to_next_replacement = (size_t) (next_occurrence - orig_moving_ptr);
         new_moving_ptr = (char *) memcpy(new_moving_ptr, orig_moving_ptr, len_to_next_replacement) + len_to_next_replacement;
         new_moving_ptr = (char *) memcpy(new_moving_ptr, new_str.cstr, new_str_len) + new_str_len;
         orig_moving_ptr += len_to_next_replacement + old_str_len;
     }
-    memcpy(new_moving_ptr, orig_moving_ptr, s.cstr + s.length - orig_moving_ptr);
+    memcpy(new_moving_ptr, orig_moving_ptr, (size_t) (s.cstr + s.length - orig_moving_ptr));
     replaced.cstr[new_length] = '\0';
 
     return replaced;

@@ -1,3 +1,7 @@
+/* for memmem function include */
+#define _GNU_SOURCE
+#define __BSD_VISIBLE
+
 #include <stdio.h>
 
 #define SSTR_IMPLEMENTATION

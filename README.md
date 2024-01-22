@@ -14,6 +14,10 @@ Similar to [nothings' stb](https://github.com/nothings/stb):
 #include "sstr.h"
 ```
 
+*NOTE*: the function `sstr_replace` requires `memmem`, so you need to define it
+somehow (an include or custom definition). If you don't need `sstr_replace`,
+you can just define a dummy `memmem` function.
+
 An example program can be found [here](examples/sstr_example.c).
 
 ## sdll
