@@ -309,32 +309,32 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str);
 sstr sstr_replace_const(sstr const s, const char * const old_str, const char * const new_str);
 
 /**
- * Counts the number of occurrences of `searched` in sstr `s`.
+ * Counts the number of occurrences of `substr` in sstr `s`.
  *
  * @param s sstr to search through.
- * @param searched String to count.
- * @param searched_len Length of the searched string in bytes.
- * @return Number of occurrences of the searched string.
+ * @param substr String to count.
+ * @param substr_len Length of `substr` in bytes.
+ * @return Number of occurrences of `substr`.
  */
-size_t sstr_count(sstr const s, const void * const searched, size_t const searched_len);
+size_t sstr_count(sstr const s, const void * const substr, size_t const substr_len);
 
 /**
- * Counts the number of occurrences of `searched` in sstr `s`.
+ * Counts the number of occurrences of `substr` in sstr `s`.
  *
  * @param s sstr to search through.
- * @param searched String to count.
- * @return Number of occurrences of the searched string.
+ * @param substr String to count.
+ * @return Number of occurrences of `substr`.
  */
-size_t sstr_count_sstr(sstr const s, sstr const searched);
+size_t sstr_count_sstr(sstr const s, sstr const substr);
 
 /**
- * Counts the number of occurrences of `searched` in sstr `s`.
+ * Counts the number of occurrences of `substr` in sstr `s`.
  *
  * @param s sstr to search through.
- * @param searched String to count.
- * @return Number of occurrences of the searched string.
+ * @param substr String to count.
+ * @return Number of occurrences of `substr`.
  */
-size_t sstr_count_const(sstr const s, const char * const searched);
+size_t sstr_count_const(sstr const s, const char * const substr);
 
 #ifdef __cplusplus
 }
@@ -655,27 +655,27 @@ bool sstr_index_of_last(sstr const s, char const c, size_t * const index)
     return false;
 }
 
-size_t sstr_count(sstr const s, const void * const searched, size_t const searched_len)
+size_t sstr_count(sstr const s, const void * const substr, size_t const substr_len)
 {
     char *next_occurrence = s.cstr;
     size_t count = 0;
     char *tmp;
-    while ((tmp = (char *) memmem(next_occurrence, (size_t) (s.cstr + s.length - next_occurrence), searched, searched_len)))
+    while ((tmp = (char *) memmem(next_occurrence, (size_t) (s.cstr + s.length - next_occurrence), substr, substr_len)))
     {
-        next_occurrence = tmp + searched_len;
+        next_occurrence = tmp + substr_len;
         count++;
     }
     return count;
 }
 
-size_t sstr_count_sstr(sstr const s, sstr const searched)
+size_t sstr_count_sstr(sstr const s, sstr const substr)
 {
-    return sstr_count(s, searched.cstr, searched.length);
+    return sstr_count(s, substr.cstr, substr.length);
 }
 
-size_t sstr_count_const(sstr const s, const char * const searched)
+size_t sstr_count_const(sstr const s, const char * const substr)
 {
-    return sstr_count(s, searched, strlen(searched));
+    return sstr_count(s, substr, strlen(substr));
 }
 
 sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
