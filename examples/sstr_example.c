@@ -132,10 +132,19 @@ int main()
     printf("%lu, %lu, %s\n", s5_trimmed_null.length, s5_trimmed_null.capacity, s5_trimmed_null.cstr);
     /* 11, 18, FOO */
 
+
+    printf("%lu\n", sstr_count(s5_trimmed_null, "\0", 1));
+    /* 2 */
+
     sstr under = sstr_new("_");
     sstr s5_repl_null = sstr_replace(s5_trimmed_null, null_str, under);
     printf("%lu, %lu, %s\n", s5_repl_null.length, s5_repl_null.capacity, s5_repl_null.cstr);
     /* 11, 18, FOO */
+
+    printf("%lu\n", sstr_count_sstr(s5_repl_null, null_str));
+    /* 0 */
+    printf("%lu\n", sstr_count_const(s5_repl_null, "_"));
+    /* 2 */
 
     /* cleanup */
     sstr_free(&s);

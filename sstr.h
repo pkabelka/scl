@@ -308,6 +308,34 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str);
  */
 sstr sstr_replace_const(sstr const s, const char * const old_str, const char * const new_str);
 
+/**
+ * Counts the number of occurrences of `searched` in sstr `s`.
+ *
+ * @param s sstr to search through.
+ * @param searched String to count.
+ * @param searched_len Length of the searched string in bytes.
+ * @return Number of occurrences of the searched string.
+ */
+size_t sstr_count(sstr const s, const void * const searched, size_t const searched_len);
+
+/**
+ * Counts the number of occurrences of `searched` in sstr `s`.
+ *
+ * @param s sstr to search through.
+ * @param searched String to count.
+ * @return Number of occurrences of the searched string.
+ */
+size_t sstr_count_sstr(sstr const s, sstr const searched);
+
+/**
+ * Counts the number of occurrences of `searched` in sstr `s`.
+ *
+ * @param s sstr to search through.
+ * @param searched String to count.
+ * @return Number of occurrences of the searched string.
+ */
+size_t sstr_count_const(sstr const s, const char * const searched);
+
 #ifdef __cplusplus
 }
 #endif
@@ -627,6 +655,29 @@ bool sstr_index_of_last(sstr const s, char const c, size_t * const index)
     return false;
 }
 
+size_t sstr_count(sstr const s, const void * const searched, size_t const searched_len)
+{
+    char *next_occurrence = s.cstr;
+    size_t count = 0;
+    char *tmp;
+    while ((tmp = (char *) memmem(next_occurrence, (size_t) (s.cstr + s.length - next_occurrence), searched, searched_len)))
+    {
+        next_occurrence = tmp + searched_len;
+        count++;
+    }
+    return count;
+}
+
+size_t sstr_count_sstr(sstr const s, sstr const searched)
+{
+    return sstr_count(s, searched.cstr, searched.length);
+}
+
+size_t sstr_count_const(sstr const s, const char * const searched)
+{
+    return sstr_count(s, searched, strlen(searched));
+}
+
 sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
 {
     size_t const old_str_len = old_str.length;
@@ -657,15 +708,7 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
         return replaced;
     }
 
-    char *next_occurrence = s.cstr;
-    size_t replacement_count = 0;
-    char *tmp;
-    while ((tmp = (char *) memmem(next_occurrence, (size_t) (s.cstr + s.length - next_occurrence), old_str.cstr, old_str_len)))
-    {
-        next_occurrence = tmp + old_str_len;
-        replacement_count++;
-    }
-
+    size_t const replacement_count = sstr_count(s, old_str.cstr, old_str_len);
     size_t const new_length = s.length + (new_str_len - old_str_len) * replacement_count;
     size_t const new_capacity = sstr_optimal_capacity(new_length);
 
@@ -681,7 +724,7 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
     size_t len_to_next_replacement = 0;
     for (size_t i = 0; i < replacement_count; i++)
     {
-        next_occurrence = (char *) memmem(orig_moving_ptr, (size_t) (s.cstr + s.length - orig_moving_ptr), old_str.cstr, old_str_len);
+        char * const next_occurrence = (char *) memmem(orig_moving_ptr, (size_t) (s.cstr + s.length - orig_moving_ptr), old_str.cstr, old_str_len);
         len_to_next_replacement = (size_t) (next_occurrence - orig_moving_ptr);
         new_moving_ptr = (char *) memcpy(new_moving_ptr, orig_moving_ptr, len_to_next_replacement) + len_to_next_replacement;
         new_moving_ptr = (char *) memcpy(new_moving_ptr, new_str.cstr, new_str_len) + new_str_len;
