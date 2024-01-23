@@ -24,12 +24,43 @@
   * For more information, please refer to <http://unlicense.org/>
   */
 
+/**
+ * Compile-time options
+ *
+ *     #define SSTR_REALLOC(ptr,size) realloc(ptr,size)
+ *     #define SSTR_FREE(ptr)         free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define SSTR_IMPLEMENTATION.
+ *
+ *         By default, sstr uses stdlib realloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ *
+ *     #define SSTR_MEMMEM(haystack,haystacklen,needle,needlelen) memmem(haystack,haystacklen,needle,needlelen)
+ *
+ *         By default, sstr uses stdlib memmem() buffer searching. You can
+ *         substitute your own function instead by defining this symbol.
+ */
+
 #ifndef INCLUDE_SSTR_H
 #define INCLUDE_SSTR_H
 
 #include <stdbool.h>
-#include <stdlib.h>
 #include <string.h>
+
+#if defined(SSTR_REALLOC) && !defined(SSTR_FREE) || !defined(SSTR_REALLOC) && defined(SSTR_FREE)
+#error "You must define both SSTR_REALLOC and SSTR_FREE, or neither."
+#endif
+#if !defined(SSTR_REALLOC) && !defined(SSTR_FREE)
+#include <stdlib.h>
+#define SSTR_REALLOC(ptr,size) realloc(ptr,size)
+#define SSTR_FREE(ptr)         free(ptr)
+#endif
+
+#if !defined(SSTR_MEMMEM)
+#define SSTR_MEMMEM(haystack,haystacklen,needle,needlelen) memmem(haystack,haystacklen,needle,needlelen)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -356,7 +387,7 @@ sstr sstr_new(char const * const init_string)
     size_t const init_string_len = strlen(init_string);
     size_t const init_capacity = sstr_optimal_capacity(init_string_len);
 
-    if ((s.cstr = (char *) malloc(sizeof(char) * init_capacity)) == NULL)
+    if ((s.cstr = (char *) SSTR_REALLOC(NULL, sizeof(char) * init_capacity)) == NULL)
     {
         return s;
     }
@@ -397,7 +428,7 @@ bool sstr_add(sstr * const s, const void * const src, size_t const length)
 
     if (new_length+1 > s->capacity)
     {
-        if ((s->cstr = (char *) realloc(s->cstr, sizeof(char) * new_capacity)) == NULL)
+        if ((s->cstr = (char *) SSTR_REALLOC(s->cstr, sizeof(char) * new_capacity)) == NULL)
         {
             return false;
         }
@@ -463,7 +494,7 @@ bool sstr_set_capacity(sstr * const s, size_t const capacity)
         return false;
     }
 
-    if ((s->cstr = (char *) realloc(s->cstr, new_capacity)) == NULL)
+    if ((s->cstr = (char *) SSTR_REALLOC(s->cstr, new_capacity)) == NULL)
     {
         return false;
     }
@@ -649,7 +680,7 @@ size_t sstr_count(sstr const s, const void * const substr, size_t const substr_l
     char *next_occurrence = s.cstr;
     size_t count = 0;
     char *tmp;
-    while ((tmp = (char *) memmem(next_occurrence, (size_t) (s.cstr + s.length - next_occurrence), substr, substr_len)))
+    while ((tmp = (char *) SSTR_MEMMEM(next_occurrence, (size_t) (s.cstr + s.length - next_occurrence), substr, substr_len)))
     {
         next_occurrence = tmp + substr_len;
         count++;
@@ -713,7 +744,7 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str)
     size_t len_to_next_replacement = 0;
     for (size_t i = 0; i < replacement_count; i++)
     {
-        char * const next_occurrence = (char *) memmem(orig_moving_ptr, (size_t) (s.cstr + s.length - orig_moving_ptr), old_str.cstr, old_str_len);
+        char * const next_occurrence = (char *) SSTR_MEMMEM(orig_moving_ptr, (size_t) (s.cstr + s.length - orig_moving_ptr), old_str.cstr, old_str_len);
         len_to_next_replacement = (size_t) (next_occurrence - orig_moving_ptr);
         new_moving_ptr = (char *) memcpy(new_moving_ptr, orig_moving_ptr, len_to_next_replacement) + len_to_next_replacement;
         new_moving_ptr = (char *) memcpy(new_moving_ptr, new_str.cstr, new_str_len) + new_str_len;
