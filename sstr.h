@@ -558,10 +558,9 @@ sstr sstr_trim_left(sstr const s, const char * const trim_char_set)
 sstr sstr_trim_left_sstr(sstr const s, sstr const trim_char_set)
 {
     size_t char_count = 0;
-    size_t unused;
     for (size_t i = 0; i < s.length; i++)
     {
-        if (sstr_index_of(trim_char_set, s.cstr[i], &unused))
+        if (memchr(trim_char_set.cstr, s.cstr[i], trim_char_set.length) != NULL)
         {
             char_count++;
         }
@@ -599,10 +598,9 @@ sstr sstr_trim_right(sstr const s, const char * const trim_char_set)
 sstr sstr_trim_right_sstr(sstr const s, sstr trim_char_set)
 {
     size_t char_count = 0;
-    size_t unused;
     for (size_t i = s.length - 1; i != 0; i--)
     {
-        if (sstr_index_of(trim_char_set, s.cstr[i], &unused))
+        if (memchr(trim_char_set.cstr, s.cstr[i], trim_char_set.length) != NULL)
         {
             char_count++;
         }
@@ -619,13 +617,11 @@ sstr sstr_trim_right_sstr(sstr const s, sstr trim_char_set)
 
 bool sstr_index_of(sstr const s, char const c, size_t * const index)
 {
-    for (size_t i = 0; i < s.length; i++)
+    void *found = memchr(s.cstr, c, s.length);
+    if (found != NULL)
     {
-        if (c == s.cstr[i])
-        {
-            *index = i;
-            return true;
-        }
+        *index = (size_t) ((char *) found - s.cstr);
+        return true;
     }
     return false;
 }
