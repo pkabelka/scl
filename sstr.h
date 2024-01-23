@@ -535,24 +535,12 @@ bool sstr_has_suffix_sstr(sstr const s, sstr const suffix)
     return memcmp(s.cstr + s.length - suffix.length, suffix.cstr, suffix.length) == 0;
 }
 
-static bool _sstr_const_contains_char(const char * const string, char const ch)
-{
-    for (char const *c = string; *c; c++)
-    {
-        if (*c == ch)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 sstr sstr_trim_left(sstr const s, const char * const trim_char_set)
 {
     size_t char_count = 0;
     for (size_t i = 0; i < s.length; i++)
     {
-        if (_sstr_const_contains_char(trim_char_set, s.cstr[i]))
+        if (strchr(trim_char_set, s.cstr[i]))
         {
             char_count++;
         }
@@ -593,7 +581,7 @@ sstr sstr_trim_right(sstr const s, const char * const trim_char_set)
     size_t char_count = 0;
     for (size_t i = s.length - 1; i != 0; i--)
     {
-        if (_sstr_const_contains_char(trim_char_set, s.cstr[i]))
+        if (strchr(trim_char_set, s.cstr[i]))
         {
             char_count++;
         }
