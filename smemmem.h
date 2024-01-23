@@ -24,6 +24,20 @@
   * For more information, please refer to <http://unlicense.org/>
   */
 
+/**
+ * Compile-time options
+ *
+ *     #define SMEMMEM_REALLOC(ptr,size) realloc(ptr,size)
+ *     #define SMEMMEM_FREE(ptr)         free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define SMEMMEM_IMPLEMENTATION.
+ *
+ *         By default, smemmem uses stdlib realloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ */
+
 #ifndef INCLUDE_SMEMMEM_H
 #define INCLUDE_SMEMMEM_H
 
