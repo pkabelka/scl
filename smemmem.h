@@ -35,8 +35,8 @@
 #endif
 #if !defined(SMEMMEM_REALLOC) && !defined(SMEMMEM_FREE)
 #include <stdlib.h>
-#define SMEMMEM_REALLOC(context,ptr,size) realloc(ptr,size)
-#define SMEMMEM_FREE(context,ptr)         free(ptr)
+#define SMEMMEM_REALLOC(ptr,size) realloc(ptr,size)
+#define SMEMMEM_FREE(ptr)         free(ptr)
 #endif
 
 #ifdef __cplusplus
@@ -162,7 +162,7 @@ void *smemmem_bmh(const void * const haystack,
     size_t * skip_table = NULL;
     if (skip_table_buf == NULL)
     {
-        skip_table = (size_t *) SMEMMEM_REALLOC(NULL, NULL, sizeof(size_t) * skip_table_size);
+        skip_table = (size_t *) SMEMMEM_REALLOC(NULL, sizeof(size_t) * skip_table_size);
         if (skip_table == NULL)
         {
             return NULL;
@@ -189,7 +189,7 @@ void *smemmem_bmh(const void * const haystack,
         {
             if (skip_table_buf == NULL)
             {
-                SMEMMEM_FREE(NULL, skip_table);
+                SMEMMEM_FREE(skip_table);
             }
             return (void *) ((char *) haystack + skip);
         }
@@ -198,7 +198,7 @@ void *smemmem_bmh(const void * const haystack,
 
     if (skip_table_buf == NULL)
     {
-        SMEMMEM_FREE(NULL, skip_table);
+        SMEMMEM_FREE(skip_table);
     }
     return NULL;
 }
@@ -214,7 +214,7 @@ static size_t smemmem__kmp_common(const void * const haystack,
     long long j = 0;
 
     /* compute the KMP table */
-    long long *kmp_table = (long long *) SMEMMEM_REALLOC(NULL, NULL, sizeof(long long) * (needle_len + 1));
+    long long *kmp_table = (long long *) SMEMMEM_REALLOC(NULL, sizeof(long long) * (needle_len + 1));
     kmp_table[0] = -1;
 
     while (i < (long long) needle_len)
@@ -254,29 +254,29 @@ static size_t smemmem__kmp_common(const void * const haystack,
             {
                 if (only_first)
                 {
-                    SMEMMEM_FREE(NULL, kmp_table);
+                    SMEMMEM_FREE(kmp_table);
                     return (size_t) (i - j);
                 }
                 /* allocate memory for indices */
                 if (number_of_indices == 0)
                 {
-                    if ((*indices = (size_t *) SMEMMEM_REALLOC(NULL, NULL, sizeof(size_t))) == NULL)
+                    if ((*indices = (size_t *) SMEMMEM_REALLOC(NULL, sizeof(size_t))) == NULL)
                     {
-                        SMEMMEM_FREE(NULL, kmp_table);
+                        SMEMMEM_FREE(kmp_table);
                         return 0;
                     }
                 }
                 else if (number_of_indices > 0)
                 {
-                    if ((*indices = (size_t *) SMEMMEM_REALLOC(NULL, *indices, sizeof(size_t) * (number_of_indices + 1))) == NULL)
+                    if ((*indices = (size_t *) SMEMMEM_REALLOC(*indices, sizeof(size_t) * (number_of_indices + 1))) == NULL)
                     {
-                        SMEMMEM_FREE(NULL, kmp_table);
+                        SMEMMEM_FREE(kmp_table);
                         return 0;
                     }
                 }
                 else
                 {
-                    SMEMMEM_FREE(NULL, kmp_table);
+                    SMEMMEM_FREE(kmp_table);
                     return 0;
                 }
 
@@ -296,7 +296,7 @@ static size_t smemmem__kmp_common(const void * const haystack,
         }
     }
 
-    SMEMMEM_FREE(NULL, kmp_table);
+    SMEMMEM_FREE(kmp_table);
     return number_of_indices;
 }
 
