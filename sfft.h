@@ -103,7 +103,7 @@ bool sfft_new(sfft * const fft, size_t const n)
 
     fft->n = n;
 
-    static const double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
+    static const double pi = 3.141592653589793;
     size_t log2_n = sfft__bit_size(n) - 1;
 
     for (size_t i = 0; i < n; i++)

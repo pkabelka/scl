@@ -81,8 +81,8 @@ bool sfft_recursive_ifft(sfft_recursive_complexdouble * const in,
 
 #ifdef SFFT_RECURSIVE_IMPLEMENTATION
 
-#ifndef SFFT__RECURSIVE_PI
-#define SFFT__RECURSIVE_PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068
+#ifndef SFFT_RECURSIVE__PI
+#define SFFT_RECURSIVE__PI 3.141592653589793
 #endif
 
 void sfft__recursive(sfft_recursive_complexdouble * const in,
@@ -97,7 +97,7 @@ void sfft__recursive(sfft_recursive_complexdouble * const in,
         return;
     }
 
-    const sfft_recursive_complexdouble omega_n = cexp((forward ? -2 : 2) * I * SFFT__RECURSIVE_PI / n);
+    const sfft_recursive_complexdouble omega_n = cexp((forward ? -2 : 2) * I * SFFT_RECURSIVE__PI / n);
     sfft_recursive_complexdouble omega = 1;
 
     /* even */
