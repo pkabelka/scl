@@ -32,13 +32,35 @@
  * instead of float.
  */
 
+/**
+ * Compile-time options
+ *
+ *     #define SFFT_MALLOC(size) malloc(size)
+ *     #define SFFT_FREE(ptr)    free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define SFFT_IMPLEMENTATION.
+ *
+ *         By default, sfft uses stdlib malloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ */
+
 #ifndef INCLUDE_SFFT_H
 #define INCLUDE_SFFT_H
 
 #include <stdbool.h>
-#include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
+#if defined(SFFT_MALLOC) && !defined(SFFT_FREE) || !defined(SFFT_MALLOC) && defined(SFFT_FREE)
+#error "You must define both SFFT_MALLOC and SFFT_FREE, or neither."
+#endif
+#if !defined(SFFT_MALLOC) && !defined(SFFT_FREE)
+#include <stdlib.h>
+#define SFFT_MALLOC(size) malloc(size)
+#define SFFT_FREE(ptr)    free(ptr)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -86,17 +108,17 @@ bool sfft_new(sfft * const fft, size_t const n)
 {
     fft->n = 0;
 
-    if ((fft->bit_reverse = (size_t *) malloc(sizeof(size_t) * n)) == NULL)
+    if ((fft->bit_reverse = (size_t *) SFFT_MALLOC(sizeof(size_t) * n)) == NULL)
     {
         return false;
     }
 
-    if ((fft->sine = (double *) malloc(sizeof(double) * n)) == NULL)
+    if ((fft->sine = (double *) SFFT_MALLOC(sizeof(double) * n)) == NULL)
     {
         return false;
     }
 
-    if ((fft->cosine = (double *) malloc(sizeof(double) * n)) == NULL)
+    if ((fft->cosine = (double *) SFFT_MALLOC(sizeof(double) * n)) == NULL)
     {
         return false;
     }
@@ -119,9 +141,9 @@ bool sfft_new(sfft * const fft, size_t const n)
 
 void sfft_free(sfft * const fft)
 {
-    free(fft->bit_reverse);
-    free(fft->sine);
-    free(fft->cosine);
+    SFFT_FREE(fft->bit_reverse);
+    SFFT_FREE(fft->sine);
+    SFFT_FREE(fft->cosine);
 
     fft->n = 0;
     fft->bit_reverse = NULL;
