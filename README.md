@@ -14,6 +14,8 @@ domain.
 | [sfft_recursive](sfft_recursive.h) | Recursive in-place Fast Fourier Transform (link with `-lm`)                                                         | [example](examples/sfft_recursive_example.c) |
 | [sdarray](sdarray.h)               | Dynamic array (WIP)                                                                                                 | [example](examples/sdarray_example.c)        |
 | [shashtab](shashtab.h)             | Hash table using *FNV 1a 32* hash algorithm (*NOTE*: requires [sbintree](sbintree.h) and [sdll](sdll.h))            | [example](examples/shashtab_example.c)       |
+| [sscannum](sscannum.h)             | Scanner for unlimited number scanning from the specified `getchar_func`                                             | [example](examples/sscannum_example.c)       |
+| [sgetnum](sgetnum.h)               | Similar to [sscannum](sscannum.h) but returns only the first number found                                           | [example](examples/sgetnum_example.c)        |
 
 ## Usage
 
