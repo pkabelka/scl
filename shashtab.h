@@ -94,7 +94,7 @@ static unsigned int shashtab__fnv_1a_32(void * const buf, size_t const buf_len)
     return hash;
 }
 
-static bool shashtab__is_prime(size_t n)
+static bool shashtab__is_prime(size_t const n)
 {
     if (n <= 1)
     {
@@ -121,7 +121,7 @@ static bool shashtab__is_prime(size_t n)
     return true;
 }
 
-static size_t shashtab__next_prime(size_t n)
+static size_t shashtab__next_prime(size_t const n)
 {
     for (size_t i = n; i < 2 * n; i++)
     {
