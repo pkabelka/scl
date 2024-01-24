@@ -24,13 +24,35 @@
   * For more information, please refer to <http://unlicense.org/>
   */
 
+/**
+ * Compile-time options
+ *
+ *     #define SDARRAY_REALLOC(ptr,size) realloc(ptr,size)
+ *     #define SDARRAY_FREE(ptr)         free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define SDARRAY_IMPLEMENTATION.
+ *
+ *         By default, sdarray uses stdlib realloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ */
+
 #ifndef INCLUDE_SDARRAY_H
 #define INCLUDE_SDARRAY_H
 
 #include <stdbool.h>
-#include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+
+#if defined(SDARRAY_REALLOC) && !defined(SDARRAY_FREE) || !defined(SDARRAY_REALLOC) && defined(SDARRAY_FREE)
+#error "You must define both SDARRAY_REALLOC and SDARRAY_FREE, or neither."
+#endif
+#if !defined(SDARRAY_REALLOC) && !defined(SDARRAY_FREE)
+#include <stdlib.h>
+#define SDARRAY_REALLOC(ptr,size) realloc(ptr,size)
+#define SDARRAY_FREE(ptr)         free(ptr)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -71,7 +93,7 @@ sdarray sdarray_new(size_t const element_size, size_t const init_capacity)
         return arr;
     }
 
-    if ((arr.data = (void *) malloc(sizeof(uint8_t) * element_size * init_capacity)) == NULL)
+    if ((arr.data = (void *) SDARRAY_REALLOC(NULL, sizeof(uint8_t) * element_size * init_capacity)) == NULL)
     {
         return arr;
     }
@@ -96,7 +118,7 @@ bool sdarray_add_from(sdarray * const arr, const void * const src, size_t const 
     if (arr->data == NULL)
     {
 
-        if ((arr->data = (void *) malloc(sizeof(uint8_t) * arr->element_size * length)) == NULL)
+        if ((arr->data = (void *) SDARRAY_REALLOC(NULL, sizeof(uint8_t) * arr->element_size * length)) == NULL)
         {
             return false;
         }
@@ -104,7 +126,7 @@ bool sdarray_add_from(sdarray * const arr, const void * const src, size_t const 
 
     if (new_length > arr->capacity)
     {
-        if ((arr->data = (void *) realloc(arr->data, sizeof(uint8_t) * arr->element_size * new_capacity)) == NULL)
+        if ((arr->data = (void *) SDARRAY_REALLOC(arr->data, sizeof(uint8_t) * arr->element_size * new_capacity)) == NULL)
         {
             return false;
         }
@@ -147,7 +169,7 @@ bool sdarray_remove(sdarray * const arr, size_t const index)
     /* shrink the array when it reaches cap = 2 * len */
     if (arr->capacity / arr->length >= 2)
     {
-        if ((arr->data = (uint8_t *) realloc(arr->data, sizeof(uint8_t) * arr->element_size * arr->length)) == NULL)
+        if ((arr->data = (uint8_t *) SDARRAY_REALLOC(arr->data, sizeof(uint8_t) * arr->element_size * arr->length)) == NULL)
         {
             return false;
         }
@@ -176,7 +198,7 @@ bool sdarray_set_capacity(sdarray * const arr, size_t const capacity)
         return false;
     }
 
-    if ((arr->data = (uint8_t *) realloc(arr->data, sizeof(uint8_t) * arr->element_size * capacity)) == NULL)
+    if ((arr->data = (uint8_t *) SDARRAY_REALLOC(arr->data, sizeof(uint8_t) * arr->element_size * capacity)) == NULL)
     {
         return false;
     }
