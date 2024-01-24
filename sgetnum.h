@@ -31,6 +31,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -192,26 +193,6 @@ enum sgetnum__number_type
     SGETNUM__FLOAT,
 };
 
-/**
- * Checks if char `c` is in the `arr` array.
- *
- * @param c Character.
- * @param arr Array of characters.
- * @param length Length of `arr`.
- * @return True if `arr` contains `c`, false otherwise.
- */
-static bool sgetnum__char_in_array(int c, char const * const arr, size_t const length)
-{
-    for (size_t i = 0; i < length; i++)
-    {
-        if (arr[i] == c)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 static bool sgetnum__common(int (*getchar_func)(),
                              char const * delimiter,
                              size_t delimiter_length,
@@ -239,7 +220,7 @@ static bool sgetnum__common(int (*getchar_func)(),
             c = getchar_func();
 
             /* ignore whitespace by default if it is not specified as a delimiter */
-            if (isspace(c) && !sgetnum__char_in_array(c, delimiter, delimiter_length))
+            if (isspace(c) && memchr(delimiter, c, delimiter_length) == NULL)
             {
                 continue;
             }
@@ -247,7 +228,7 @@ static bool sgetnum__common(int (*getchar_func)(),
             /* add non-delimiter chars to buffer */
             if (c != EOF)
             {
-                if (!sgetnum__char_in_array(c, delimiter, delimiter_length))
+                if (memchr(delimiter, c, delimiter_length) == NULL)
                 {
                     digit_buffer[digit_buffer_index++] = c;
                     continue;
