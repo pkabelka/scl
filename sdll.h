@@ -24,10 +24,31 @@
   * For more information, please refer to <http://unlicense.org/>
   */
 
+/**
+ * Compile-time options
+ *
+ *     #define SDLL_MALLOC(size) malloc(size)
+ *     #define SDLL_FREE(ptr)    free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define SDLL_IMPLEMENTATION.
+ *
+ *         By default, sdll uses stdlib malloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ */
+
 #ifndef INCLUDE_SDLL_H
 #define INCLUDE_SDLL_H
 
+#if defined(SDLL_MALLOC) && !defined(SDLL_FREE) || !defined(SDLL_MALLOC) && defined(SDLL_FREE)
+#error "You must define both SDLL_MALLOC and SDLL_FREE, or neither."
+#endif
+#if !defined(SDLL_MALLOC) && !defined(SDLL_FREE)
 #include <stdlib.h>
+#define SDLL_MALLOC(size) malloc(size)
+#define SDLL_FREE(ptr)    free(ptr)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,7 +89,7 @@ void sdll_dummy_free(void * const data);
 
 sdll *sdll_new()
 {
-    sdll *l = (sdll*) malloc(sizeof(sdll));
+    sdll *l = (sdll*) SDLL_MALLOC(sizeof(sdll));
     if (l == NULL)
     {
         return NULL;
@@ -94,7 +115,7 @@ void sdll_empty(sdll * const l, void (*free_func)(void*))
         next = current->next;
 
         free_func(current->data);
-        free(current);
+        SDLL_FREE(current);
     }
 
     l->first = NULL;
@@ -105,7 +126,7 @@ void sdll_empty(sdll * const l, void (*free_func)(void*))
 void sdll_free(sdll **l, void (*free_func)(void*))
 {
     sdll_empty(*l, free_func);
-    free(*l);
+    SDLL_FREE(*l);
     *l = NULL;
 }
 
@@ -113,7 +134,7 @@ void sdll_insert_after(sdll * const l, sdll_node *node, void * const data)
 {
     if (l == NULL) return;
 
-    sdll_node *new_node = (sdll_node*) malloc(sizeof(sdll_node));
+    sdll_node *new_node = (sdll_node*) SDLL_MALLOC(sizeof(sdll_node));
     new_node->prev = node;
     new_node->data = data;
 
@@ -136,7 +157,7 @@ void sdll_insert_before(sdll * const l, sdll_node *node, void * const data)
 {
     if (l == NULL) return;
 
-    sdll_node *new_node = (sdll_node*) malloc(sizeof(sdll_node));
+    sdll_node *new_node = (sdll_node*) SDLL_MALLOC(sizeof(sdll_node));
     new_node->next = node;
     new_node->data = data;
 
@@ -161,7 +182,7 @@ void sdll_insert_first(sdll * const l, void * const data)
 
     if (l->first == NULL)
     {
-        sdll_node *new_node = (sdll_node*) malloc(sizeof(sdll_node));
+        sdll_node *new_node = (sdll_node*) SDLL_MALLOC(sizeof(sdll_node));
         new_node->data = data;
 
         l->first = new_node;
@@ -218,7 +239,7 @@ void sdll_remove(sdll * const l, sdll_node ** node, void (*free_func)(void*))
 {
     sdll_unlink(l, *node);
     free_func((*node)->data);
-    free(*node);
+    SDLL_FREE(*node);
     *node = NULL;
 }
 
