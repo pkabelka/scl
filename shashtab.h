@@ -24,13 +24,35 @@
   * For more information, please refer to <http://unlicense.org/>
   */
 
+/**
+ * Compile-time options
+ *
+ *     #define SHASHTAB_CALLOC(count,size) calloc(count,size)
+ *     #define SHASHTAB_FREE(ptr)          free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define SHASHTAB_IMPLEMENTATION.
+ *
+ *         By default, shashtab uses stdlib calloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ */
+
 #ifndef INCLUDE_SHASHTAB_H
 #define INCLUDE_SHASHTAB_H
 
 #include <stdbool.h>
-#include <stdlib.h>
 #include <string.h>
 #include "sbintree.h"
+
+#if defined(SHASHTAB_CALLOC) && !defined(SHASHTAB_FREE) || !defined(SHASHTAB_CALLOC) && defined(SHASHTAB_FREE)
+#error "You must define both SHASHTAB_CALLOC and SHASHTAB_FREE, or neither."
+#endif
+#if !defined(SHASHTAB_CALLOC) && !defined(SHASHTAB_FREE)
+#include <stdlib.h>
+#define SHASHTAB_CALLOC(count,size) calloc(count,size)
+#define SHASHTAB_FREE(ptr)          free(ptr)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -145,7 +167,7 @@ shashtab shashtab_new(size_t const capacity)
     /* about 70 % load factor */
     size_t const init_capacity = shashtab__next_prime(shashtab__optimal_capacity(capacity));
 
-    if ((ht.data = (sbintree **) calloc(init_capacity, sizeof(sbintree*))) == NULL)
+    if ((ht.data = (sbintree **) SHASHTAB_CALLOC(init_capacity, sizeof(sbintree*))) == NULL)
     {
         return ht;
     }
@@ -204,7 +226,7 @@ void shashtab_free(shashtab ht, void (*free_func)(sbintree*))
         }
     }
 
-    free(ht.data);
+    SHASHTAB_FREE(ht.data);
     ht.capacity = 0;
 }
 
