@@ -24,14 +24,36 @@
   * For more information, please refer to <http://unlicense.org/>
   */
 
+/**
+ * Compile-time options
+ *
+ *     #define STRIE_MALLOC(size) malloc(size)
+ *     #define STRIE_FREE(ptr)    free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define STRIE_IMPLEMENTATION.
+ *
+ *         By default, strie uses stdlib malloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ */
+
 #ifndef INCLUDE_STRIE_H
 #define INCLUDE_STRIE_H
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include "sdll.h"
+
+#if defined(STRIE_MALLOC) && !defined(STRIE_FREE) || !defined(STRIE_MALLOC) && defined(STRIE_FREE)
+#error "You must define both STRIE_MALLOC and STRIE_FREE, or neither."
+#endif
+#if !defined(STRIE_MALLOC) && !defined(STRIE_FREE)
+#include <stdlib.h>
+#define STRIE_MALLOC(size) malloc(size)
+#define STRIE_FREE(ptr)    free(ptr)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,7 +83,7 @@ strie *strie_insert(strie ** const root, void * const key, size_t const key_leng
 {
     if (*root == NULL)
     {
-        *root = (strie *) malloc(sizeof(strie));
+        *root = (strie *) STRIE_MALLOC(sizeof(strie));
         if (*root == NULL)
         {
             return NULL;
@@ -70,7 +92,7 @@ strie *strie_insert(strie ** const root, void * const key, size_t const key_leng
         (*root)->prev = NULL;
         (*root)->data = NULL;
         (*root)->next_count = 0;
-        (*root)->next = (strie **) malloc(sizeof(strie *) * 256);
+        (*root)->next = (strie **) STRIE_MALLOC(sizeof(strie *) * 256);
         if ((*root)->next == NULL)
         {
             return NULL;
@@ -86,13 +108,13 @@ strie *strie_insert(strie ** const root, void * const key, size_t const key_leng
         strie *next_node = current->next[key_bytes[i]];
         if (next_node == NULL)
         {
-            next_node = (strie *) malloc(sizeof(strie));
+            next_node = (strie *) STRIE_MALLOC(sizeof(strie));
             if (next_node == NULL)
             {
                 return NULL;
             }
 
-            next_node->next = (strie **) malloc(sizeof(strie *) * 256);
+            next_node->next = (strie **) STRIE_MALLOC(sizeof(strie *) * 256);
             if (next_node->next == NULL)
             {
                 return NULL;
@@ -161,14 +183,14 @@ bool strie_remove(strie ** const root, void * const key, size_t const key_length
     size_t i = key_length_bytes - 1;
     while (current->prev != (*root)->prev)
     {
-        free(current->next);
+        STRIE_FREE(current->next);
         current->next = NULL;
         current->prev->next[key_bytes[i]] = NULL;
         current->prev->next_count--;
 
         if (current->prev->next_count > 0)
         {
-            free(current);
+            STRIE_FREE(current);
             return true;
         }
 
@@ -176,11 +198,11 @@ bool strie_remove(strie ** const root, void * const key, size_t const key_length
         current = current->prev;
         i--;
 
-        free(tmp);
+        STRIE_FREE(tmp);
     }
 
-    free((*root)->next);
-    free(*root);
+    STRIE_FREE((*root)->next);
+    STRIE_FREE(*root);
     *root = NULL;
 
     return true;
