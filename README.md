@@ -14,11 +14,27 @@ Similar to [nothings' stb](https://github.com/nothings/stb):
 #include "sstr.h"
 ```
 
-*NOTE*: the function `sstr_replace` requires `memmem`, so you need to define it
-somehow (an include or custom definition). If you don't need `sstr_replace`,
-you can just define a dummy `memmem` function.
+*NOTE*: the functions `sstr_replace` and `sstr_count` require `memmem`, so you
+need to define it e.g. in an include or specify a custom definition via the
+`SSTR_MEMMEM` macro. You can also use a function from [smemmem.h](smemmem.h).
 
 An example program can be found [here](examples/sstr_example.c).
+
+## smemmem
+
+`smemmem` stands for *simple memmem*. It is a single header file implementation
+of a several `memmem` functions.
+
+### Usage
+
+Similar to [nothings' stb](https://github.com/nothings/stb):
+
+```c
+#define SMEMMEM_IMPLEMENTATION
+#include "smemmem.h"
+```
+
+An example program can be found [here](examples/smemmem_example.c).
 
 ## sdll
 
