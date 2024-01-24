@@ -24,12 +24,34 @@
   * For more information, please refer to <http://unlicense.org/>
   */
 
+/**
+ * Compile-time options
+ *
+ *     #define SBINTREE_MALLOC(size) malloc(size)
+ *     #define SBINTREE_FREE(ptr)    free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define SBINTREE_IMPLEMENTATION.
+ *
+ *         By default, sbintree uses stdlib malloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ */
+
 #ifndef INCLUDE_SBINTREE_H
 #define INCLUDE_SBINTREE_H
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "sdll.h"
+
+#if defined(SBINTREE_MALLOC) && !defined(SBINTREE_FREE) || !defined(SBINTREE_MALLOC) && defined(SBINTREE_FREE)
+#error "You must define both SBINTREE_MALLOC and SBINTREE_FREE, or neither."
+#endif
+#if !defined(SBINTREE_MALLOC) && !defined(SBINTREE_FREE)
+#include <stdlib.h>
+#define SBINTREE_MALLOC(size) malloc(size)
+#define SBINTREE_FREE(ptr)    free(ptr)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,7 +88,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
 {
     if (*root == NULL)
     {
-        sbintree *new_node = (sbintree*) malloc(sizeof(sbintree));
+        sbintree *new_node = (sbintree*) SBINTREE_MALLOC(sizeof(sbintree));
         if (new_node == NULL)
         {
             return NULL;
@@ -95,7 +117,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
                 continue;
             }
 
-            sbintree *new_node = (sbintree*) malloc(sizeof(sbintree));
+            sbintree *new_node = (sbintree*) SBINTREE_MALLOC(sizeof(sbintree));
             if (new_node == NULL)
             {
                 return NULL;
@@ -119,7 +141,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
                 continue;
             }
 
-            sbintree *new_node = (sbintree*) malloc(sizeof(sbintree));
+            sbintree *new_node = (sbintree*) SBINTREE_MALLOC(sizeof(sbintree));
             if (new_node == NULL)
             {
                 return NULL;
@@ -192,7 +214,7 @@ void sbintree_inorder(sbintree * const root, void (*callback)(sbintree * const n
         sdll_unlink(list, list->first);
         sbintree__left_inorder(((sbintree*)first->data)->right, list);
         callback((sbintree*)first->data);
-        free(first);
+        SBINTREE_FREE(first);
     }
 
     sdll_free(&list, sdll_dummy_free);
