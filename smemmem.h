@@ -65,8 +65,9 @@ extern "C" {
  * @param haystack_len Length of the memory buffer to search through in bytes.
  * @param needle Substring to find.
  * @param needle_len Length of the substring to find in bytes.
- * @return Pointer to the start of the substring, or `NULL` if the substring is
- * not found or `needle` is empty.
+ * @return Pointer to the start of the substring.
+ * @return `NULL` if the substring is not found.
+ * @return `haystack` if `needle` is empty.
  */
 void *smemmem_naive(const void * const haystack,
                     size_t const haystack_len,
@@ -86,8 +87,9 @@ void *smemmem_naive(const void * const haystack,
  * for `sizeof(size_t) * 2^(sizeof(char) * 8)` elements. If `NULL` then the
  * table is allocated using the `SMEMMEM_REALLOC` macro and free'd with
  * `SMEMMEM_FREE` macro.
- * @return Pointer to the start of the substring, or `NULL` if the substring is
- * not found or `needle` is empty.
+ * @return Pointer to the start of the substring.
+ * @return `NULL` if the substring is not found.
+ * @return `haystack` if `needle` is empty.
  */
 void *smemmem_bmh(const void * const haystack,
                   size_t const haystack_len,
@@ -104,8 +106,9 @@ void *smemmem_bmh(const void * const haystack,
  * @param haystack_len Length of the memory buffer to search through in bytes.
  * @param needle Substring to find.
  * @param needle_len Length of the substring to find in bytes.
- * @return Pointer to the start of the substring, or `NULL` if the substring is
- * not found or `needle` is empty.
+ * @return Pointer to the start of the substring.
+ * @return `NULL` if the substring is not found.
+ * @return `haystack` if `needle` is empty.
  */
 void *smemmem_kmp(const void * const haystack,
                   size_t const haystack_len,
@@ -144,8 +147,11 @@ void *smemmem_naive(const void * const haystack,
                     const void * const needle,
                     size_t const needle_len)
 {
-    if (haystack == NULL || needle == NULL || haystack_len == 0 ||
-        needle_len == 0 || needle_len > haystack_len)
+    if (needle == NULL || needle_len == 0)
+    {
+        return (void *) haystack;
+    }
+    if (haystack == NULL || haystack_len == 0 || needle_len > haystack_len)
     {
         return NULL;
     }
@@ -166,8 +172,11 @@ void *smemmem_bmh(const void * const haystack,
                   size_t const needle_len,
                   size_t * const skip_table_buf)
 {
-    if (haystack == NULL || needle == NULL || haystack_len == 0 ||
-        needle_len == 0 || needle_len > haystack_len)
+    if (needle == NULL || needle_len == 0)
+    {
+        return (void *) haystack;
+    }
+    if (haystack == NULL || haystack_len == 0 || needle_len > haystack_len)
     {
         return NULL;
     }
@@ -319,8 +328,11 @@ void *smemmem_kmp(const void * const haystack,
                   const void * const needle,
                   size_t const needle_len)
 {
-    if (haystack == NULL || needle == NULL || haystack_len == 0 ||
-        needle_len == 0 || needle_len > haystack_len)
+    if (needle == NULL || needle_len == 0)
+    {
+        return (void *) haystack;
+    }
+    if (haystack == NULL || haystack_len == 0 || needle_len > haystack_len)
     {
         return NULL;
     }
