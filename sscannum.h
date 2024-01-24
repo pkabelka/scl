@@ -24,14 +24,36 @@
   * For more information, please refer to <http://unlicense.org/>
   */
 
+/**
+ * Compile-time options
+ *
+ *     #define SSCANNUM_REALLOC(ptr,size) realloc(ptr,size)
+ *     #define SSCANNUM_FREE(ptr)         free(ptr)
+ *
+ *         These defines only need to be set in the file containing
+ *         #define SSCANNUM_IMPLEMENTATION.
+ *
+ *         By default, sscannum uses stdlib realloc() and free() for memory
+ *         management. You can substitute your own functions instead by defining
+ *         these symbols. You must either define both, or neither.
+ */
+
 #ifndef INCLUDE_SSCANNUM_H
 #define INCLUDE_SSCANNUM_H
 
-#include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+
+#if defined(SSCANNUM_REALLOC) && !defined(SSCANNUM_FREE) || !defined(SSCANNUM_REALLOC) && defined(SSCANNUM_FREE)
+#error "You must define both SSCANNUM_REALLOC and SSCANNUM_FREE, or neither."
+#endif
+#if !defined(SSCANNUM_REALLOC) && !defined(SSCANNUM_FREE)
+#include <stdlib.h>
+#define SSCANNUM_REALLOC(ptr,size) realloc(ptr,size)
+#define SSCANNUM_FREE(ptr)         free(ptr)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -289,7 +311,7 @@ static bool sscannum__common(int (*getchar_func)(),
     /* allocate the number array */
     size_t numbers_length = 0;
     size_t numbers_capacity = 1;
-    void *numbers = (void *) malloc(numbers_element_size * numbers_capacity);
+    void *numbers = (void *) SSCANNUM_REALLOC(NULL, numbers_element_size * numbers_capacity);
     if (numbers == NULL)
     {
         return false;
@@ -335,7 +357,7 @@ static bool sscannum__common(int (*getchar_func)(),
         size_t const new_capacity = (3*(numbers_length+1)/2 + (((numbers_length+1) % 2) != 0));
         if (numbers_length+1 > numbers_capacity)
         {
-            if ((numbers = (void *) realloc(numbers, numbers_element_size * new_capacity)) == NULL)
+            if ((numbers = (void *) SSCANNUM_REALLOC(numbers, numbers_element_size * new_capacity)) == NULL)
             {
                 return false;
             }
@@ -365,7 +387,7 @@ static bool sscannum__common(int (*getchar_func)(),
                 ((float *) numbers)[numbers_length++] = strtof(digit_buffer, NULL);
                 break;
             default:
-                free(numbers);
+                SSCANNUM_FREE(numbers);
                 return false;
                 break;
         }
