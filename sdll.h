@@ -47,7 +47,7 @@ typedef struct
     size_t length;
 } sdll;
 
-sdll* sdll_new();
+sdll *sdll_new();
 void sdll_empty(sdll * const l, void (*free_func)(void*));
 void sdll_free(sdll **l, void (*free_func)(void*));
 void sdll_insert_after(sdll * const l, sdll_node *node, void * const data);
@@ -66,7 +66,7 @@ void sdll_dummy_free(void * const data);
 
 #ifdef SDLL_IMPLEMENTATION
 
-sdll* sdll_new()
+sdll *sdll_new()
 {
     sdll *l = (sdll*) malloc(sizeof(sdll));
     if (l == NULL)

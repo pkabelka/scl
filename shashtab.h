@@ -78,7 +78,7 @@ void shashtab_free(shashtab ht, void (*free_func)(sbintree*));
 
 #ifdef SHASHTAB_IMPLEMENTATION
 
-unsigned int _shashtab_fnv_1a_32(void * const buf, size_t const buf_len)
+static unsigned int shashtab__fnv_1a_32(void * const buf, size_t const buf_len)
 {
     unsigned char *bp = (unsigned char *) buf;
     unsigned char * const be = bp + buf_len;
@@ -94,7 +94,7 @@ unsigned int _shashtab_fnv_1a_32(void * const buf, size_t const buf_len)
     return hash;
 }
 
-bool _shashtab_is_prime(size_t n)
+static bool shashtab__is_prime(size_t n)
 {
     if (n <= 1)
     {
@@ -121,11 +121,11 @@ bool _shashtab_is_prime(size_t n)
     return true;
 }
 
-size_t _shashtab_next_prime(size_t n)
+static size_t shashtab__next_prime(size_t n)
 {
     for (size_t i = n; i < 2 * n; i++)
     {
-        if (_shashtab_is_prime(i))
+        if (shashtab__is_prime(i))
         {
             return i;
         }
@@ -137,7 +137,7 @@ shashtab shashtab_new(size_t const capacity)
 {
     shashtab ht = { .data = NULL, .capacity = 0 };
     /* about 70 % load factor */
-    size_t const init_capacity = _shashtab_next_prime(capacity * 1.4);
+    size_t const init_capacity = shashtab__next_prime(capacity * 1.4);
 
     if ((ht.data = (sbintree **) calloc(init_capacity, sizeof(sbintree*))) == NULL)
     {
@@ -154,7 +154,7 @@ bool shashtab_set(shashtab const ht,
                   int (*key_func)(void *key, void *node_key),
                   void * const data)
 {
-    unsigned int const hash = _shashtab_fnv_1a_32(key, key_len);
+    unsigned int const hash = shashtab__fnv_1a_32(key, key_len);
     sbintree_insert(&ht.data[hash % ht.capacity], key, key_func, data);
     return true;
 }
@@ -164,7 +164,7 @@ void *shashtab_get(shashtab const ht,
                    size_t const key_len,
                    int (*key_func)(void *key, void *node_key))
 {
-    unsigned int const hash = _shashtab_fnv_1a_32(key, key_len);
+    unsigned int const hash = shashtab__fnv_1a_32(key, key_len);
     sbintree *node = sbintree_search(ht.data[hash % ht.capacity], key, key_func);
     if (node == NULL)
     {
@@ -179,7 +179,7 @@ void shashtab_del(shashtab const ht,
                   int (*key_func)(void *key, void *node_key),
                   void (*free_func)(sbintree*))
 {
-    unsigned int const hash = _shashtab_fnv_1a_32(key, key_len);
+    unsigned int const hash = shashtab__fnv_1a_32(key, key_len);
     sbintree *node = sbintree_search(ht.data[hash % ht.capacity], key, key_func);
     if (node == NULL)
     {

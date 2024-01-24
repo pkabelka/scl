@@ -65,14 +65,14 @@ bool sfft_ifft(sfft * const fft, double * const real, double * const imag);
 
 #ifdef SFFT_IMPLEMENTATION
 
-static size_t _sfft_bit_size(size_t n)
+static size_t sfft__bit_size(size_t n)
 {
     size_t size = 0;
     for (; n; n >>= 1) size++;
     return size;
 }
 
-static size_t _sfft_bit_reverse(size_t n, size_t bit_size)
+static size_t sfft__bit_reverse(size_t n, size_t bit_size)
 {
     size_t reversed = 0;
     for (size_t i = 0; i < bit_size; i++)
@@ -104,12 +104,12 @@ bool sfft_new(sfft * const fft, size_t const n)
     fft->n = n;
 
     static const double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068;
-    size_t log2_n = _sfft_bit_size(n) - 1;
+    size_t log2_n = sfft__bit_size(n) - 1;
 
     for (size_t i = 0; i < n; i++)
     {
         double w = -2.0 * pi / n * i;
-        fft->bit_reverse[i] = _sfft_bit_reverse(i, log2_n);
+        fft->bit_reverse[i] = sfft__bit_reverse(i, log2_n);
         fft->sine[i] = sin(w);
         fft->cosine[i] = cos(w);
     }
@@ -129,7 +129,7 @@ void sfft_free(sfft * const fft)
     fft->cosine = NULL;
 }
 
-static void _sfft_swap_and_run_first(sfft * const fft, double *real, double *imag)
+static void sfft__swap_and_run_first(sfft * const fft, double *real, double *imag)
 {
     size_t const n = fft->n;
     for (size_t i = 0; i < n; i++)
@@ -164,7 +164,7 @@ static void _sfft_swap_and_run_first(sfft * const fft, double *real, double *ima
     }
 }
 
-static bool _sfft_is_of_power2(size_t n)
+static bool sfft__is_of_power2(size_t n)
 {
     return (n & (n - 1)) == 0;
 }
@@ -176,12 +176,12 @@ bool sfft_fft(sfft * const fft, double * const real, double * const imag)
     double const * const cosine = fft->cosine;
     size_t const * const bit_reverse = fft->bit_reverse;
 
-    if (n == 0 || sine == NULL || cosine == NULL || bit_reverse == NULL || !_sfft_is_of_power2(n))
+    if (n == 0 || sine == NULL || cosine == NULL || bit_reverse == NULL || !sfft__is_of_power2(n))
     {
         return false;
     }
 
-    _sfft_swap_and_run_first(fft, real, imag);
+    sfft__swap_and_run_first(fft, real, imag);
 
     if (n >= 4)
     {
@@ -241,12 +241,12 @@ bool sfft_ifft(sfft * const fft, double * const real, double * const imag)
     double const * const cosine = fft->cosine;
     size_t const * const bit_reverse = fft->bit_reverse;
 
-    if (n == 0 || sine == NULL || cosine == NULL || bit_reverse == NULL || !_sfft_is_of_power2(n))
+    if (n == 0 || sine == NULL || cosine == NULL || bit_reverse == NULL || !sfft__is_of_power2(n))
     {
         return false;
     }
 
-    _sfft_swap_and_run_first(fft, real, imag);
+    sfft__swap_and_run_first(fft, real, imag);
 
     if (n >= 4)
     {

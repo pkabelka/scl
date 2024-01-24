@@ -181,15 +181,15 @@ bool sgetnum_f(int (*getchar_func)(),
 
 #ifdef SGETNUM_IMPLEMENTATION
 
-enum _sgetnum_number_type
+enum sgetnum__number_type
 {
-    _SGETNUM_LONGLONGINT,
-    _SGETNUM_UNSIGNEDLONGLONGINT,
-    _SGETNUM_LONGINT,
-    _SGETNUM_UNSIGNEDLONGINT,
-    _SGETNUM_LONGDOUBLE,
-    _SGETNUM_DOUBLE,
-    _SGETNUM_FLOAT,
+    SGETNUM__LONGLONGINT,
+    SGETNUM__UNSIGNEDLONGLONGINT,
+    SGETNUM__LONGINT,
+    SGETNUM__UNSIGNEDLONGINT,
+    SGETNUM__LONGDOUBLE,
+    SGETNUM__DOUBLE,
+    SGETNUM__FLOAT,
 };
 
 /**
@@ -200,7 +200,7 @@ enum _sgetnum_number_type
  * @param length Length of `arr`.
  * @return True if `arr` contains `c`, false otherwise.
  */
-static bool _sgetnum_char_in_array(int c, char const * const arr, size_t const length)
+static bool sgetnum__char_in_array(int c, char const * const arr, size_t const length)
 {
     for (size_t i = 0; i < length; i++)
     {
@@ -212,11 +212,11 @@ static bool _sgetnum_char_in_array(int c, char const * const arr, size_t const l
     return false;
 }
 
-static bool _sgetnum_common(int (*getchar_func)(),
+static bool sgetnum__common(int (*getchar_func)(),
                              char const * delimiter,
                              size_t delimiter_length,
                              void * result,
-                             enum _sgetnum_number_type number_type,
+                             enum sgetnum__number_type number_type,
                              int base)
 {
     char digit_buffer[128];
@@ -239,7 +239,7 @@ static bool _sgetnum_common(int (*getchar_func)(),
             c = getchar_func();
 
             /* ignore whitespace by default if it is not specified as a delimiter */
-            if (isspace(c) && !_sgetnum_char_in_array(c, delimiter, delimiter_length))
+            if (isspace(c) && !sgetnum__char_in_array(c, delimiter, delimiter_length))
             {
                 continue;
             }
@@ -247,7 +247,7 @@ static bool _sgetnum_common(int (*getchar_func)(),
             /* add non-delimiter chars to buffer */
             if (c != EOF)
             {
-                if (!_sgetnum_char_in_array(c, delimiter, delimiter_length))
+                if (!sgetnum__char_in_array(c, delimiter, delimiter_length))
                 {
                     digit_buffer[digit_buffer_index++] = c;
                     continue;
@@ -259,25 +259,25 @@ static bool _sgetnum_common(int (*getchar_func)(),
         digit_buffer_index = 0;
 
         switch (number_type) {
-            case _SGETNUM_LONGLONGINT:
+            case SGETNUM__LONGLONGINT:
                 *((long long int *) result) = strtoll(digit_buffer, NULL, base);
                 break;
-            case _SGETNUM_UNSIGNEDLONGLONGINT:
+            case SGETNUM__UNSIGNEDLONGLONGINT:
                 *((unsigned long long int *) result) = strtoull(digit_buffer, NULL, base);
                 break;
-            case _SGETNUM_LONGINT:
+            case SGETNUM__LONGINT:
                 *((long int *) result) = strtol(digit_buffer, NULL, base);
                 break;
-            case _SGETNUM_UNSIGNEDLONGINT:
+            case SGETNUM__UNSIGNEDLONGINT:
                 *((unsigned long int *) result) = strtoul(digit_buffer, NULL, base);
                 break;
-            case _SGETNUM_LONGDOUBLE:
+            case SGETNUM__LONGDOUBLE:
                 *((long double *) result) = strtold(digit_buffer, NULL);
                 break;
-            case _SGETNUM_DOUBLE:
+            case SGETNUM__DOUBLE:
                 *((double *) result) = strtod(digit_buffer, NULL);
                 break;
-            case _SGETNUM_FLOAT:
+            case SGETNUM__FLOAT:
                 *((float *) result) = strtof(digit_buffer, NULL);
                 break;
             default:
@@ -302,12 +302,12 @@ bool sgetnum_ll(int (*getchar_func)(),
                  long long int * result,
                  int base)
 {
-    return _sgetnum_common(
+    return sgetnum__common(
         getchar_func,
         delimiter,
         delimiter_length,
         (void *) result,
-        _SGETNUM_LONGLONGINT,
+        SGETNUM__LONGLONGINT,
         base);
 }
 
@@ -317,12 +317,12 @@ bool sgetnum_ull(int (*getchar_func)(),
                   unsigned long long int * result,
                   int base)
 {
-    return _sgetnum_common(
+    return sgetnum__common(
         getchar_func,
         delimiter,
         delimiter_length,
         (void *) result,
-        _SGETNUM_UNSIGNEDLONGLONGINT,
+        SGETNUM__UNSIGNEDLONGLONGINT,
         base);
 }
 
@@ -332,12 +332,12 @@ bool sgetnum_l(int (*getchar_func)(),
                 long int * result,
                 int base)
 {
-    return _sgetnum_common(
+    return sgetnum__common(
         getchar_func,
         delimiter,
         delimiter_length,
         (void *) result,
-        _SGETNUM_LONGINT,
+        SGETNUM__LONGINT,
         base);
 }
 
@@ -347,12 +347,12 @@ bool sgetnum_ul(int (*getchar_func)(),
                  unsigned long int * result,
                  int base)
 {
-    return _sgetnum_common(
+    return sgetnum__common(
         getchar_func,
         delimiter,
         delimiter_length,
         (void *) result,
-        _SGETNUM_UNSIGNEDLONGINT,
+        SGETNUM__UNSIGNEDLONGINT,
         base);
 }
 
@@ -361,12 +361,12 @@ bool sgetnum_ld(int (*getchar_func)(),
                  size_t delimiter_length,
                  long double * result)
 {
-    return _sgetnum_common(
+    return sgetnum__common(
         getchar_func,
         delimiter,
         delimiter_length,
         (void *) result,
-        _SGETNUM_LONGDOUBLE,
+        SGETNUM__LONGDOUBLE,
         0);
 }
 
@@ -375,12 +375,12 @@ bool sgetnum_d(int (*getchar_func)(),
                 size_t delimiter_length,
                 double * result)
 {
-    return _sgetnum_common(
+    return sgetnum__common(
         getchar_func,
         delimiter,
         delimiter_length,
         (void *) result,
-        _SGETNUM_DOUBLE,
+        SGETNUM__DOUBLE,
         0);
 }
 
@@ -389,12 +389,12 @@ bool sgetnum_f(int (*getchar_func)(),
                 size_t delimiter_length,
                 float * result)
 {
-    return _sgetnum_common(
+    return sgetnum__common(
         getchar_func,
         delimiter,
         delimiter_length,
         (void *) result,
-        _SGETNUM_FLOAT,
+        SGETNUM__FLOAT,
         0);
 }
 

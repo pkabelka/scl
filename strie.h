@@ -45,8 +45,8 @@ typedef struct strie
     void *data;
 } strie;
 
-strie* strie_insert(strie ** const node, void * const key, size_t const key_length_bytes, void * const data);
-strie* strie_search(strie * const node, void * const key, size_t const key_length_bytes);
+strie *strie_insert(strie ** const node, void * const key, size_t const key_length_bytes, void * const data);
+strie *strie_search(strie * const node, void * const key, size_t const key_length_bytes);
 bool strie_remove(strie ** const root, void * const key, size_t const key_length_bytes, void (*free_func)(void*));
 
 #ifdef __cplusplus
@@ -57,7 +57,7 @@ bool strie_remove(strie ** const root, void * const key, size_t const key_length
 
 #ifdef STRIE_IMPLEMENTATION
 
-strie* strie_insert(strie ** const root, void * const key, size_t const key_length_bytes, void * const data)
+strie *strie_insert(strie ** const root, void * const key, size_t const key_length_bytes, void * const data)
 {
     if (*root == NULL)
     {
@@ -113,7 +113,7 @@ strie* strie_insert(strie ** const root, void * const key, size_t const key_leng
     return current;
 }
 
-strie* strie_search(strie * const node, void * const key, size_t const key_length_bytes)
+strie *strie_search(strie * const node, void * const key, size_t const key_length_bytes)
 {
     if (node == NULL)
     {
