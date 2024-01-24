@@ -9,7 +9,7 @@
 
 void sdll_sstr_free(void *data)
 {
-    sstr_free((sstr*)data);
+    sstr_free((sstr *) data);
 }
 
 int main()
@@ -34,17 +34,17 @@ int main()
     {
         sdll_node *next = curr->next;
 
-        printf("%s\n", ((sstr*)curr->data)->cstr);
+        printf("%s\n", ((sstr *) curr->data)->cstr);
 
         /* find the node to remove */
-        if (sstr_cmp_const(*(sstr*)curr->data, "amet consectetur") == 0)
+        if (sstr_cmp_const(*(sstr *) curr->data, "amet consectetur") == 0)
         {
             printf("%lu\n", list->length);
 
             /* remove the node from list */
             sdll_unlink(list, curr);
             /* free the node data */
-            sstr_free((sstr*)curr->data);
+            sstr_free((sstr *) curr->data);
             /* set next node pointer */
             next = curr->next;
             /* free the unlinked node */
@@ -58,7 +58,7 @@ int main()
     /* print the list */
     for (sdll_node *curr = list->first; curr != NULL; curr = curr->next)
     {
-        printf("%s\n", ((sstr*)curr->data)->cstr);
+        printf("%s\n", ((sstr *) curr->data)->cstr);
     }
 
     /* remove example with sdll_remove */
@@ -68,7 +68,7 @@ int main()
         sdll_node *next = curr->next;
 
         /* find the node to remove */
-        if (sstr_cmp_const(*(sstr*)curr->data, "dolor sit") == 0)
+        if (sstr_cmp_const(*(sstr *) curr->data, "dolor sit") == 0)
         {
             printf("%lu\n", list->length);
 
@@ -83,7 +83,7 @@ int main()
     /* print the list */
     for (sdll_node *curr = list->first; curr != NULL; curr = curr->next)
     {
-        printf("%s\n", ((sstr*)curr->data)->cstr);
+        printf("%s\n", ((sstr *) curr->data)->cstr);
     }
 
     /* free the entire list */

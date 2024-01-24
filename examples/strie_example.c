@@ -17,7 +17,7 @@ void print_keys(strie *node)
         {
             continue;
         }
-        printf("%c: %p, ", (char)i, (void *) node->next[i]);
+        printf("%c: %p, ", (char) i, (void *) node->next[i]);
     }
     printf("\n");
 }
@@ -30,24 +30,24 @@ int main()
     strie_insert(&root, "faa", 3, "baz");
     strie_insert(&root, "fob", 3, "qux");
 
-    printf("%s\n", (char*)strie_search(root, "foo", 3)->data);
-    printf("%s\n", (char*)strie_search(root, "faa", 3)->data);
+    printf("%s\n", (char *) strie_search(root, "foo", 3)->data);
+    printf("%s\n", (char *) strie_search(root, "faa", 3)->data);
 
     print_keys(root);
-    print_keys(root->next[(int)'f']);
-    print_keys(root->next[(int)'f']->next[(int)'a']);
-    print_keys(root->next[(int)'f']->next[(int)'o']);
+    print_keys(root->next[(int) 'f']);
+    print_keys(root->next[(int) 'f']->next[(int) 'a']);
+    print_keys(root->next[(int) 'f']->next[(int) 'o']);
 
     strie_remove(&root, "faa", 3, dummy_free);
 
     print_keys(root);
-    print_keys(root->next[(int)'f']);
-    print_keys(root->next[(int)'f']->next[(int)'o']);
+    print_keys(root->next[(int) 'f']);
+    print_keys(root->next[(int) 'f']->next[(int) 'o']);
 
     strie_remove(&root, "foo", 3, dummy_free);
     print_keys(root);
-    print_keys(root->next[(int)'f']);
-    print_keys(root->next[(int)'f']->next[(int)'o']);
+    print_keys(root->next[(int) 'f']);
+    print_keys(root->next[(int) 'f']->next[(int) 'o']);
 
     strie_remove(&root, "fob", 3, dummy_free);
 

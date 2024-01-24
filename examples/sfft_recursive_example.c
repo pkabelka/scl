@@ -1,6 +1,6 @@
+#include <complex.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <complex.h>
 
 #define SFFT_RECURSIVE_IMPLEMENTATION
 #include "../sfft_recursive.h"

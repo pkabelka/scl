@@ -1,28 +1,28 @@
 /** This is free and unencumbered software released into the public domain.
-  * 
-  * Anyone is free to copy, modify, publish, use, compile, sell, or
-  * distribute this software, either in source code form or as a compiled
-  * binary, for any purpose, commercial or non-commercial, and by any
-  * means.
-  * 
-  * In jurisdictions that recognize copyright laws, the author or authors
-  * of this software dedicate any and all copyright interest in the
-  * software to the public domain. We make this dedication for the benefit
-  * of the public at large and to the detriment of our heirs and
-  * successors. We intend this dedication to be an overt act of
-  * relinquishment in perpetuity of all present and future rights to this
-  * software under copyright law.
-  * 
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-  * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-  * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-  * OTHER DEALINGS IN THE SOFTWARE.
-  * 
-  * For more information, please refer to <http://unlicense.org/>
-  */
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * For more information, please refer to <http://unlicense.org/>
+ */
 
 /**
  * Compile-time options
@@ -54,16 +54,17 @@
 #endif
 #if !defined(SSTR_REALLOC) && !defined(SSTR_FREE)
 #include <stdlib.h>
-#define SSTR_REALLOC(ptr,size) realloc(ptr,size)
-#define SSTR_FREE(ptr)         free(ptr)
+#define SSTR_REALLOC(ptr, size) realloc(ptr, size)
+#define SSTR_FREE(ptr) free(ptr)
 #endif
 
 #if !defined(SSTR_MEMMEM)
-#define SSTR_MEMMEM(haystack,haystacklen,needle,needlelen) memmem(haystack,haystacklen,needle,needlelen)
+#define SSTR_MEMMEM(haystack, haystacklen, needle, needlelen) memmem(haystack, haystacklen, needle, needlelen)
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /**
@@ -378,12 +379,12 @@ size_t sstr_count_const(sstr const s, const char * const substr);
 size_t sstr_optimal_capacity(size_t length)
 {
     /* ceil((new_length+1) * 1.5) */
-    return 3*(length+1)/2 + (((length+1) % 2) != 0);
+    return 3 * (length + 1) / 2 + (((length + 1) % 2) != 0);
 }
 
 sstr sstr_new(char const * const init_string)
 {
-    sstr s = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr s = {.cstr = NULL, .length = 0, .capacity = 0};
     size_t const init_string_len = strlen(init_string);
     size_t const init_capacity = sstr_optimal_capacity(init_string_len);
 
@@ -426,7 +427,7 @@ bool sstr_add(sstr * const s, const void * const src, size_t const length)
     size_t const new_length = s->length + length;
     size_t const new_capacity = sstr_optimal_capacity(new_length);
 
-    if (new_length+1 > s->capacity)
+    if (new_length + 1 > s->capacity)
     {
         if ((s->cstr = (char *) SSTR_REALLOC(s->cstr, sizeof(char) * new_capacity)) == NULL)
         {
@@ -437,7 +438,7 @@ bool sstr_add(sstr * const s, const void * const src, size_t const length)
 
     if (length && src)
     {
-        memcpy(s->cstr+s->length, src, length);
+        memcpy(s->cstr + s->length, src, length);
     }
     s->length = new_length;
     s->cstr[s->length] = '\0';
@@ -505,7 +506,7 @@ bool sstr_set_capacity(sstr * const s, size_t const capacity)
 
 sstr sstr_new_empty(size_t const capacity)
 {
-    sstr new_sstr = { .cstr = NULL, .length = 0, .capacity = 0 };
+    sstr new_sstr = {.cstr = NULL, .length = 0, .capacity = 0};
     sstr_set_capacity(&new_sstr, capacity);
     return new_sstr;
 }
@@ -523,7 +524,7 @@ sstr sstr_substr(sstr const s, size_t const start, size_t const length)
     sstr new_sstr = sstr_new_empty(0);
     if ((start < s.length) && (s.length - start >= length))
     {
-        sstr_add(&new_sstr, s.cstr+start, length);
+        sstr_add(&new_sstr, s.cstr + start, length);
     }
     return new_sstr;
 }

@@ -1,28 +1,28 @@
 /** This is free and unencumbered software released into the public domain.
-  * 
-  * Anyone is free to copy, modify, publish, use, compile, sell, or
-  * distribute this software, either in source code form or as a compiled
-  * binary, for any purpose, commercial or non-commercial, and by any
-  * means.
-  * 
-  * In jurisdictions that recognize copyright laws, the author or authors
-  * of this software dedicate any and all copyright interest in the
-  * software to the public domain. We make this dedication for the benefit
-  * of the public at large and to the detriment of our heirs and
-  * successors. We intend this dedication to be an overt act of
-  * relinquishment in perpetuity of all present and future rights to this
-  * software under copyright law.
-  * 
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-  * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-  * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-  * OTHER DEALINGS IN THE SOFTWARE.
-  * 
-  * For more information, please refer to <http://unlicense.org/>
-  */
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * For more information, please refer to <http://unlicense.org/>
+ */
 
 /**
  * Compile-time options
@@ -41,8 +41,8 @@
 #ifndef INCLUDE_SBINTREE_H
 #define INCLUDE_SBINTREE_H
 
-#include <stdio.h>
 #include "sdll.h"
+#include <stdio.h>
 
 #if defined(SBINTREE_MALLOC) && !defined(SBINTREE_FREE) || !defined(SBINTREE_MALLOC) && defined(SBINTREE_FREE)
 #error "You must define both SBINTREE_MALLOC and SBINTREE_FREE, or neither."
@@ -50,11 +50,12 @@
 #if !defined(SBINTREE_MALLOC) && !defined(SBINTREE_FREE)
 #include <stdlib.h>
 #define SBINTREE_MALLOC(size) malloc(size)
-#define SBINTREE_FREE(ptr)    free(ptr)
+#define SBINTREE_FREE(ptr) free(ptr)
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 typedef struct sbintree
@@ -66,15 +67,15 @@ typedef struct sbintree
     void *data;
 } sbintree;
 
-sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_func)(void *key, void *node_key), void * const data);
-sbintree* sbintree_search(sbintree * const root, void * const key, int (*key_func)(void *searched_key, void *node_key));
+sbintree *sbintree_insert(sbintree ** const root, void * const key, int (*key_func)(void *key, void *node_key), void * const data);
+sbintree *sbintree_search(sbintree * const root, void * const key, int (*key_func)(void *searched_key, void *node_key));
 void sbintree_inorder(sbintree * const root, void (*callback)(sbintree * const node));
-void sbintree_free(sbintree ** const root, void (*free_func)(sbintree*));
-sbintree* sbintree_leftmost(sbintree * const node);
-sbintree* sbintree_rightmost(sbintree * const node);
-sbintree* sbintree_successor(sbintree * const node);
-sbintree* sbintree_predecessor(sbintree * const node);
-void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_func)(sbintree*));
+void sbintree_free(sbintree ** const root, void (*free_func)(sbintree *));
+sbintree *sbintree_leftmost(sbintree * const node);
+sbintree *sbintree_rightmost(sbintree * const node);
+sbintree *sbintree_successor(sbintree * const node);
+sbintree *sbintree_predecessor(sbintree * const node);
+void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_func)(sbintree *));
 
 #ifdef __cplusplus
 }
@@ -84,11 +85,11 @@ void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_
 
 #ifdef SBINTREE_IMPLEMENTATION
 
-sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_func)(void *key, void *node_key), void * const data)
+sbintree *sbintree_insert(sbintree ** const root, void * const key, int (*key_func)(void *key, void *node_key), void * const data)
 {
     if (*root == NULL)
     {
-        sbintree *new_node = (sbintree*) SBINTREE_MALLOC(sizeof(sbintree));
+        sbintree *new_node = (sbintree *) SBINTREE_MALLOC(sizeof(sbintree));
         if (new_node == NULL)
         {
             return NULL;
@@ -117,7 +118,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
                 continue;
             }
 
-            sbintree *new_node = (sbintree*) SBINTREE_MALLOC(sizeof(sbintree));
+            sbintree *new_node = (sbintree *) SBINTREE_MALLOC(sizeof(sbintree));
             if (new_node == NULL)
             {
                 return NULL;
@@ -141,7 +142,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
                 continue;
             }
 
-            sbintree *new_node = (sbintree*) SBINTREE_MALLOC(sizeof(sbintree));
+            sbintree *new_node = (sbintree *) SBINTREE_MALLOC(sizeof(sbintree));
             if (new_node == NULL)
             {
                 return NULL;
@@ -164,7 +165,7 @@ sbintree* sbintree_insert(sbintree ** const root, void * const key, int (*key_fu
     return NULL;
 }
 
-sbintree* sbintree_search(sbintree * const root, void * const key, int (*key_func)(void *searched_key, void *node_key))
+sbintree *sbintree_search(sbintree * const root, void * const key, int (*key_func)(void *searched_key, void *node_key))
 {
     if (root == NULL)
     {
@@ -203,7 +204,8 @@ static void sbintree__left_inorder(sbintree * const root, sdll * const list)
 
 void sbintree_inorder(sbintree * const root, void (*callback)(sbintree * const node))
 {
-    if (root == NULL) return;
+    if (root == NULL)
+        return;
 
     sdll *list = sdll_new();
     sbintree__left_inorder(root, list);
@@ -212,21 +214,21 @@ void sbintree_inorder(sbintree * const root, void (*callback)(sbintree * const n
     {
         sdll_node *first = list->first;
         sdll_unlink(list, list->first);
-        sbintree__left_inorder(((sbintree*)first->data)->right, list);
-        callback((sbintree*)first->data);
+        sbintree__left_inorder(((sbintree *) first->data)->right, list);
+        callback((sbintree *) first->data);
         SBINTREE_FREE(first);
     }
 
     sdll_free(&list, sdll_dummy_free);
 }
 
-void sbintree_free(sbintree ** const root, void (*free_func)(sbintree*))
+void sbintree_free(sbintree ** const root, void (*free_func)(sbintree *))
 {
     sbintree_inorder(*root, free_func);
     *root = NULL;
 }
 
-sbintree* sbintree_leftmost(sbintree * const node)
+sbintree *sbintree_leftmost(sbintree * const node)
 {
     sbintree *predecessor = node;
     for (sbintree *current = node; current != NULL; current = current->left)
@@ -236,7 +238,7 @@ sbintree* sbintree_leftmost(sbintree * const node)
     return predecessor;
 }
 
-sbintree* sbintree_rightmost(sbintree * const node)
+sbintree *sbintree_rightmost(sbintree * const node)
 {
     sbintree *predecessor = node;
     for (sbintree *current = node; current != NULL; current = current->right)
@@ -246,7 +248,7 @@ sbintree* sbintree_rightmost(sbintree * const node)
     return predecessor;
 }
 
-sbintree* sbintree_successor(sbintree * const node)
+sbintree *sbintree_successor(sbintree * const node)
 {
     if (node->right != NULL)
     {
@@ -263,7 +265,7 @@ sbintree* sbintree_successor(sbintree * const node)
     return successor;
 }
 
-sbintree* sbintree_predecessor(sbintree * const node)
+sbintree *sbintree_predecessor(sbintree * const node)
 {
     if (node->left != NULL)
     {
@@ -301,7 +303,7 @@ static void sbintree__replace_nodes(sbintree ** const root, sbintree * const old
     }
 }
 
-void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_func)(sbintree*))
+void sbintree_remove(sbintree ** const root, sbintree * const node, void (*free_func)(sbintree *))
 {
     if (node->left == NULL)
     {

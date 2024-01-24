@@ -34,7 +34,7 @@ int main()
         printf("%zu ", indices[i]);
     }
     printf("\n");
-    /* 3 6 12  */ 
+    /* 3 6 12  */
     free(indices);
 
     return 0;

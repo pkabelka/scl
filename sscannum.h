@@ -1,28 +1,28 @@
 /** This is free and unencumbered software released into the public domain.
-  * 
-  * Anyone is free to copy, modify, publish, use, compile, sell, or
-  * distribute this software, either in source code form or as a compiled
-  * binary, for any purpose, commercial or non-commercial, and by any
-  * means.
-  * 
-  * In jurisdictions that recognize copyright laws, the author or authors
-  * of this software dedicate any and all copyright interest in the
-  * software to the public domain. We make this dedication for the benefit
-  * of the public at large and to the detriment of our heirs and
-  * successors. We intend this dedication to be an overt act of
-  * relinquishment in perpetuity of all present and future rights to this
-  * software under copyright law.
-  * 
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-  * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-  * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-  * OTHER DEALINGS IN THE SOFTWARE.
-  * 
-  * For more information, please refer to <http://unlicense.org/>
-  */
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * For more information, please refer to <http://unlicense.org/>
+ */
 
 /**
  * Compile-time options
@@ -41,9 +41,9 @@
 #ifndef INCLUDE_SSCANNUM_H
 #define INCLUDE_SSCANNUM_H
 
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <ctype.h>
 #include <string.h>
 
 #if defined(SSCANNUM_REALLOC) && !defined(SSCANNUM_FREE) || !defined(SSCANNUM_REALLOC) && defined(SSCANNUM_FREE)
@@ -51,12 +51,13 @@
 #endif
 #if !defined(SSCANNUM_REALLOC) && !defined(SSCANNUM_FREE)
 #include <stdlib.h>
-#define SSCANNUM_REALLOC(ptr,size) realloc(ptr,size)
-#define SSCANNUM_FREE(ptr)         free(ptr)
+#define SSCANNUM_REALLOC(ptr, size) realloc(ptr, size)
+#define SSCANNUM_FREE(ptr) free(ptr)
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /**
@@ -79,9 +80,9 @@ extern "C" {
  * @return True if the function succeedes, false otherwise.
  */
 bool sscannum_ll(int (*getchar_func)(),
-                 char const * delimiter,
+                 char const *delimiter,
                  size_t delimiter_length,
-                 long long int ** result,
+                 long long int **result,
                  size_t *result_length,
                  size_t *result_capacity,
                  int base);
@@ -107,9 +108,9 @@ bool sscannum_ll(int (*getchar_func)(),
  * @return True if the function succeedes, false otherwise.
  */
 bool sscannum_ull(int (*getchar_func)(),
-                  char const * delimiter,
+                  char const *delimiter,
                   size_t delimiter_length,
-                  unsigned long long int ** result,
+                  unsigned long long int **result,
                   size_t *result_length,
                   size_t *result_capacity,
                   int base);
@@ -135,9 +136,9 @@ bool sscannum_ull(int (*getchar_func)(),
  * @return True if the function succeedes, false otherwise.
  */
 bool sscannum_l(int (*getchar_func)(),
-                char const * delimiter,
+                char const *delimiter,
                 size_t delimiter_length,
-                long int ** result,
+                long int **result,
                 size_t *result_length,
                 size_t *result_capacity,
                 int base);
@@ -163,9 +164,9 @@ bool sscannum_l(int (*getchar_func)(),
  * @return True if the function succeedes, false otherwise.
  */
 bool sscannum_ul(int (*getchar_func)(),
-                 char const * delimiter,
+                 char const *delimiter,
                  size_t delimiter_length,
-                 unsigned long int ** result,
+                 unsigned long int **result,
                  size_t *result_length,
                  size_t *result_capacity,
                  int base);
@@ -190,9 +191,9 @@ bool sscannum_ul(int (*getchar_func)(),
  * @return True if the function succeedes, false otherwise.
  */
 bool sscannum_ld(int (*getchar_func)(),
-                 char const * delimiter,
+                 char const *delimiter,
                  size_t delimiter_length,
-                 long double ** result,
+                 long double **result,
                  size_t *result_length,
                  size_t *result_capacity);
 
@@ -216,9 +217,9 @@ bool sscannum_ld(int (*getchar_func)(),
  * @return True if the function succeedes, false otherwise.
  */
 bool sscannum_d(int (*getchar_func)(),
-                char const * delimiter,
+                char const *delimiter,
                 size_t delimiter_length,
-                double ** result,
+                double **result,
                 size_t *result_length,
                 size_t *result_capacity);
 
@@ -242,9 +243,9 @@ bool sscannum_d(int (*getchar_func)(),
  * @return True if the function succeedes, false otherwise.
  */
 bool sscannum_f(int (*getchar_func)(),
-                char const * delimiter,
+                char const *delimiter,
                 size_t delimiter_length,
-                float ** result,
+                float **result,
                 size_t *result_length,
                 size_t *result_capacity);
 
@@ -268,9 +269,9 @@ enum sscannum__number_type
 };
 
 static bool sscannum__common(int (*getchar_func)(),
-                             char const * delimiter,
+                             char const *delimiter,
                              size_t delimiter_length,
-                             void ** result,
+                             void **result,
                              size_t *result_length,
                              size_t *result_capacity,
                              enum sscannum__number_type number_type,
@@ -281,31 +282,32 @@ static bool sscannum__common(int (*getchar_func)(),
 
     /* define the array element size */
     size_t numbers_element_size = 0;
-    switch (number_type) {
-        case SSCANNUM__LONGLONGINT:
-            numbers_element_size = sizeof(long long int);
-            break;
-        case SSCANNUM__UNSIGNEDLONGLONGINT:
-            numbers_element_size = sizeof(unsigned long long int);
-            break;
-        case SSCANNUM__LONGINT:
-            numbers_element_size = sizeof(long int);
-            break;
-        case SSCANNUM__UNSIGNEDLONGINT:
-            numbers_element_size = sizeof(unsigned long int);
-            break;
-        case SSCANNUM__LONGDOUBLE:
-            numbers_element_size = sizeof(long double);
-            break;
-        case SSCANNUM__DOUBLE:
-            numbers_element_size = sizeof(double);
-            break;
-        case SSCANNUM__FLOAT:
-            numbers_element_size = sizeof(float);
-            break;
-        default:
-            return false;
-            break;
+    switch (number_type)
+    {
+    case SSCANNUM__LONGLONGINT:
+        numbers_element_size = sizeof(long long int);
+        break;
+    case SSCANNUM__UNSIGNEDLONGLONGINT:
+        numbers_element_size = sizeof(unsigned long long int);
+        break;
+    case SSCANNUM__LONGINT:
+        numbers_element_size = sizeof(long int);
+        break;
+    case SSCANNUM__UNSIGNEDLONGINT:
+        numbers_element_size = sizeof(unsigned long int);
+        break;
+    case SSCANNUM__LONGDOUBLE:
+        numbers_element_size = sizeof(long double);
+        break;
+    case SSCANNUM__DOUBLE:
+        numbers_element_size = sizeof(double);
+        break;
+    case SSCANNUM__FLOAT:
+        numbers_element_size = sizeof(float);
+        break;
+    default:
+        return false;
+        break;
     }
 
     /* allocate the number array */
@@ -329,7 +331,7 @@ static bool sscannum__common(int (*getchar_func)(),
     int c = 0;
     while (c != EOF)
     {
-        if (digit_buffer_index < 128-1)
+        if (digit_buffer_index < 128 - 1)
         {
             c = getchar_func();
 
@@ -354,8 +356,8 @@ static bool sscannum__common(int (*getchar_func)(),
         digit_buffer_index = 0;
 
         /* ceil((numbers_length+1) * 1.5) */
-        size_t const new_capacity = (3*(numbers_length+1)/2 + (((numbers_length+1) % 2) != 0));
-        if (numbers_length+1 > numbers_capacity)
+        size_t const new_capacity = (3 * (numbers_length + 1) / 2 + (((numbers_length + 1) % 2) != 0));
+        if (numbers_length + 1 > numbers_capacity)
         {
             if ((numbers = (void *) SSCANNUM_REALLOC(numbers, numbers_element_size * new_capacity)) == NULL)
             {
@@ -364,32 +366,33 @@ static bool sscannum__common(int (*getchar_func)(),
             numbers_capacity = new_capacity;
         }
 
-        switch (number_type) {
-            case SSCANNUM__LONGLONGINT:
-                ((long long int *) numbers)[numbers_length++] = strtoll(digit_buffer, NULL, base);
-                break;
-            case SSCANNUM__UNSIGNEDLONGLONGINT:
-                ((unsigned long long int *) numbers)[numbers_length++] = strtoull(digit_buffer, NULL, base);
-                break;
-            case SSCANNUM__LONGINT:
-                ((long int *) numbers)[numbers_length++] = strtol(digit_buffer, NULL, base);
-                break;
-            case SSCANNUM__UNSIGNEDLONGINT:
-                ((unsigned long int *) numbers)[numbers_length++] = strtoul(digit_buffer, NULL, base);
-                break;
-            case SSCANNUM__LONGDOUBLE:
-                ((long double *) numbers)[numbers_length++] = strtold(digit_buffer, NULL);
-                break;
-            case SSCANNUM__DOUBLE:
-                ((double *) numbers)[numbers_length++] = strtod(digit_buffer, NULL);
-                break;
-            case SSCANNUM__FLOAT:
-                ((float *) numbers)[numbers_length++] = strtof(digit_buffer, NULL);
-                break;
-            default:
-                SSCANNUM_FREE(numbers);
-                return false;
-                break;
+        switch (number_type)
+        {
+        case SSCANNUM__LONGLONGINT:
+            ((long long int *) numbers)[numbers_length++] = strtoll(digit_buffer, NULL, base);
+            break;
+        case SSCANNUM__UNSIGNEDLONGLONGINT:
+            ((unsigned long long int *) numbers)[numbers_length++] = strtoull(digit_buffer, NULL, base);
+            break;
+        case SSCANNUM__LONGINT:
+            ((long int *) numbers)[numbers_length++] = strtol(digit_buffer, NULL, base);
+            break;
+        case SSCANNUM__UNSIGNEDLONGINT:
+            ((unsigned long int *) numbers)[numbers_length++] = strtoul(digit_buffer, NULL, base);
+            break;
+        case SSCANNUM__LONGDOUBLE:
+            ((long double *) numbers)[numbers_length++] = strtold(digit_buffer, NULL);
+            break;
+        case SSCANNUM__DOUBLE:
+            ((double *) numbers)[numbers_length++] = strtod(digit_buffer, NULL);
+            break;
+        case SSCANNUM__FLOAT:
+            ((float *) numbers)[numbers_length++] = strtof(digit_buffer, NULL);
+            break;
+        default:
+            SSCANNUM_FREE(numbers);
+            return false;
+            break;
         }
     }
 
@@ -400,9 +403,9 @@ static bool sscannum__common(int (*getchar_func)(),
 }
 
 bool sscannum_ll(int (*getchar_func)(),
-                 char const * delimiter,
+                 char const *delimiter,
                  size_t delimiter_length,
-                 long long int ** result,
+                 long long int **result,
                  size_t *result_length,
                  size_t *result_capacity,
                  int base)
@@ -419,9 +422,9 @@ bool sscannum_ll(int (*getchar_func)(),
 }
 
 bool sscannum_ull(int (*getchar_func)(),
-                  char const * delimiter,
+                  char const *delimiter,
                   size_t delimiter_length,
-                  unsigned long long int ** result,
+                  unsigned long long int **result,
                   size_t *result_length,
                   size_t *result_capacity,
                   int base)
@@ -438,9 +441,9 @@ bool sscannum_ull(int (*getchar_func)(),
 }
 
 bool sscannum_l(int (*getchar_func)(),
-                char const * delimiter,
+                char const *delimiter,
                 size_t delimiter_length,
-                long int ** result,
+                long int **result,
                 size_t *result_length,
                 size_t *result_capacity,
                 int base)
@@ -457,9 +460,9 @@ bool sscannum_l(int (*getchar_func)(),
 }
 
 bool sscannum_ul(int (*getchar_func)(),
-                 char const * delimiter,
+                 char const *delimiter,
                  size_t delimiter_length,
-                 unsigned long int ** result,
+                 unsigned long int **result,
                  size_t *result_length,
                  size_t *result_capacity,
                  int base)
@@ -476,9 +479,9 @@ bool sscannum_ul(int (*getchar_func)(),
 }
 
 bool sscannum_ld(int (*getchar_func)(),
-                 char const * delimiter,
+                 char const *delimiter,
                  size_t delimiter_length,
-                 long double ** result,
+                 long double **result,
                  size_t *result_length,
                  size_t *result_capacity)
 {
@@ -494,9 +497,9 @@ bool sscannum_ld(int (*getchar_func)(),
 }
 
 bool sscannum_d(int (*getchar_func)(),
-                char const * delimiter,
+                char const *delimiter,
                 size_t delimiter_length,
-                double ** result,
+                double **result,
                 size_t *result_length,
                 size_t *result_capacity)
 {
@@ -512,9 +515,9 @@ bool sscannum_d(int (*getchar_func)(),
 }
 
 bool sscannum_f(int (*getchar_func)(),
-                char const * delimiter,
+                char const *delimiter,
                 size_t delimiter_length,
-                float ** result,
+                float **result,
                 size_t *result_length,
                 size_t *result_capacity)
 {

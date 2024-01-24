@@ -1,28 +1,28 @@
 /** This is free and unencumbered software released into the public domain.
-  * 
-  * Anyone is free to copy, modify, publish, use, compile, sell, or
-  * distribute this software, either in source code form or as a compiled
-  * binary, for any purpose, commercial or non-commercial, and by any
-  * means.
-  * 
-  * In jurisdictions that recognize copyright laws, the author or authors
-  * of this software dedicate any and all copyright interest in the
-  * software to the public domain. We make this dedication for the benefit
-  * of the public at large and to the detriment of our heirs and
-  * successors. We intend this dedication to be an overt act of
-  * relinquishment in perpetuity of all present and future rights to this
-  * software under copyright law.
-  * 
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-  * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-  * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-  * OTHER DEALINGS IN THE SOFTWARE.
-  * 
-  * For more information, please refer to <http://unlicense.org/>
-  */
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * For more information, please refer to <http://unlicense.org/>
+ */
 
 /**
  * Compile-time options
@@ -49,12 +49,13 @@
 #endif
 #if !defined(SMEMMEM_REALLOC) && !defined(SMEMMEM_FREE)
 #include <stdlib.h>
-#define SMEMMEM_REALLOC(ptr,size) realloc(ptr,size)
-#define SMEMMEM_FREE(ptr)         free(ptr)
+#define SMEMMEM_REALLOC(ptr, size) realloc(ptr, size)
+#define SMEMMEM_FREE(ptr) free(ptr)
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /**
@@ -182,7 +183,7 @@ void *smemmem_bmh(const void * const haystack,
     }
 
     size_t const skip_table_size = 1 << (sizeof(char) * 8);
-    size_t * skip_table = NULL;
+    size_t *skip_table = NULL;
     if (skip_table_buf == NULL)
     {
         skip_table = (size_t *) SMEMMEM_REALLOC(NULL, sizeof(size_t) * skip_table_size);
@@ -338,7 +339,7 @@ void *smemmem_kmp(const void * const haystack,
     }
 
     size_t const offset = smemmem__kmp_common(haystack, haystack_len, needle,
-                                             needle_len, NULL, true);
+                                              needle_len, NULL, true);
     if (offset == 0)
     {
         return NULL;
@@ -352,8 +353,7 @@ size_t smemmem_kmp_all(const void * const haystack,
                        size_t const needle_len,
                        size_t **indices)
 {
-    if (haystack == NULL || needle == NULL || haystack_len == 0 ||
-        needle_len == 0 || needle_len > haystack_len)
+    if (haystack == NULL || needle == NULL || haystack_len == 0 || needle_len == 0 || needle_len > haystack_len)
     {
         return 0;
     }

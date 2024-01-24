@@ -1,28 +1,28 @@
 /** This is free and unencumbered software released into the public domain.
-  * 
-  * Anyone is free to copy, modify, publish, use, compile, sell, or
-  * distribute this software, either in source code form or as a compiled
-  * binary, for any purpose, commercial or non-commercial, and by any
-  * means.
-  * 
-  * In jurisdictions that recognize copyright laws, the author or authors
-  * of this software dedicate any and all copyright interest in the
-  * software to the public domain. We make this dedication for the benefit
-  * of the public at large and to the detriment of our heirs and
-  * successors. We intend this dedication to be an overt act of
-  * relinquishment in perpetuity of all present and future rights to this
-  * software under copyright law.
-  * 
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-  * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-  * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-  * OTHER DEALINGS IN THE SOFTWARE.
-  * 
-  * For more information, please refer to <http://unlicense.org/>
-  */
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * For more information, please refer to <http://unlicense.org/>
+ */
 
 /**
  * Compile-time options
@@ -41,10 +41,10 @@
 #ifndef INCLUDE_STRIE_H
 #define INCLUDE_STRIE_H
 
+#include "sdll.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
-#include "sdll.h"
 
 #if defined(STRIE_MALLOC) && !defined(STRIE_FREE) || !defined(STRIE_MALLOC) && defined(STRIE_FREE)
 #error "You must define both STRIE_MALLOC and STRIE_FREE, or neither."
@@ -52,11 +52,12 @@
 #if !defined(STRIE_MALLOC) && !defined(STRIE_FREE)
 #include <stdlib.h>
 #define STRIE_MALLOC(size) malloc(size)
-#define STRIE_FREE(ptr)    free(ptr)
+#define STRIE_FREE(ptr) free(ptr)
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 typedef struct strie
@@ -69,7 +70,7 @@ typedef struct strie
 
 strie *strie_insert(strie ** const node, void * const key, size_t const key_length_bytes, void * const data);
 strie *strie_search(strie * const node, void * const key, size_t const key_length_bytes);
-bool strie_remove(strie ** const root, void * const key, size_t const key_length_bytes, void (*free_func)(void*));
+bool strie_remove(strie ** const root, void * const key, size_t const key_length_bytes, void (*free_func)(void *));
 
 #ifdef __cplusplus
 }
@@ -159,7 +160,7 @@ strie *strie_search(strie * const node, void * const key, size_t const key_lengt
     return current;
 }
 
-bool strie_remove(strie ** const root, void * const key, size_t const key_length_bytes, void (*free_func)(void*))
+bool strie_remove(strie ** const root, void * const key, size_t const key_length_bytes, void (*free_func)(void *))
 {
     if (*root == NULL)
     {

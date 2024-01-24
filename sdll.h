@@ -1,28 +1,28 @@
 /** This is free and unencumbered software released into the public domain.
-  * 
-  * Anyone is free to copy, modify, publish, use, compile, sell, or
-  * distribute this software, either in source code form or as a compiled
-  * binary, for any purpose, commercial or non-commercial, and by any
-  * means.
-  * 
-  * In jurisdictions that recognize copyright laws, the author or authors
-  * of this software dedicate any and all copyright interest in the
-  * software to the public domain. We make this dedication for the benefit
-  * of the public at large and to the detriment of our heirs and
-  * successors. We intend this dedication to be an overt act of
-  * relinquishment in perpetuity of all present and future rights to this
-  * software under copyright law.
-  * 
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-  * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-  * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-  * OTHER DEALINGS IN THE SOFTWARE.
-  * 
-  * For more information, please refer to <http://unlicense.org/>
-  */
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * For more information, please refer to <http://unlicense.org/>
+ */
 
 /**
  * Compile-time options
@@ -47,11 +47,12 @@
 #if !defined(SDLL_MALLOC) && !defined(SDLL_FREE)
 #include <stdlib.h>
 #define SDLL_MALLOC(size) malloc(size)
-#define SDLL_FREE(ptr)    free(ptr)
+#define SDLL_FREE(ptr) free(ptr)
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 typedef struct sdll_node
@@ -69,14 +70,14 @@ typedef struct
 } sdll;
 
 sdll *sdll_new();
-void sdll_empty(sdll * const l, void (*free_func)(void*));
-void sdll_free(sdll **l, void (*free_func)(void*));
+void sdll_empty(sdll * const l, void (*free_func)(void *));
+void sdll_free(sdll **l, void (*free_func)(void *));
 void sdll_insert_after(sdll * const l, sdll_node *node, void * const data);
 void sdll_insert_before(sdll * const l, sdll_node *node, void * const data);
 void sdll_insert_first(sdll * const l, void * const data);
 void sdll_insert_last(sdll * const l, void * const data);
 void sdll_unlink(sdll * const l, sdll_node * const node);
-void sdll_remove(sdll * const l, sdll_node ** node, void (*free_func)(void*));
+void sdll_remove(sdll * const l, sdll_node **node, void (*free_func)(void *));
 void sdll_dummy_free(void * const data);
 
 #ifdef __cplusplus
@@ -89,7 +90,7 @@ void sdll_dummy_free(void * const data);
 
 sdll *sdll_new()
 {
-    sdll *l = (sdll*) SDLL_MALLOC(sizeof(sdll));
+    sdll *l = (sdll *) SDLL_MALLOC(sizeof(sdll));
     if (l == NULL)
     {
         return NULL;
@@ -102,9 +103,10 @@ sdll *sdll_new()
     return l;
 }
 
-void sdll_empty(sdll * const l, void (*free_func)(void*))
+void sdll_empty(sdll * const l, void (*free_func)(void *))
 {
-    if (l == NULL || l->first == NULL) return;
+    if (l == NULL || l->first == NULL)
+        return;
 
     sdll_node *current;
     sdll_node *next = l->first;
@@ -123,7 +125,7 @@ void sdll_empty(sdll * const l, void (*free_func)(void*))
     l->length = 0;
 }
 
-void sdll_free(sdll **l, void (*free_func)(void*))
+void sdll_free(sdll **l, void (*free_func)(void *))
 {
     sdll_empty(*l, free_func);
     SDLL_FREE(*l);
@@ -132,9 +134,10 @@ void sdll_free(sdll **l, void (*free_func)(void*))
 
 void sdll_insert_after(sdll * const l, sdll_node *node, void * const data)
 {
-    if (l == NULL) return;
+    if (l == NULL)
+        return;
 
-    sdll_node *new_node = (sdll_node*) SDLL_MALLOC(sizeof(sdll_node));
+    sdll_node *new_node = (sdll_node *) SDLL_MALLOC(sizeof(sdll_node));
     new_node->prev = node;
     new_node->data = data;
 
@@ -155,9 +158,10 @@ void sdll_insert_after(sdll * const l, sdll_node *node, void * const data)
 
 void sdll_insert_before(sdll * const l, sdll_node *node, void * const data)
 {
-    if (l == NULL) return;
+    if (l == NULL)
+        return;
 
-    sdll_node *new_node = (sdll_node*) SDLL_MALLOC(sizeof(sdll_node));
+    sdll_node *new_node = (sdll_node *) SDLL_MALLOC(sizeof(sdll_node));
     new_node->next = node;
     new_node->data = data;
 
@@ -178,11 +182,12 @@ void sdll_insert_before(sdll * const l, sdll_node *node, void * const data)
 
 void sdll_insert_first(sdll * const l, void * const data)
 {
-    if (l == NULL) return;
+    if (l == NULL)
+        return;
 
     if (l->first == NULL)
     {
-        sdll_node *new_node = (sdll_node*) SDLL_MALLOC(sizeof(sdll_node));
+        sdll_node *new_node = (sdll_node *) SDLL_MALLOC(sizeof(sdll_node));
         new_node->data = data;
 
         l->first = new_node;
@@ -199,7 +204,8 @@ void sdll_insert_first(sdll * const l, void * const data)
 
 void sdll_insert_last(sdll * const l, void * const data)
 {
-    if (l == NULL) return;
+    if (l == NULL)
+        return;
 
     if (l->last == NULL)
     {
@@ -213,7 +219,8 @@ void sdll_insert_last(sdll * const l, void * const data)
 
 void sdll_unlink(sdll * const l, sdll_node * const node)
 {
-    if (l == NULL) return;
+    if (l == NULL)
+        return;
 
     if (node->prev == NULL)
     {
@@ -235,7 +242,7 @@ void sdll_unlink(sdll * const l, sdll_node * const node)
     l->length--;
 }
 
-void sdll_remove(sdll * const l, sdll_node ** node, void (*free_func)(void*))
+void sdll_remove(sdll * const l, sdll_node **node, void (*free_func)(void *))
 {
     sdll_unlink(l, *node);
     free_func((*node)->data);
@@ -245,7 +252,7 @@ void sdll_remove(sdll * const l, sdll_node ** node, void (*free_func)(void*))
 
 void sdll_dummy_free(void * const data)
 {
-    (void)data;
+    (void) data;
 }
 
 #endif /*SDLL_IMPLEMENTATION*/

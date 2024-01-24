@@ -10,8 +10,8 @@
 
 /* Input from command: seq 8 | sed '$!s/$/,/'
  * Output:
- * 1 2 3 4 5 6 7 8 
- * 36 0j    -4 9.65685j    -4 4j    -4 1.65685j    -4 0j    -4 -1.65685j    -4 -4j    -4 -9.65685j    
+ * 1 2 3 4 5 6 7 8
+ * 36 0j    -4 9.65685j    -4 4j    -4 1.65685j    -4 0j    -4 -1.65685j    -4 -4j    -4 -9.65685j
  */
 int main()
 {
@@ -24,7 +24,6 @@ int main()
     }
     /* printf("%lu, %lu, %s\n", s.length, s.capacity, s.cstr); */
 
-
     /* convert numbers in string to long long int numbers */
     char digit_buffer[128];
     size_t digit_buffer_index = 0;
@@ -34,7 +33,7 @@ int main()
 
     for (size_t i = 0; i <= s.length; i++)
     {
-        if (digit_buffer_index < 128-1)
+        if (digit_buffer_index < 128 - 1)
         {
             char const c = s.cstr[i];
             if (c == '\n' || c == '\r' || c == '\t' || c == ' ')
@@ -53,7 +52,7 @@ int main()
         digit_buffer[digit_buffer_index] = '\0';
         digit_buffer_index = 0;
 
-        long long int num_buffer[1] = { strtoll(digit_buffer, NULL, 10) };
+        long long int num_buffer[1] = {strtoll(digit_buffer, NULL, 10)};
         sdarray_add_from(&numbers, num_buffer, 1);
     }
 
@@ -62,7 +61,6 @@ int main()
         printf("%lld ", ((long long int *) numbers.data)[i]);
     }
     printf("\n");
-
 
     /* create arrays of "double" numbers for real and imaginary parts */
     sdarray real = sdarray_new(sizeof(double), numbers.length);
@@ -75,7 +73,6 @@ int main()
     real.length = numbers.length;
     imag.length = numbers.length;
 
-
     /* run FFT of real numbers from STDIN */
     sfft fft;
     sfft_new(&fft, real.length);
@@ -86,7 +83,6 @@ int main()
         printf("%g %gj    ", ((double *) real.data)[i], ((double *) imag.data)[i]);
     }
     printf("\n");
-
 
     sstr_free(&s);
     free(numbers.data);

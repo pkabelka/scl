@@ -7,15 +7,15 @@
 
 int str_comp(void *s1, void *s2)
 {
-    return strcmp((const char*)s1, (const char*)s2);
+    return strcmp((const char *) s1, (const char *) s2);
 }
 
 void printf_callback(sbintree * const node)
 {
-    printf("%s: %s\n", (char*)node->key, (char*)node->data);
+    printf("%s: %s\n", (char *) node->key, (char *) node->data);
     if (node->parent != NULL)
     {
-        printf("parent of %s: %s\n", (char*)node->key, (char*)node->parent->key);
+        printf("parent of %s: %s\n", (char *) node->key, (char *) node->parent->key);
     }
 }
 
@@ -34,18 +34,18 @@ int main()
     sbintree_insert(&root, "e", str_comp, "e");
     sbintree_insert(&root, "d", str_comp, "d");
 
-    printf("%s\n", (char*)(root->right->data));
+    printf("%s\n", (char *) (root->right->data));
 
     sbintree *node = sbintree_search(root, "c", str_comp);
-    printf("%s\n", (char*)(node->data));
+    printf("%s\n", (char *) (node->data));
 
     sbintree_inorder(root, printf_callback);
 
     sbintree *leftmost = sbintree_leftmost(root);
-    printf("%s\n", (char*)(leftmost->data));
+    printf("%s\n", (char *) (leftmost->data));
 
     sbintree *rightmost = sbintree_rightmost(root);
-    printf("%s\n", (char*)(rightmost->data));
+    printf("%s\n", (char *) (rightmost->data));
 
     sbintree_remove(&root, node, sbintree_free_func);
     sbintree_inorder(root, printf_callback);
