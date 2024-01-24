@@ -341,7 +341,7 @@ sstr sstr_replace(sstr const s, sstr const old_str, sstr const new_str);
 sstr sstr_replace_const(sstr const s, const char * const old_str, const char * const new_str);
 
 /**
- * Counts the number of occurrences of `substr` in sstr `s`.
+ * Counts the number of occurrences of `substr` in sstr `s`. Requires the function `memmem`.
  *
  * @param s sstr to search through.
  * @param substr String to count.
@@ -351,7 +351,7 @@ sstr sstr_replace_const(sstr const s, const char * const old_str, const char * c
 size_t sstr_count(sstr const s, const void * const substr, size_t const substr_len);
 
 /**
- * Counts the number of occurrences of `substr` in sstr `s`.
+ * Counts the number of occurrences of `substr` in sstr `s`. Requires the function `memmem`.
  *
  * @param s sstr to search through.
  * @param substr String to count.
@@ -360,7 +360,7 @@ size_t sstr_count(sstr const s, const void * const substr, size_t const substr_l
 size_t sstr_count_sstr(sstr const s, sstr const substr);
 
 /**
- * Counts the number of occurrences of `substr` in sstr `s`.
+ * Counts the number of occurrences of `substr` in sstr `s`. Requires the function `memmem`.
  *
  * @param s sstr to search through.
  * @param substr String to count.
