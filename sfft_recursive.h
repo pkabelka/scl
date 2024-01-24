@@ -27,7 +27,6 @@
 #ifndef INCLUDE_SFFT_RECURSIVE_H
 #define INCLUDE_SFFT_RECURSIVE_H
 
-#include <stdlib.h>
 #include <math.h>
 #include <complex.h>
 #include <stdbool.h>
