@@ -133,11 +133,17 @@ static size_t shashtab__next_prime(size_t n)
     return n;
 }
 
+static size_t shashtab__optimal_capacity(size_t const length)
+{
+    /* ceil(length * 1.4) */
+    return 7*length/5 + ((length % 2) != 0);
+}
+
 shashtab shashtab_new(size_t const capacity)
 {
     shashtab ht = { .data = NULL, .capacity = 0 };
     /* about 70 % load factor */
-    size_t const init_capacity = shashtab__next_prime(capacity * 1.4);
+    size_t const init_capacity = shashtab__next_prime(shashtab__optimal_capacity(capacity));
 
     if ((ht.data = (sbintree **) calloc(init_capacity, sizeof(sbintree*))) == NULL)
     {
