@@ -97,7 +97,7 @@ void sfft__recursive(sfft_recursive_complexdouble * const in,
         return;
     }
 
-    const sfft_recursive_complexdouble omega_n = cexp((forward ? -2 : 2) * I * SFFT_RECURSIVE__PI / n);
+    const sfft_recursive_complexdouble omega_n = cexp((forward ? -2 : 2) * I * SFFT_RECURSIVE__PI / (double) n);
     sfft_recursive_complexdouble omega = 1;
 
     /* even */
@@ -142,7 +142,7 @@ bool sfft_recursive_ifft(sfft_recursive_complexdouble * const in,
 
     for (size_t i = 0; i < n; i++)
     {
-        out[i] /= n;
+        out[i] /= (double) n;
     }
 
     return true;

@@ -4,7 +4,10 @@
 #define STRIE_IMPLEMENTATION
 #include "../strie.h"
 
-void dummy_free(void *data){}
+void dummy_free(void *data)
+{
+    (void) data;
+}
 
 void print_keys(strie *node)
 {
@@ -14,7 +17,7 @@ void print_keys(strie *node)
         {
             continue;
         }
-        printf("%c: %p, ", (char)i, node->next[i]);
+        printf("%c: %p, ", (char)i, (void *) node->next[i]);
     }
     printf("\n");
 }

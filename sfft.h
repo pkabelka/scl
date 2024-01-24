@@ -108,7 +108,7 @@ bool sfft_new(sfft * const fft, size_t const n)
 
     for (size_t i = 0; i < n; i++)
     {
-        double w = -2.0 * pi / n * i;
+        double w = -2.0 * pi / (double) n * (double) i;
         fft->bit_reverse[i] = sfft__bit_reverse(i, log2_n);
         fft->sine[i] = sin(w);
         fft->cosine[i] = cos(w);
@@ -298,8 +298,8 @@ bool sfft_ifft(sfft * const fft, double * const real, double * const imag)
 
     for (size_t i = 0; i < n; i++)
     {
-        real[i] /= n;
-        imag[i] /= n;
+        real[i] /= (double) n;
+        imag[i] /= (double) n;
     }
 
     return true;

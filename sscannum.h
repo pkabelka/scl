@@ -322,7 +322,7 @@ static bool sscannum__common(int (*getchar_func)(),
             {
                 if (memchr(delimiter, c, delimiter_length) == NULL)
                 {
-                    digit_buffer[digit_buffer_index++] = c;
+                    digit_buffer[digit_buffer_index++] = (char) c;
                     continue;
                 }
             }
