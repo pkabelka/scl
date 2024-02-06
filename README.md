@@ -1,7 +1,6 @@
 # scl
 
-This is a collection of some simple single-file header C libraries in public
-domain.
+This is a collection of some simple single-file header C libraries.
 
 | Library                            | Description                                                                                                         | Example program                              |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
@@ -32,4 +31,6 @@ In other files you can just use the include.
 
 ## LICENSE
 
-This project is in public domain, see [LICENSE](LICENSE).
+This project is in public domain and also licensed under the 0BSD license which
+is a public-domain-equivalent license. See [LICENSE](LICENSE) for the license
+text.
